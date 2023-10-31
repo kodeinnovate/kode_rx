@@ -26,7 +26,18 @@ class PatientAppointmentsScreen extends StatelessWidget {
   List<AppointmentList> lists = [
     AppointmentList(name: 'Hello World1', date: '7th May', status: 'pending'),
     AppointmentList(name: 'Hello World2', date: '10th May', status: 'On Going'),
-    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled')
+    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
+    AppointmentList(name: 'Hello World4', date: '12th May', status: 'cancelled'),
+    AppointmentList(name: 'Hello World5', date: '11th May', status: 'cancelled'),
+    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
+    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
+    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
+    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
+    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
+    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
+    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
+    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
+    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
   ];
 
 
@@ -60,7 +71,8 @@ class PatientAppointmentsScreen extends StatelessWidget {
               child: ListView.builder(
                 itemCount: lists.length,
                 itemBuilder: (context, index) {
-                  return MySquare(child: lists[index].name);
+                  return MySquare(child: lists[index].name, date: lists[index].date);
+
                 },
               ),
             ),
