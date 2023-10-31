@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:kode_rx/patient_appointments.dart';
 import 'app_colors.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(PatientAppointmentsScreen());
 }
 
 class MyApp extends StatelessWidget {
