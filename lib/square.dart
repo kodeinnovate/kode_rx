@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:kode_rx/common_class.dart';
 
 class MySquare extends StatelessWidget {
-  final child;
+  final name;
   final date;
   final status;
-  MySquare({required this.child, required this.date, required this.status});
+  MySquare({required this.name, required this.date, required this.status});
 
   @override
   Widget build(BuildContext context) {
@@ -13,28 +13,28 @@ class MySquare extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Card(
+        color: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),
         elevation: 10,
         child: Row(
           children: [
-             Builder(
-                builder: (BuildContext context) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        bottomLeft: Radius.circular(20),
-                      ),
-                      color: statusColor,
+            Builder(
+              builder: (BuildContext context) {
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      bottomLeft: Radius.circular(20),
                     ),
-                    width: 15,
-                    height: 240,
-                  );
-                },
-              ),
-            
+                    color: statusColor,
+                  ),
+                  width: 15,
+                  height: 240,
+                );
+              },
+            ),
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -48,6 +48,7 @@ class MySquare extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
+                      
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
                         child: Text(
@@ -57,16 +58,17 @@ class MySquare extends StatelessWidget {
                       ),
                     ],
                   ),
-                const  Padding(
-                    padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-                    child: Divider(color: Colors.black54),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Divider(color: Colors.black87),
                   ),
+                  
                   Container(
-                    height: 100,
+                    height: 50,
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                       child: Text(
-                        child,
+                        name,
                         style: TextStyle(fontSize: 40),
                       ),
                     ),

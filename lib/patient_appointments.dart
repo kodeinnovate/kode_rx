@@ -66,7 +66,7 @@ class PatientAppointmentsScreen extends StatelessWidget {
               child: ListView.builder(
                 itemCount: lists.length,
                 itemBuilder: (context, index) {
-                  return MySquare(child: lists[index].name, date: lists[index].date, status: lists[index].status);
+                  return MySquare(name: lists[index].name, date: lists[index].date, status: lists[index].status);
 
                 },
               ),
