@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:kode_rx/common_class.dart';
 import 'package:kode_rx/square.dart';
 import 'app_colors.dart';
+
 
 class AppointmentList {
   String? date;
   String? name;
-  String? status;
+  Status? status;
 
   AppointmentList({this.date, this.name, this.status}); // Constructor
 }
+
 
 
 class PatientAppointmentsScreen extends StatelessWidget {
@@ -24,23 +27,15 @@ class PatientAppointmentsScreen extends StatelessWidget {
 //   ];
 
   List<AppointmentList> lists = [
-    AppointmentList(name: 'Hello World1', date: '7th May', status: 'pending'),
-    AppointmentList(name: 'Hello World2', date: '10th May', status: 'On Going'),
-    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
-    AppointmentList(name: 'Hello World4', date: '12th May', status: 'cancelled'),
-    AppointmentList(name: 'Hello World5', date: '11th May', status: 'cancelled'),
-    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
-    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
-    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
-    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
-    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
-    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
-    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
-    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
-    AppointmentList(name: 'Hello World3', date: '11th May', status: 'cancelled'),
+    AppointmentList(name: 'Hello World1', date: '7th May', status: Status.ongoing),
+    AppointmentList(name: 'Hello World2', date: '10th May', status: Status.completed),
+    AppointmentList(name: 'Hello World3', date: '11th May', status: Status.ongoing),
+    AppointmentList(name: 'Hello World4', date: '12th May', status: Status.pending),
+    AppointmentList(name: 'Hello World5', date: '11th May', status: Status.pending),
+    AppointmentList(name: 'Hello World3', date: '11th May', status: Status.completed),
+    AppointmentList(name: 'Hello World3', date: '11th May', status: Status.ongoing),
+
   ];
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +66,7 @@ class PatientAppointmentsScreen extends StatelessWidget {
               child: ListView.builder(
                 itemCount: lists.length,
                 itemBuilder: (context, index) {
-                  return MySquare(child: lists[index].name, date: lists[index].date);
+                  return MySquare(child: lists[index].name, date: lists[index].date, status: lists[index].status);
 
                 },
               ),
@@ -81,4 +76,6 @@ class PatientAppointmentsScreen extends StatelessWidget {
       ),
     );
   }
+  
+  
 }
