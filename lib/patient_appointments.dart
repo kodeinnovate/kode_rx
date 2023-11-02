@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kode_rx/common_class.dart';
+import 'package:kode_rx/device_helper.dart';
 import 'package:kode_rx/square.dart';
+// import 'package:kode_rx/tablet_appBar.dart';
 import 'app_colors.dart';
 
 
@@ -34,7 +36,6 @@ class PatientAppointmentsScreen extends StatelessWidget {
     AppointmentList(name: 'Hello World5', date: '11th May', status: Status.pending),
     AppointmentList(name: 'Hello World3', date: '11th May', status: Status.completed),
     AppointmentList(name: 'Hello World3', date: '11th May', status: Status.ongoing),
-
   ];
 
   @override
@@ -42,31 +43,28 @@ class PatientAppointmentsScreen extends StatelessWidget {
     return MaterialApp(
       // textDirection: TextDirection.ltr, // Or TextDirection.rtl for right-to-left text direction
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Appointments'),
-          backgroundColor: AppColors.customBackground,
-        ),
+        appBar: DeviceHelper.deviceAppBar() ,
         body:
 
         Column(
 
           children: [
-            Align(alignment: Alignment.centerLeft, child:
-            Container(
-              child: const Padding(padding: EdgeInsets.fromLTRB(40, 100, 0, 100),
-                child:  Column(
-                  children: [
-                    Text('Schedule', style: TextStyle(fontSize: 70, fontWeight: FontWeight.bold), textAlign: TextAlign.left,)
-                  ],
-                ),),
-            )
-              ,),
+            // Align(alignment: Alignment.centerLeft, child:
+            // Container(
+            //   child: const Padding(padding: EdgeInsets.fromLTRB(40, 100, 0, 100),
+            //     child:  Column(
+            //       children: [
+            //         Text('Schedule', style: TextStyle(fontSize: 70, fontWeight: FontWeight.bold), textAlign: TextAlign.left,)
+            //       ],
+            //     ),),
+            // )
+            //   ,),
 
             Expanded(
               child: ListView.builder(
                 itemCount: lists.length,
                 itemBuilder: (context, index) {
-                  return MySquare(name: lists[index].name, date: lists[index].date, status: lists[index].status);
+                  return MySquare(name: lists[index].name!, date: lists[index].date!, status: lists[index].status!);
 
                 },
               ),
