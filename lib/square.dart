@@ -11,7 +11,6 @@ class MySquare extends StatelessWidget {
 
   MySquare({required this.name, required this.date, required this.status});
 
-
   @override
   Widget build(BuildContext context) {
     Color statusColor = getStatusColor(status);
@@ -54,15 +53,14 @@ class MySquare extends StatelessWidget {
 
                       Text(
                         format.format(date),
-                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w400),
                       ),
                     ],
                   ),
-                  Container(
-                    height: 5, // Adjust the height of the "divider" as needed
-                    color: AppColors.customDividerColor, // You can set the color to your preference
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 10), // Adjust margin as needed
+                const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 5.0),
+                    child: Divider(color: Colors.black87, thickness: 2.0,),
                   ),
                   SizedBox(
                     // height: 40,

@@ -16,16 +16,6 @@ class AppointmentList {
 
 
 class PatientAppointmentsScreen extends StatelessWidget {
-//   final List _appointments = [
-// 'post 1',
-//     'post 2',
-//     'post 3',
-//     'post 4',
-//     'post 3',
-//     'post 3',
-//     'post 3',
-//     'post 3'
-//   ];
 
   List<AppointmentList> lists = [
     AppointmentList(name: 'Hello World1', date: DateTime.parse('1969-07-20 20:18:04Z'), status: Status.ongoing),
