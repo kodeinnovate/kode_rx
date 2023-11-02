@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:kode_rx/common_class.dart';
 import 'package:kode_rx/device_helper.dart';
 import 'package:kode_rx/square.dart';
-// import 'package:kode_rx/tablet_appBar.dart';
 import 'app_colors.dart';
-
+import 'package:intl/intl.dart';
 
 class AppointmentList {
-  String? date;
+  DateTime? date;
   String? name;
   Status? status;
 
@@ -29,13 +28,13 @@ class PatientAppointmentsScreen extends StatelessWidget {
 //   ];
 
   List<AppointmentList> lists = [
-    AppointmentList(name: 'Hello World1', date: '7th May', status: Status.ongoing),
-    AppointmentList(name: 'Hello World2', date: '10th May', status: Status.completed),
-    AppointmentList(name: 'Hello World3', date: '11th May', status: Status.ongoing),
-    AppointmentList(name: 'Hello World4', date: '12th May', status: Status.pending),
-    AppointmentList(name: 'Hello World5', date: '11th May', status: Status.pending),
-    AppointmentList(name: 'Hello World3', date: '11th May', status: Status.completed),
-    AppointmentList(name: 'Hello World3', date: '11th May', status: Status.ongoing),
+    AppointmentList(name: 'Hello World1', date: DateTime.parse('1969-07-20 20:18:04Z'), status: Status.ongoing),
+    AppointmentList(name: 'Hello World2', date: DateTime.parse('2021-07-13T13:15:54.000000Z'), status: Status.completed),
+    AppointmentList(name: 'Hello World3', date: DateTime.parse('1969-07-20 20:18:04Z'), status: Status.ongoing),
+    AppointmentList(name: 'Hello World4', date: DateTime.parse('1969-07-20 20:18:04Z'), status: Status.pending),
+    AppointmentList(name: 'Hello World5', date: DateTime.parse('1969-07-20 20:18:04Z'), status: Status.pending),
+    AppointmentList(name: 'Hello World3', date: DateTime.parse('1969-07-20 20:18:04Z'), status: Status.completed),
+    AppointmentList(name: 'Hello World3', date: DateTime.parse('1969-07-20 20:18:04Z'), status: Status.ongoing),
   ];
 
   @override
@@ -43,7 +42,7 @@ class PatientAppointmentsScreen extends StatelessWidget {
     return MaterialApp(
       // textDirection: TextDirection.ltr, // Or TextDirection.rtl for right-to-left text direction
       home: Scaffold(
-        appBar: DeviceHelper.deviceAppBar() ,
+        appBar: DeviceHelper.deviceAppBar(),
         body:
 
         Column(

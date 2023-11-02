@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'app_colors.dart';
 enum DeviceType { Phone, Tablet }
 
 class DeviceHelper {
@@ -15,14 +15,17 @@ class DeviceHelper {
       return AppBar(
         title: const Text('Appointment', style: TextStyle(fontSize: 40.0)),
         toolbarHeight: 120,
+        backgroundColor: AppColors.customBackground,
       );
     } else if (deviceType == DeviceType.Phone) {
       return AppBar(
         title: const Text('Appointment'),
+        backgroundColor: AppColors.customBackground,
       );
     } else {
       return AppBar(
         title: const Text('Appointment'),
+        backgroundColor: AppColors.customBackground,
       );
     }
   }
