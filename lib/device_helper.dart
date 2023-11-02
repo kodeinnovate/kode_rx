@@ -16,6 +16,10 @@ class DeviceHelper {
         title: const Text('Appointment', style: TextStyle(fontSize: 40.0)),
         toolbarHeight: 120,
       );
+    } else if (deviceType == DeviceType.Phone) {
+      return AppBar(
+        title: const Text('Appointment'),
+      );
     } else {
       return AppBar(
         title: const Text('Appointment'),
