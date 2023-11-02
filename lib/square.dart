@@ -60,7 +60,7 @@ class MySquare extends StatelessWidget {
                   ),
                 const Padding(
                     padding: EdgeInsets.symmetric(vertical: 5.0),
-                    child: Divider(color: Colors.black87, thickness: 2.0,),
+                    child: Divider(color: AppColors.customDividerColor, thickness: 2.0,),
                   ),
                   SizedBox(
                     // height: 40,
