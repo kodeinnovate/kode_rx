@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kode_rx/app_colors.dart';
 import 'package:kode_rx/common_class.dart';
+import 'package:kode_rx/device_helper.dart';
+
 
 class MySquare extends StatelessWidget {
   final String name;
@@ -19,7 +21,9 @@ class MySquare extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       child: Card(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(
+            DeviceHelper.getDeviceType == DeviceType.tablet ? 15.0 : 10.0,
+          ),
         ),
         elevation: 5,
         child: Row(
@@ -27,47 +31,67 @@ class MySquare extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  bottomLeft: Radius.circular(20),
+                  topLeft: Radius.circular(
+                    DeviceHelper.getDeviceType == DeviceType.tablet ? 20 : 10,
+                  ),
+                  bottomLeft: Radius.circular(
+                    DeviceHelper.getDeviceType == DeviceType.tablet ? 20 : 10,
+                  ),
                 ),
                 color: statusColor,
               ),
-              width: 15,
-              height: 160,
+              width: DeviceHelper.getDeviceType == DeviceType.tablet ? 10 : 5,
+              height: DeviceHelper.getDeviceType == DeviceType.tablet ? 200 : 100,
             ),
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(
+                DeviceHelper.getDeviceType == DeviceType.tablet ? 20.0 : 10.0,
+              ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         'Appointment Date:',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                          fontSize:
+                              DeviceHelper.getDeviceType == DeviceType.tablet
+                                  ? 20
+                                  : 14,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-
-                      // const SizedBox(height: 10),
-
                       Text(
                         format.format(date),
                         style: const TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w400),
+                          fontSize:
+                              DeviceHelper.getDeviceType == DeviceType.tablet
+                                  ? 24
+                                  : 16,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ],
                   ),
-                const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5.0),
-                    child: Divider(color: AppColors.customDividerColor, thickness: 2.0,),
+                  // This is where you add your red Container
+                  Container( 
+                    child: Divider(color: Colors.amber, thickness: 2),
+                  ),
+
+                 Text(
+                    '--------------------------------------------------------', style: TextStyle(color: AppColors.customDividerColor)// Use the desired gray color.
                   ),
                   SizedBox(
-                    // height: 40,
-                    // padding: const EdgeInsets.only(top: 10),
                     child: Text(
                       name,
-                      style: const TextStyle(fontSize: 40),
+                      style: const TextStyle(
+                        fontSize:
+                            DeviceHelper.getDeviceType == DeviceType.tablet
+                                ? 38
+                                : 18,
+                      ),
                     ),
                   ),
                 ],
@@ -78,6 +102,7 @@ class MySquare extends StatelessWidget {
       ),
     );
   }
+
 
   Color getStatusColor(Status status) {
     switch (status) {
