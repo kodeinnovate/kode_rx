@@ -155,7 +155,7 @@ class PatientHome extends StatelessWidget {
                             ),
                           ),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4.0),
+                            borderRadius: BorderRadius.circular(20.0),
                             color: Colors.white,
                           ),
                         ),
