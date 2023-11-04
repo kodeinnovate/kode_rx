@@ -223,7 +223,7 @@ class PatientHome extends StatelessWidget {
                             text: 'Top ',
                             style: TextStyle(fontWeight: FontWeight.w900),
                           ),
-                          TextSpan(text: 'Docters'),
+                          TextSpan(text: 'Doctors'),
                         ],
                       ),
                     ),
