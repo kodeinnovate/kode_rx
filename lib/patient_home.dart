@@ -73,8 +73,8 @@ class PatientHome extends StatelessWidget {
             SliverAppBar(
               shape: const ContinuousRectangleBorder(
                   borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30))),
+                      bottomLeft: Radius.circular(20),
+                      bottomRight: Radius.circular(20))),
               leading: const Icon(Icons.menu),
               backgroundColor: AppColors.customBackground,
               // title: Text('Find Your Desired Doctor'),
@@ -143,14 +143,14 @@ class PatientHome extends StatelessWidget {
                           placeholder: 'Looking for...',
                           placeholderStyle: const TextStyle(
                             color: Color(0xffC4C6CC),
-                            fontSize: 14.0,
+                            fontSize: 16.0,
                             fontFamily: 'Brutal',
                           ),
                           prefix: const Padding(
                             padding: EdgeInsets.fromLTRB(5.0, 5.0, 0.0, 5.0),
                             child: Icon(
                               Icons.search,
-                              size: 18,
+                              size: 20,
                               color: Color(0xffC4C6CC),
                             ),
                           ),
