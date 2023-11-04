@@ -30,16 +30,35 @@ List<CatageroiesData> catdata = [
 ];
 
 List<DoctersData> docdata = [
-  DoctersData(name: 'Dr. Ryleigh Dunker',profession: 'Gynaecologist', image: 'assets/images/kodeinnovate.png'),
-  DoctersData(name: 'Dr. Corbin Melle',profession: 'Pediatrician', image: 'assets/images/kodeinnovate.png'),
-  DoctersData(name: 'Dr. Scarlett Dena',profession: 'Psychiatrist', image: 'assets/images/kodeinnovate.png'),
-  DoctersData(name: 'Dr. Angela Littrell',profession: 'Anesthesiologist', image: 'assets/images/kodeinnovate.png'),
-  DoctersData(name: 'Dr Melba Knobloch',profession: 'Dermatologist', image: 'assets/images/kodeinnovate.png'),
-  DoctersData(name: 'Dr Shayla Naveed',profession: 'Neurologist', image: 'assets/images/kodeinnovate.png'),
+  DoctersData(
+      name: 'Dr. Ryleigh Dunker',
+      profession: 'Gynaecologist',
+      image: 'assets/images/kodeinnovate.png'),
+  DoctersData(
+      name: 'Dr. Corbin Melle',
+      profession: 'Pediatrician',
+      image: 'assets/images/kodeinnovate.png'),
+  DoctersData(
+      name: 'Dr. Scarlett Dena',
+      profession: 'Psychiatrist',
+      image: 'assets/images/kodeinnovate.png'),
+  DoctersData(
+      name: 'Dr. Angela Littrell',
+      profession: 'Anesthesiologist',
+      image: 'assets/images/kodeinnovate.png'),
+  DoctersData(
+      name: 'Dr Melba Knobloch',
+      profession: 'Dermatologist',
+      image: 'assets/images/kodeinnovate.png'),
+  DoctersData(
+      name: 'Dr Shayla Naveed',
+      profession: 'Neurologist',
+      image: 'assets/images/kodeinnovate.png'),
 ];
 
 // ignore: must_be_immutable
 class PatientHome extends StatelessWidget {
+  
   bool appBarSearchShow = false;
   final TextEditingController _filter = TextEditingController();
 
@@ -63,13 +82,14 @@ class PatientHome extends StatelessWidget {
               collapsedHeight: 130,
               floating: true,
               pinned: true,
+              centerTitle: true,
               actions: const [
                 Padding(
-                  padding: EdgeInsets.all(2.0),
+                  padding: EdgeInsets.only(top:10.0, right: 10.0),
                   child: CircleAvatar(
                     backgroundImage:
                         AssetImage('assets/images/kodeinnovate.png'),
-                    radius: 30, // Adjust the size as needed
+                    radius: 28, // Adjust the size as needed
                   ),
                 ),
               ],
@@ -77,16 +97,28 @@ class PatientHome extends StatelessWidget {
               flexibleSpace: Stack(
                 children: [
                   // Title(color: Colors.black87, child: Text('Hello World')),
-                  const Positioned(
-                    left: 40, // Adjust the left position as needed
-                    bottom: 65, // Adjust the bottom position as needed
-                    child: Text(
-                      'Find your desired doctor',
+                  Positioned(
+                    left: 65, // Adjust the left position as needed
+                    bottom: 75, // Adjust the bottom position as needed
+                    child: 
+                    RichText(text: const TextSpan(
                       style: TextStyle(
-                        color: Colors.white, // Adjust the text color
-                        fontSize: 24, // Adjust the text size
+                      fontSize: 26,
+                      color: Colors.white,
                       ),
+                      children: <TextSpan>[
+                        TextSpan(text:
+                      'Find ',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      TextSpan(
+                        text: 'your desired doctor', 
+                        style: TextStyle(fontWeight: FontWeight.w300)
+                      )
+                      ]
                     ),
+                    ),
+                    
                   ),
                   FlexibleSpaceBar(
                       collapseMode: CollapseMode.parallax,
@@ -95,13 +127,13 @@ class PatientHome extends StatelessWidget {
                       title: Container(
                         //margin: EdgeInsets.symmetric(horizontal: 10),
                         constraints:
-                            const BoxConstraints(minHeight: 35, maxHeight: 35),
+                            const BoxConstraints(minHeight: 40, maxHeight: 45),
                         width: 300,
                         decoration: BoxDecoration(
                           boxShadow: <BoxShadow>[
                             BoxShadow(
                                 color: Colors.grey.withOpacity(0.6),
-                                offset: const Offset(1.2, 1.1),
+                                offset: const Offset(1.1, 1.1),
                                 blurRadius: 5.0),
                           ],
                         ),
@@ -165,7 +197,9 @@ class PatientHome extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: catdata.length,
                   itemBuilder: (context, index) {
-                    return CatageroieCell(title: catdata[index].title!, image: catdata[index].image!);
+                    return CatageroieCell(
+                        title: catdata[index].title!,
+                        image: catdata[index].image!);
                   },
                 ),
               ),
@@ -208,7 +242,11 @@ class PatientHome extends StatelessWidget {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  return DoctorCell(name: docdata[index].name!, profession: docdata[index].profession!, image: docdata[index].image!,);
+                  return DoctorCell(
+                    name: docdata[index].name!,
+                    profession: docdata[index].profession!,
+                    image: docdata[index].image!,
+                  );
                 },
                 childCount: docdata.length, // The number of items
               ),
@@ -232,7 +270,6 @@ class PatientHome extends StatelessWidget {
             //     ),
             //   ),
             // ),
-
           ],
         ),
       ),
