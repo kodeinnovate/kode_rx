@@ -27,7 +27,7 @@ class CatageroieCell extends StatelessWidget {
                 ),
                 // Padding(padding: EdgeInsets.symmetric(horizontal: 7), child: Divider(height: 10, thickness: 2,),),
                 Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
+                    padding: const EdgeInsets.only(bottom: 20.0),
                     child: Text(
                       title,
                       style: const TextStyle(fontSize: 18),

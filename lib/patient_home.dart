@@ -30,12 +30,12 @@ List<CatageroiesData> catdata = [
 ];
 
 List<DoctersData> docdata = [
-  DoctersData(name: 'Dr Who',profession: 'Gynaecologist', image: 'assets/images/kodeinnovate.png'),
-  DoctersData(name: 'Dr Who',profession: 'Pediatrician', image: 'assets/images/kodeinnovate.png'),
-  DoctersData(name: 'Dr Who',profession: 'Psychiatrist', image: 'assets/images/kodeinnovate.png'),
-  DoctersData(name: 'Dr Who',profession: 'Anesthesiologist', image: 'assets/images/kodeinnovate.png'),
-  DoctersData(name: 'Dr Who',profession: 'Dermatologist', image: 'assets/images/kodeinnovate.png'),
-  DoctersData(name: 'Dr Who',profession: 'Neurologist', image: 'assets/images/kodeinnovate.png'),
+  DoctersData(name: 'Dr. Ryleigh Dunker',profession: 'Gynaecologist', image: 'assets/images/kodeinnovate.png'),
+  DoctersData(name: 'Dr. Corbin Melle',profession: 'Pediatrician', image: 'assets/images/kodeinnovate.png'),
+  DoctersData(name: 'Dr. Scarlett Dena',profession: 'Psychiatrist', image: 'assets/images/kodeinnovate.png'),
+  DoctersData(name: 'Dr. Angela Littrell',profession: 'Anesthesiologist', image: 'assets/images/kodeinnovate.png'),
+  DoctersData(name: 'Dr Melba Knobloch',profession: 'Dermatologist', image: 'assets/images/kodeinnovate.png'),
+  DoctersData(name: 'Dr Shayla Naveed',profession: 'Neurologist', image: 'assets/images/kodeinnovate.png'),
 ];
 
 // ignore: must_be_immutable
