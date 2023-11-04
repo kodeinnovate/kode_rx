@@ -8,12 +8,24 @@ class CatageroieCell extends StatelessWidget {
       borderRadius: BorderRadius.circular(20),
       child: Container(
         width: 130.0,
-        child: const Card(
+        child: Card(
             color: AppColors.backgroundColor,
-            child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Align(
-                    alignment: Alignment.bottomCenter, child: Text('data')))),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: Image.asset(
+                    'assets/images/kodeinnovate.png', // Replace with the actual image path
+                    width: 60, // Adjust the width as needed
+                    height: 60, // Adjust the height as needed
+                  ),
+                ),
+                // Padding(padding: EdgeInsets.symmetric(horizontal: 7), child: Divider(height: 10, thickness: 2,),),
+                
+              const  Padding(padding: EdgeInsets.all(20.0), child: Text('Checkup', style: TextStyle(fontSize: 18),))
+              ],
+            )),
       ),
     );
   }

@@ -5,18 +5,54 @@ class DoctorCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(8.0),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(8.0),
         child: Container(
-          height: 100,
-          color: AppColors.customBackground,
-          child: const Align(
-            alignment: Alignment.bottomCenter,
-            child: Text(
-              'Hello World',
-              style: TextStyle(fontSize: 24, color: Colors.amber),
-            ),
+          height: 90,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(0, 10),
+                blurRadius: 10,
+                spreadRadius: 4,
+                color: Colors.grey,
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(
+                  'assets/images/kodeinnovate.png', // Replace with the actual image path
+                  width: 60, // Adjust the width as needed
+                  height: 60, // Adjust the height as needed
+                ),
+              ),
+              const Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Hello World',
+                        style: TextStyle(fontSize: 28),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Hello World',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),

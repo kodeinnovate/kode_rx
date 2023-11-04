@@ -11,6 +11,7 @@ class PatientHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        backgroundColor: AppColors.backgroundColor,
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
@@ -51,6 +52,7 @@ class PatientHome extends StatelessWidget {
                     ),
                   ),
                   FlexibleSpaceBar(
+                    
                       collapseMode: CollapseMode.parallax,
                       centerTitle: true,
                       expandedTitleScale: 1.3,
@@ -151,7 +153,7 @@ class PatientHome extends StatelessWidget {
                             text: 'Top ',
                             style: TextStyle(fontWeight: FontWeight.w900),
                           ),
-                          TextSpan(text: 'Rated Docters'),
+                          TextSpan(text: 'Docters'),
                         ],
                       ),
                     ),
