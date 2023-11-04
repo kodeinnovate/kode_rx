@@ -4,9 +4,46 @@ import 'package:kode_rx/category_cell.dart';
 import 'package:kode_rx/doctor_cell.dart';
 import 'app_colors.dart';
 
+class CatageroiesData {
+  String? title;
+  String? image;
+
+  CatageroiesData({
+    this.title,
+    this.image,
+  }); // Constructor
+}
+
+class DoctersData {
+  String? name;
+  String? profession;
+  String? image;
+
+  DoctersData({this.name, this.image, this.profession}); // Constructor
+}
+
+List<CatageroiesData> catdata = [
+  CatageroiesData(title: 'Checkup', image: 'assets/images/kodeinnovate.png'),
+  CatageroiesData(title: 'Lungs', image: 'assets/images/kodeinnovate.png'),
+  CatageroiesData(title: 'Kidney', image: 'assets/images/kodeinnovate.png'),
+  CatageroiesData(title: 'Heart', image: 'assets/images/kodeinnovate.png'),
+];
+
+List<DoctersData> docdata = [
+  DoctersData(name: 'Dr Who',profession: 'Gynaecologist', image: 'assets/images/kodeinnovate.png'),
+  DoctersData(name: 'Dr Who',profession: 'Pediatrician', image: 'assets/images/kodeinnovate.png'),
+  DoctersData(name: 'Dr Who',profession: 'Psychiatrist', image: 'assets/images/kodeinnovate.png'),
+  DoctersData(name: 'Dr Who',profession: 'Anesthesiologist', image: 'assets/images/kodeinnovate.png'),
+  DoctersData(name: 'Dr Who',profession: 'Dermatologist', image: 'assets/images/kodeinnovate.png'),
+  DoctersData(name: 'Dr Who',profession: 'Neurologist', image: 'assets/images/kodeinnovate.png'),
+];
+
+// ignore: must_be_immutable
 class PatientHome extends StatelessWidget {
   bool appBarSearchShow = false;
   final TextEditingController _filter = TextEditingController();
+
+  PatientHome({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -52,7 +89,6 @@ class PatientHome extends StatelessWidget {
                     ),
                   ),
                   FlexibleSpaceBar(
-                    
                       collapseMode: CollapseMode.parallax,
                       centerTitle: true,
                       expandedTitleScale: 1.3,
@@ -127,9 +163,9 @@ class PatientHome extends StatelessWidget {
                 height: 170.0,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 10,
+                  itemCount: catdata.length,
                   itemBuilder: (context, index) {
-                    return CatageroieCell();
+                    return CatageroieCell(title: catdata[index].title!, image: catdata[index].image!);
                   },
                 ),
               ),
@@ -137,7 +173,7 @@ class PatientHome extends StatelessWidget {
 
             SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   //mainAxisSize: MainAxisSize.max,
@@ -172,92 +208,31 @@ class PatientHome extends StatelessWidget {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  return DoctorCell();
+                  return DoctorCell(name: docdata[index].name!, profession: docdata[index].profession!, image: docdata[index].image!,);
                 },
-                childCount: 10, // The number of items
+                childCount: docdata.length, // The number of items
               ),
             ),
 
-// ...
-
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20.0),
-                  child: Container(
-                    height: 100,
-                    color: AppColors.customBackground,
-                    child: Center(
-                      child: Text(
-                        'Hello World',
-                        style: TextStyle(fontSize: 24, color: Colors.amber),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
             // SliverToBoxAdapter(
             //   child: Padding(
-            //     padding: EdgeInsets.all(8.0),
+            //     padding: const EdgeInsets.all(8.0),
             //     child: ClipRRect(
             //       borderRadius: BorderRadius.circular(20.0),
             //       child: Container(
             //         height: 100,
             //         color: AppColors.customBackground,
+            //         child: const Center(
+            //           child: Text(
+            //             'Hello World',
+            //             style: TextStyle(fontSize: 24, color: Colors.amber),
+            //           ),
+            //         ),
             //       ),
             //     ),
             //   ),
             // ),
-            // SliverToBoxAdapter(
-            //   child: Padding(
-            //     padding: EdgeInsets.all(20.0),
-            //     child: ClipRRect(
-            //       borderRadius: BorderRadius.circular(20.0),
-            //       child: Container(
-            //         height: 400,
-            //         color: AppColors.customBackground,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // SliverToBoxAdapter(
-            //   child: Padding(
-            //     padding: EdgeInsets.all(20.0),
-            //     child: ClipRRect(
-            //       borderRadius: BorderRadius.circular(20.0),
-            //       child: Container(
-            //         height: 400,
-            //         color: AppColors.customBackground,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // SliverToBoxAdapter(
-            //   child: Padding(
-            //     padding: EdgeInsets.all(20.0),
-            //     child: ClipRRect(
-            //       borderRadius: BorderRadius.circular(20.0),
-            //       child: Container(
-            //         height: 400,
-            //         color: AppColors.customBackground,
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // SliverToBoxAdapter(
-            //   child: Padding(
-            //     padding: EdgeInsets.all(20.0),
-            //     child: ClipRRect(
-            //       borderRadius: BorderRadius.circular(20.0),
-            //       child: Container(
-            //         height: 400,
-            //         color: AppColors.customBackground,
-            //       ),
-            //     ),
-            //   ),
-            // ),
+
           ],
         ),
       ),

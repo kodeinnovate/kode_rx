@@ -1,11 +1,18 @@
+// ignore: unused_import
 import 'app_colors.dart';
 import 'package:flutter/material.dart';
 
 class DoctorCell extends StatelessWidget {
+  const DoctorCell({super.key, required this.name, required this.image, required this.profession});
+final String name;
+final String image;
+final String profession;
+
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
         child: Container(
@@ -26,26 +33,26 @@ class DoctorCell extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Image.asset(
-                  'assets/images/kodeinnovate.png', // Replace with the actual image path
+                  image, // Replace with the actual image path
                   width: 60, // Adjust the width as needed
                   height: 60, // Adjust the height as needed
                 ),
               ),
-              const Expanded(
+              Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Hello World',
+                        name,
                         style: TextStyle(fontSize: 28),
                       ),
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Hello World',
+                        profession,
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
