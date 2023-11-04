@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:kode_rx/category_cell.dart';
-import 'package:kode_rx/doctor_cell.dart';
 import 'app_colors.dart';
 
-class PatientHome extends StatelessWidget {
+class Test extends StatelessWidget {
   bool appBarSearchShow = false;
   final TextEditingController _filter = TextEditingController();
   @override
@@ -127,7 +125,16 @@ class PatientHome extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   itemCount: 10,
                   itemBuilder: (context, index) {
-                    return CatageroieCell();
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                      width: 130.0,
+                      child: Card(
+                        color: AppColors.customBackground,
+                        child: Text('data'),
+                      ),
+                    ),
+                    );
                   },
                 ),
               ),
@@ -170,7 +177,23 @@ class PatientHome extends StatelessWidget {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  return DoctorCell();
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: Container(
+                        height: 100,
+                        color: AppColors.customBackground,
+                        child: const Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Text(
+                            'Hello World',
+                            style: TextStyle(fontSize: 24, color: Colors.amber),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
                 },
                 childCount: 10, // The number of items
               ),
