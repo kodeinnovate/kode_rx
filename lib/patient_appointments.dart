@@ -15,6 +15,7 @@ class AppointmentList {
 
 
 
+// ignore: must_be_immutable
 class PatientAppointmentsScreen extends StatelessWidget {
 
   List<AppointmentList> lists = [
@@ -26,6 +27,8 @@ class PatientAppointmentsScreen extends StatelessWidget {
     AppointmentList(name: 'Hello World3', date: DateTime.parse('1969-07-20 20:18:04Z'), status: Status.completed),
     AppointmentList(name: 'Hello World3', date: DateTime.parse('1969-07-20 20:18:04Z'), status: Status.ongoing),
   ];
+
+  PatientAppointmentsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
