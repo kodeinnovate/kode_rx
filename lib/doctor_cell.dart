@@ -35,7 +35,7 @@ class DoctorCell extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 12.0),
-                child: Image.asset(
+                child: Image.network(
                   image, // Replace with the actual image path
                   width: 55, // Adjust the width as needed
                   height: 55, // Adjust the height as needed

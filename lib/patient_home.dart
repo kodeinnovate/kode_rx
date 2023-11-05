@@ -23,37 +23,37 @@ class DoctersData {
 }
 
 List<CatageroiesData> catdata = [
-  CatageroiesData(title: 'Checkup', image: 'assets/images/kodeinnovate.png'),
-  CatageroiesData(title: 'Lungs', image: 'assets/images/kodeinnovate.png'),
-  CatageroiesData(title: 'Kidney', image: 'assets/images/kodeinnovate.png'),
-  CatageroiesData(title: 'Heart', image: 'assets/images/kodeinnovate.png'),
+  CatageroiesData(title: 'Physician', image: 'https://images.freeimages.com/clg/istock/previews/1023/102318825-doctor-vector-icon-round.jpg'),
+  CatageroiesData(title: 'Peadiatrician', image: 'https://c8.alamy.com/comp/2FM9NW6/handsome-male-doctor-holds-a-newborn-baby-in-her-arms-accoucheur-in-uniform-holding-child-medical-icons-or-signs-health-care-banner-trendy-style-v-2FM9NW6.jpg'),
+  CatageroiesData(title: 'Gynaecologist', image: 'https://icon-library.com/images/gynecology-icon/gynecology-icon-8.jpg'),
+  CatageroiesData(title: 'Orthopaedic', image: 'https://cdni.iconscout.com/illustration/premium/thumb/female-nurse-looking-at-broken-leg-x-ray-6767090-5649817.png?f=webp'),
 ];
 
 List<DoctersData> docdata = [
   DoctersData(
-      name: 'Dr. Ryleigh Dunker',
+      name: 'Dr. Ram Shinde',
+      profession: 'Physician',
+      image: 'https://static.wixstatic.com/media/25884e_2f61ec98c9164dee94a8e3bdf803b2b4~mv2.jpg/v1/fill/w_313,h_313,al_c,lg_1,q_80,enc_auto/25884e_2f61ec98c9164dee94a8e3bdf803b2b4~mv2.jpg'),
+  DoctersData(
+      name: 'Dr. Neena Nichlani',
       profession: 'Gynaecologist',
-      image: 'assets/images/kodeinnovate.png'),
+      image: 'https://static.wixstatic.com/media/25884e_aa52f0e9a5094f828fab5d589d9cd6a0~mv2.jpeg/v1/fill/w_281,h_281,al_c,lg_1,q_80,enc_auto/25884e_aa52f0e9a5094f828fab5d589d9cd6a0~mv2.jpeg'),
   DoctersData(
-      name: 'Dr. Corbin Melle',
-      profession: 'Pediatrician',
-      image: 'assets/images/kodeinnovate.png'),
+      name: 'Dr. Faisal Bape',
+      profession: 'Orthopedic',
+      image: 'https://static.wixstatic.com/media/25884e_41c8d703b916418186fa457dc6bb95ea~mv2.jpeg/v1/fill/w_188,h_250,al_c,lg_1,q_80,enc_auto/25884e_41c8d703b916418186fa457dc6bb95ea~mv2.jpeg'),
   DoctersData(
-      name: 'Dr. Scarlett Dena',
-      profession: 'Psychiatrist',
-      image: 'assets/images/kodeinnovate.png'),
+      name: 'Dr. Vyankatesh',
+      profession: 'Neuro Physician',
+      image: 'https://static.wixstatic.com/media/25884e_e47b0e07b950421a8ad357ad43d1e3fc~mv2.jpeg/v1/fill/w_251,h_314,al_c,lg_1,q_80,enc_auto/25884e_e47b0e07b950421a8ad357ad43d1e3fc~mv2.jpeg'),
   DoctersData(
-      name: 'Dr. Angela Littrell',
-      profession: 'Anesthesiologist',
-      image: 'assets/images/kodeinnovate.png'),
+      name: 'Dr Akhil Khan',
+      profession: 'Urologist',
+      image: 'https://static.wixstatic.com/media/25884e_84bae8b8eb344be3b7a4e94f3f366547~mv2.jpeg/v1/fill/w_594,h_594,al_c,lg_1,q_80,enc_auto/25884e_84bae8b8eb344be3b7a4e94f3f366547~mv2.jpeg'),
   DoctersData(
-      name: 'Dr Melba Knobloch',
-      profession: 'Dermatologist',
-      image: 'assets/images/kodeinnovate.png'),
-  DoctersData(
-      name: 'Dr Shayla Naveed',
-      profession: 'Neurologist',
-      image: 'assets/images/kodeinnovate.png'),
+      name: 'Dr Vimlesh Pandey',
+      profession: 'Cardiologist',
+      image: 'https://static.wixstatic.com/media/25884e_5ff3f7a1b88f406ab2d2cfae43162b04~mv2.jpeg/v1/fill/w_259,h_305,al_c,lg_1,q_80,enc_auto/25884e_5ff3f7a1b88f406ab2d2cfae43162b04~mv2.jpeg'),
 ];
 
 // ignore: must_be_immutable
@@ -83,23 +83,13 @@ class PatientHome extends StatelessWidget {
               floating: true,
               pinned: true,
               centerTitle: true,
-              actions: const [
-                Padding(
-                  padding: EdgeInsets.only(top:10.0, right: 10.0),
-                  child: CircleAvatar(
-                    backgroundImage:
-                        AssetImage('assets/images/kodeinnovate.png'),
-                    radius: 28, // Adjust the size as needed
-                  ),
-                ),
-              ],
 
               flexibleSpace: Stack(
                 children: [
                   // Title(color: Colors.black87, child: Text('Hello World')),
                   Positioned(
-                    left: 65, // Adjust the left position as needed
-                    bottom: 75, // Adjust the bottom position as needed
+                    left: 45, // Adjust the left position as needed
+                    bottom: 85, // Adjust the bottom position as needed
                     child: 
                     RichText(text: const TextSpan(
                       style: TextStyle(
@@ -124,10 +114,12 @@ class PatientHome extends StatelessWidget {
                       collapseMode: CollapseMode.parallax,
                       centerTitle: true,
                       expandedTitleScale: 1.3,
-                      title: Container(
+                      title: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.0), // Add padding here
+                          child:Container(
                         //margin: EdgeInsets.symmetric(horizontal: 10),
                         constraints:
-                            const BoxConstraints(minHeight: 40, maxHeight: 45),
+                            const BoxConstraints(minHeight: 30, maxHeight: 35),
                         width: 300,
                         decoration: BoxDecoration(
                           boxShadow: <BoxShadow>[
@@ -159,7 +151,7 @@ class PatientHome extends StatelessWidget {
                             color: Colors.white,
                           ),
                         ),
-                      )),
+                      )),),
                 ],
               ),
             ),

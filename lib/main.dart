@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),
-        '/selectMedicenesScreen': (context) => SelectMedicineScreen(),
+        '/selectMedicenesScreen': (context) => MediceneListScreen(),
       },
       home: LoginScreen(), // Use the LoginScreen widget here
     );
