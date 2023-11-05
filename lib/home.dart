@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'device_helper.dart';
+
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final isTablet = MediaQuery.of(context).size.width > 600;
+    final isTablet = DeviceHelper.getDeviceType() == DeviceType.tablet;
 
     return Scaffold(
       appBar: AppBar(
