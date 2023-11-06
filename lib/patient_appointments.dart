@@ -19,13 +19,13 @@ class AppointmentList {
 class PatientAppointmentsScreen extends StatelessWidget {
 
   List<AppointmentList> lists = [
-    AppointmentList(name: 'Hello World1', date: DateTime.parse('1969-07-20 20:18:04Z'), status: Status.ongoing),
-    AppointmentList(name: 'Hello World2', date: DateTime.parse('2021-07-13T13:15:54.000000Z'), status: Status.completed),
-    AppointmentList(name: 'Hello World3', date: DateTime.parse('1969-07-20 20:18:04Z'), status: Status.ongoing),
-    AppointmentList(name: 'Hello World4', date: DateTime.parse('1969-07-20 20:18:04Z'), status: Status.pending),
-    AppointmentList(name: 'Hello World5', date: DateTime.parse('1969-07-20 20:18:04Z'), status: Status.pending),
-    AppointmentList(name: 'Hello World3', date: DateTime.parse('1969-07-20 20:18:04Z'), status: Status.completed),
-    AppointmentList(name: 'Hello World3', date: DateTime.parse('1969-07-20 20:18:04Z'), status: Status.ongoing),
+    AppointmentList(name: 'Sophia Hunter', date: DateTime.parse('2023-11-07 20:18:04Z'), status: Status.ongoing),
+    AppointmentList(name: 'Sarah Matthews', date: DateTime.parse('2021-07-13T13:15:54.000000Z'), status: Status.completed),
+    AppointmentList(name: 'Ted Miles', date: DateTime.parse('2023-11-08 20:18:04Z'), status: Status.ongoing),
+    AppointmentList(name: 'Shaun Robinson', date: DateTime.parse('2023-11-09 20:18:04Z'), status: Status.pending),
+    AppointmentList(name: 'Shelia Elliott', date: DateTime.parse('2023-11-10 20:18:04Z'), status: Status.pending),
+    AppointmentList(name: 'Lance Nichols', date: DateTime.parse('2023-11-20 20:18:04Z'), status: Status.completed),
+    AppointmentList(name: 'Alberto Cortez', date: DateTime.parse('2023-11-20 20:18:04Z'), status: Status.ongoing),
   ];
 
   PatientAppointmentsScreen({super.key});

@@ -48,10 +48,10 @@ class MySquare extends StatelessWidget {
                 DeviceHelper.getDeviceType == DeviceType.tablet ? 20.0 : 10.0,
               ),
               child: Column(
-                // crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Column(
-                    // crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         'Appointment Date:',
@@ -75,10 +75,10 @@ class MySquare extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // This is where you add your red Container
-                  Container( 
-                    child: Divider(color: Colors.amber, thickness: 2),
-                  ),
+                  // // This is where you add your red Container
+                  // Container( 
+                  //   child: Divider(color: Colors.amber, thickness: 2),
+                  // ),
 
                  Text(
                     '--------------------------------------------------------', style: TextStyle(color: AppColors.customDividerColor)// Use the desired gray color.
