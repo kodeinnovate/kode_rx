@@ -5,7 +5,8 @@ import 'app_colors.dart';
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return MaterialApp(
+     home: Scaffold(
       backgroundColor: AppColors.customBackground,
       resizeToAvoidBottomInset: true,
       body: SafeArea(
@@ -112,6 +113,6 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ));
   }
 }

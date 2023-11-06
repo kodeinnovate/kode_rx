@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'app_colors.dart';
 import 'device_helper.dart';
 
 
@@ -8,9 +9,11 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isTablet = DeviceHelper.getDeviceType() == DeviceType.tablet;
 
-    return Scaffold(
+    return MaterialApp(home: Scaffold(
+      backgroundColor: AppColors.customBackground,
       appBar: AppBar(
         title: Text('Doctor Prescription App'),
+        backgroundColor: AppColors.customBackground,
       ),
       body: Center(
         child: Column(
@@ -54,7 +57,7 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 }
 
@@ -81,7 +84,7 @@ class SquareModule extends StatelessWidget {
         width: isTablet ? 200.0 : 150.0,
         height: isTablet ? 200.0 : 150.0,
         decoration: BoxDecoration(
-          color: Colors.blue,
+          color: AppColors.customBackground,
           borderRadius: BorderRadius.circular(10.0),
         ),
         child: Column(
