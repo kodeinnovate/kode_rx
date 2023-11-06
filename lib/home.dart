@@ -9,7 +9,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isTablet = DeviceHelper.getDeviceType() == DeviceType.tablet;
 
-    return MaterialApp(home: Scaffold(
+    return  Scaffold(
       appBar: AppBar(
         title: Text('Doctor Prescription App'),
         backgroundColor: AppColors.customBackground,
@@ -56,7 +56,7 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-    ));
+    );
   }
 }
 
