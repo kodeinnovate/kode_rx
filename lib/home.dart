@@ -10,7 +10,6 @@ class HomeScreen extends StatelessWidget {
     final isTablet = DeviceHelper.getDeviceType() == DeviceType.tablet;
 
     return MaterialApp(home: Scaffold(
-      backgroundColor: AppColors.customBackground,
       appBar: AppBar(
         title: Text('Doctor Prescription App'),
         backgroundColor: AppColors.customBackground,
