@@ -71,7 +71,7 @@ class SquareModule extends StatelessWidget {
       onTap: () {
         // Handle module tap
         if (text == 'Appointments') {
-          Navigator.of(context).pushReplacementNamed('/selectMedicenesScreen');
+          Navigator.of(context).pushReplacementNamed('/patientAppointmentScreen');
         } else if (text == 'Appointment History') {
           // Navigate to Appointment History screen
           // Add your navigation code here

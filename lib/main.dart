@@ -8,7 +8,7 @@ import 'home.dart';
 import 'login.dart'; // Import the login screen
 
 void main() {
-  runApp(PatientHome());
+  runApp(LoginScreen());
 }
 
 class MyApp extends StatelessWidget {
@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),
         '/selectMedicenesScreen': (context) => MediceneListScreen(),
+        '/patientAppointmentScreen': (context) => PatientAppointmentsScreen(),
       },
       home: LoginScreen(), // Use the LoginScreen widget here
     );
