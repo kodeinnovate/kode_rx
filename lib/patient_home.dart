@@ -31,29 +31,33 @@ List<CatageroiesData> catdata = [
 
 List<DoctersData> docdata = [
   DoctersData(
-      name: 'Dr. Ram Shinde',
+      name: 'Dr Ashlynn Crosswhite',
       profession: 'Physician',
-      image: 'https://static.wixstatic.com/media/25884e_2f61ec98c9164dee94a8e3bdf803b2b4~mv2.jpg/v1/fill/w_313,h_313,al_c,lg_1,q_80,enc_auto/25884e_2f61ec98c9164dee94a8e3bdf803b2b4~mv2.jpg'),
+      image: 'https://img.freepik.com/premium-photo/photo-female-doctor-physician-medical-uniform-with-stethoscope-cross-arms-chest-smiling_812426-24163.jpg'),
   DoctersData(
-      name: 'Dr. Neena Nichlani',
+      name: 'Dr. Scarlett Theodoropoulo',
       profession: 'Gynaecologist',
-      image: 'https://static.wixstatic.com/media/25884e_aa52f0e9a5094f828fab5d589d9cd6a0~mv2.jpeg/v1/fill/w_281,h_281,al_c,lg_1,q_80,enc_auto/25884e_aa52f0e9a5094f828fab5d589d9cd6a0~mv2.jpeg'),
+      image: 'https://img.freepik.com/premium-photo/photo-female-doctor-physician-medical-uniform-with-stethoscope-cross-arms-chest-smiling_812426-21604.jpg'),
   DoctersData(
-      name: 'Dr. Faisal Bape',
+      name: 'Dr. Isabella Marabella',
       profession: 'Orthopedic',
-      image: 'https://static.wixstatic.com/media/25884e_41c8d703b916418186fa457dc6bb95ea~mv2.jpeg/v1/fill/w_188,h_250,al_c,lg_1,q_80,enc_auto/25884e_41c8d703b916418186fa457dc6bb95ea~mv2.jpeg'),
+      image: 'https://img.freepik.com/premium-photo/photo-female-doctor-physician-medical-uniform-with-stethoscope-cross-arms-chest-smiling_812426-28118.jpg'),
   DoctersData(
-      name: 'Dr. Vyankatesh',
+      name: 'Dr. Damien Chaffee',
       profession: 'Neuro Physician',
-      image: 'https://static.wixstatic.com/media/25884e_e47b0e07b950421a8ad357ad43d1e3fc~mv2.jpeg/v1/fill/w_251,h_314,al_c,lg_1,q_80,enc_auto/25884e_e47b0e07b950421a8ad357ad43d1e3fc~mv2.jpeg'),
+      image: 'https://image.similarpng.com/very-thumbnail/2020/05/Beautiful-doctor-vector-illustration-PNG.png'),
   DoctersData(
-      name: 'Dr Akhil Khan',
+      name: 'Dr. Damien Chaffee',
+      profession: 'Neuro Physician',
+      image: 'https://image.similarpng.com/very-thumbnail/2020/05/Beautiful-doctor-vector-illustration-PNG.png'),
+  DoctersData(
+      name: 'Dr Ryleigh Jorden',
       profession: 'Urologist',
-      image: 'https://static.wixstatic.com/media/25884e_84bae8b8eb344be3b7a4e94f3f366547~mv2.jpeg/v1/fill/w_594,h_594,al_c,lg_1,q_80,enc_auto/25884e_84bae8b8eb344be3b7a4e94f3f366547~mv2.jpeg'),
+      image: 'https://img.freepik.com/free-icon/doctor_318-342603.jpg?w=2000'),
   DoctersData(
-      name: 'Dr Vimlesh Pandey',
+      name: 'Dr Rebekah Durphey',
       profession: 'Cardiologist',
-      image: 'https://static.wixstatic.com/media/25884e_5ff3f7a1b88f406ab2d2cfae43162b04~mv2.jpeg/v1/fill/w_259,h_305,al_c,lg_1,q_80,enc_auto/25884e_5ff3f7a1b88f406ab2d2cfae43162b04~mv2.jpeg'),
+      image: 'https://static.vecteezy.com/system/resources/thumbnails/007/986/570/small/woman-doctor-icon-doctor-woman-with-stereoscopic-glyph-isolated-blue-background-vector.jpg'),
 ];
 
 // ignore: must_be_immutable

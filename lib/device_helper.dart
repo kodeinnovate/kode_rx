@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 enum DeviceType { phone, tablet }
 
+
 class DeviceHelper {
   static DeviceType getDeviceType() {
     final data = MediaQueryData.fromView(WidgetsBinding.instance.window);
     return data.size.shortestSide < 600 ? DeviceType.phone : DeviceType.tablet;
   }
+
+  // static Colors onClick() {
+  //   return 
+  // }
 
   static AppBar deviceAppBar() {
     final deviceType = getDeviceType();
