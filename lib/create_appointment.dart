@@ -173,8 +173,8 @@ class _TableBasicsExampleState extends State<CreateAppointment> {
                         child: Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5.0),
-                              color: isSelectedList[index] 
-                                  ? Colors.blue
+                              color: isSelectedList[index] && !timeSlotList[index].isSelected! 
+                                  ? AppColors.customBackground
                                   : Colors.white,
                               border: Border.all(color: Colors.grey, width: 2)),
                           height: 40,
@@ -262,15 +262,15 @@ class _TableBasicsExampleState extends State<CreateAppointment> {
                         EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
                     child: Container(
                       width: 300,
-                      height: 70,
+                      height: 50,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.0),
-                        color: Colors.blue,
+                        color: AppColors.customBackground,
                       ),
                       child: Center(
                         child: Text(
                           'Book Appointment',
-                          style: TextStyle(fontSize: 22),
+                          style: TextStyle(fontSize: 22, color: Colors.white),
                         ),
                       ),
                     ),
