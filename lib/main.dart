@@ -9,7 +9,7 @@ import 'home.dart';
 import 'login.dart'; // Import the login screen
 
 void main() {
-  runApp(CreateAppointment());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/patientHome',
+      initialRoute: '/login',
       routes: {
         '/login': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),
