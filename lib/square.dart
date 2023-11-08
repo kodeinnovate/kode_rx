@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:kode_rx/app_colors.dart';
 import 'package:kode_rx/common_class.dart';
 import 'package:kode_rx/device_helper.dart';
+import 'package:kode_rx/select_medicenes.dart';
 
 
 class MySquare extends StatelessWidget {
@@ -26,7 +27,16 @@ class MySquare extends StatelessWidget {
           ),
         ),
         elevation: 5,
-        child: Row(
+        child: GestureDetector(
+          onTap: () {
+      // Navigate to the selectMedicinesScreen when the card is tapped
+      Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MedicationReminderApp(),
+      ),
+    );
+  },child:  Row(
           children: [
             Container(
               decoration: BoxDecoration(
@@ -100,7 +110,7 @@ class MySquare extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 
 

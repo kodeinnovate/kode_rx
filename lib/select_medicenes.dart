@@ -1,128 +1,309 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class Medicene {
-  final int id;
-  final String name;
-  final MediceneCategory category;
-  bool isSelected;
 
-  Medicene({required this.id, required this.name, required this.category, this.isSelected = false});
-}
-
-class MediceneCategory {
-  final int id;
-  final String name;
-
-  MediceneCategory({required this.id, required this.name});
-}
-
-class MediceneListScreen extends StatelessWidget {
+class MedicationReminderApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ChangeNotifierProvider(
-        create: (context) => MediceneListProvider(),
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Medicine List'),
-          ),
-          body: MediceneList(),
-        ),
-      ),
+      home: MedicationListScreen(),
     );
   }
 }
 
+class MedicationListScreen extends StatefulWidget {
+  @override
+  _MedicationListScreenState createState() => _MedicationListScreenState();
+}
 
-class MediceneList extends StatelessWidget {
+class _MedicationListScreenState extends State<MedicationListScreen> {
+  List<Medicine> medicines = [];
+  List<Medicine> selectedMedicines = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Add dummy medicine data
+    medicines = [
+      Medicine('Medicine A'),
+      Medicine('Medicine B'),
+      Medicine('Medicine C'),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
-    final mediceneProvider = Provider.of<MediceneListProvider>(context);
-
-    return Column(
-      children: [
-        Container(
-          color: Colors.blue, // Set the background color to blue
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white, // Set the input field background color to white
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: CupertinoTextField(
-              placeholder: 'Search Medicene', // Set the placeholder text
-              prefix: Icon(
-                CupertinoIcons.search,
-                color: Colors.black,
-              ),
-              onChanged: (query) {
-                mediceneProvider.filterMediceneList(query);
-              },
-              style: TextStyle(color: Colors.black), // Set text color to black
-              padding: EdgeInsets.all(10),
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Medicine List'),
+      ),
+      body: Column(
+        children: [
+          SearchField(
+            medicines: medicines,
+            onSearch: (filteredMedicines) {
+              setState(() {
+                medicines = filteredMedicines;
+              });
+            },
           ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: mediceneProvider.filteredMediceneList.length,
-            itemBuilder: (context, index) {
-              final medicene = mediceneProvider.filteredMediceneList[index];
-              return Card(
-                elevation: 3,
-                margin: EdgeInsets.all(8),
-                child: ListTile(
-                  title: Text(
-                    medicene.name,
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  trailing: Checkbox(
-                    value: medicene.isSelected,
-                    onChanged: (value) {
-                      mediceneProvider.toggleSelection(medicene);
-                    },
-                    visualDensity: VisualDensity.comfortable,
-                  ),
+          MedicationListView(
+            medicines: medicines,
+            onSelect: (selectedMedicine) {
+              showMedicineTimeDialog(selectedMedicine);
+            },
+          ),
+          SelectedMedicationsList(
+            selectedMedicines: selectedMedicines,
+          ),
+        ],
+      ),
+    );
+  }
+
+  void showMedicineTimeDialog(Medicine medicine) {
+    var selectedTimesToTake = <String>[];
+    var isMorningSelected = false;
+    var isAfternoonSelected = false;
+    var isEveningSelected = false;
+
+    final timeDialogKey = GlobalKey<FormState>();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(medicine.name),
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              return Form(
+                key: timeDialogKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text('Select times to take:'),
+                    CheckboxListTile(
+                      title: Text('Morning'),
+                      value: isMorningSelected,
+                      onChanged: (value) {
+                        setState(() {
+                          isMorningSelected = value!;
+                          updateSelectedTimes(
+                            'Morning',
+                            isMorningSelected,
+                            selectedTimesToTake,
+                          );
+                        });
+                      },
+                    ),
+                    CheckboxListTile(
+                      title: Text('Afternoon'),
+                      value: isAfternoonSelected,
+                      onChanged: (value) {
+                        setState(() {
+                          isAfternoonSelected = value!;
+                          updateSelectedTimes(
+                            'Afternoon',
+                            isAfternoonSelected,
+                            selectedTimesToTake,
+                          );
+                        });
+                      },
+                    ),
+                    CheckboxListTile(
+                      title: Text('Evening'),
+                      value: isEveningSelected,
+                      onChanged: (value) {
+                        setState(() {
+                          isEveningSelected = value!;
+                          updateSelectedTimes(
+                            'Evening',
+                            isEveningSelected,
+                            selectedTimesToTake,
+                          );
+                        });
+                      },
+                    ),
+                  ],
                 ),
               );
             },
           ),
-        ),
-      ],
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                if (timeDialogKey.currentState!.validate()) {
+                  Navigator.of(context).pop();
+                  showMealDialog(medicine, selectedTimesToTake);
+                }
+              },
+              child: Text('Next'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void updateSelectedTimes(
+      String time,
+      bool selected,
+      List<String> selectedTimes,
+      ) {
+    if (selected) {
+      selectedTimes.add(time);
+    } else {
+      selectedTimes.remove(time);
+    }
+  }
+
+  void showMealDialog(Medicine medicine, List<String> selectedTimesToTake) {
+    var isBeforeMeal = false;
+
+    final mealDialogKey = GlobalKey<FormState>();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Meal Information'),
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              return Form(
+                key: mealDialogKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Text('Select when to take before or after meal:'),
+                    CheckboxListTile(
+                      title: Text('Before Meal'),
+                      value: isBeforeMeal,
+                      onChanged: (value) {
+                        setState(() {
+                          isBeforeMeal = value!;
+                        });
+                      },
+                    ),
+                    CheckboxListTile(
+                      title: Text('After Meal'),
+                      value: !isBeforeMeal,
+                      onChanged: (value) {
+                        setState(() {
+                          isBeforeMeal = !value!;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                if (mealDialogKey.currentState!.validate()) {
+                  medicine.timesToTake = selectedTimesToTake;
+                  medicine.beforeMeal = isBeforeMeal;
+                  setState(() {
+                    selectedMedicines.add(medicine);
+                  });
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text('Add'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
 
-class MediceneListProvider with ChangeNotifier {
-  final List<Medicene> mediceneList = [
-    Medicene(id: 1, name: 'Medicene 1', category: MediceneCategory(id: 1, name: 'Category 1')),
-    Medicene(id: 2, name: 'Medicene 2', category: MediceneCategory(id: 2, name: 'Category 2')),
-    // Add more medicines here
-  ];
+class SearchField extends StatelessWidget {
+  final List<Medicine> medicines;
+  final Function(List<Medicine>) onSearch;
 
-  List<Medicene> _filteredMediceneList = [];
+  SearchField({required this.medicines, required this.onSearch});
 
-  List<Medicene> get filteredMediceneList => _filteredMediceneList;
-
-  MediceneListProvider() {
-    _filteredMediceneList = mediceneList;
-  }
-
-  void filterMediceneList(String query) {
-    _filteredMediceneList = mediceneList
-        .where((medicene) => medicene.name.toLowerCase().contains(query.toLowerCase()))
-        .toList();
-    notifyListeners();
-  }
-
-  void toggleSelection(Medicene medicene) {
-    medicene.isSelected = !medicene.isSelected;
-    notifyListeners();
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      decoration: InputDecoration(labelText: 'Search Medicine'),
+      onChanged: (query) {
+        final filteredMedicines = medicines
+            .where((medicine) =>
+            medicine.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+        onSearch(filteredMedicines);
+      },
+    );
   }
 }
 
-void main() => runApp(MaterialApp(
-  home: MediceneListScreen(),
-));
+class Medicine {
+  final String name;
+  List<String> timesToTake = [];
+  bool beforeMeal = false;
+
+  Medicine(this.name);
+}
+
+class MedicationListView extends StatelessWidget {
+  final List<Medicine> medicines;
+  final Function(Medicine) onSelect;
+
+  MedicationListView({required this.medicines, required this.onSelect});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+        child: ListView.builder(
+        itemCount: medicines.length,
+        itemBuilder: (context, index) {
+      return ListTile(
+        title: Text(medicines[index].name),
+        onTap: () {
+          onSelect(medicines[index]);
+        },
+      );
+    },
+    ));
+  }
+}
+
+class SelectedMedicationsList extends StatelessWidget {
+  final List<Medicine> selectedMedicines;
+
+  SelectedMedicationsList({required this.selectedMedicines});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          'Selected Medicines:',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        for (var medicine in selectedMedicines)
+          ListTile(
+            title: Text(medicine.name),
+            subtitle: Text(
+              'Time to take: ${medicine.timesToTake.isNotEmpty ? medicine.timesToTake.join(', ') : 'No specific time'} | Meal: ${medicine.beforeMeal ? 'Before Meal' : 'After Meal'}',
+            ),
+          ),
+      ],
+    );
+  }
+}
