@@ -1,4 +1,7 @@
 // ignore: unused_import
+import 'package:kode_rx/create_appointment.dart';
+import 'package:kode_rx/patient_appointments.dart';
+
 import 'app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +17,16 @@ class DoctorCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return InkWell(
+      onTap: () =>  Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) {
+              // Replace `DestinationScreen` with your actual destination screen widget
+              return CreateAppointment();
+            },
+          ),
+        ),
+      child: Padding(
       padding: const EdgeInsets.all(8.0),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8.0),
@@ -68,6 +80,7 @@ class DoctorCell extends StatelessWidget {
           ),
         ),
       ),
+    )
     );
   }
 }

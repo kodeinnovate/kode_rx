@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kode_rx/app_colors.dart';
+import 'package:kode_rx/patient_home.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'utils.dart';
 import 'device_helper.dart';
@@ -52,10 +53,11 @@ int selectedGridItemIndex = -1;
 final format = DateFormat('hh:mm a');
 
 class _TableBasicsExampleState extends State<CreateAppointment> {
-  CalendarFormat _calendarFormat = CalendarFormat.month;
+  CalendarFormat _calendarFormat = CalendarFormat.week;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   bool showOverlay = false;
+  bool showToastMessage = false;
 
   @override
   Widget build(BuildContext context) {
@@ -112,11 +114,11 @@ class _TableBasicsExampleState extends State<CreateAppointment> {
                 // SizedBox(
                 //   height: 40.0,
                 // ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
 
-                Padding(
+                const Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Center(
                       child: Text(
@@ -296,25 +298,43 @@ class _TableBasicsExampleState extends State<CreateAppointment> {
                 Center(
                   child: InkWell(
                     onTap: () {
-                      setState(() {
-                        showOverlay = true;
-                      });
-
-                      // Simulate a delay before hiding the overlay
-                      Future.delayed(const Duration(seconds: 3), () {
+                      if (selectedGridItemIndex == -1) {
+                        print('start');
                         setState(() {
-                          showOverlay = false;
+                          showToastMessage = true;
+                        });
+                        Future.delayed(const Duration(seconds: 3), () {
+                          setState(() {
+                            print('Hello');
+                            showToastMessage = false;
+                          });
+                        });
+                      } else {
+                        setState(() {
+                          showOverlay = true;
                         });
 
-                        // Navigate back to '/patientAppointmentScreen' after hiding overlay
-                        Navigator.of(context)
-                            .pushReplacementNamed('/patientHome');
-                      });
+                        // Simulate a delay before hiding the overlay
+                        Future.delayed(const Duration(seconds: 3), () {
+                          setState(() {
+                            showOverlay = false;
+                          });
+
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) {
+                                // Replace `DestinationScreen` with your actual destination screen widget
+                                return PatientHome();
+                              },
+                            ),
+                          );
+                        });
+                      }
                     },
                     child: Stack(
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 8.0, vertical: 16.0),
                           child: Container(
                             width: 300,
@@ -323,7 +343,7 @@ class _TableBasicsExampleState extends State<CreateAppointment> {
                               borderRadius: BorderRadius.circular(5.0),
                               color: AppColors.customBackground,
                             ),
-                            child: Center(
+                            child: const Center(
                               child: Text(
                                 'Book Appointment',
                                 style: TextStyle(
@@ -338,7 +358,8 @@ class _TableBasicsExampleState extends State<CreateAppointment> {
                 ),
               ],
             ),
-            if (showOverlay) GradientContainer()
+            if (showOverlay) AppointmentConfirmation(),
+            if (showToastMessage) ToastMessage(),
           ],
         ),
       ),
@@ -346,7 +367,7 @@ class _TableBasicsExampleState extends State<CreateAppointment> {
   }
 }
 
-class GradientContainer extends StatelessWidget {
+class AppointmentConfirmation extends StatelessWidget {
   @override
   Widget build(context) {
     return (Container(
@@ -378,5 +399,47 @@ class GradientContainer extends StatelessWidget {
         ],
       ),
     ));
+  }
+}
+
+class ToastMessage extends StatelessWidget {
+  @override
+  Widget build(context) {
+    return Container(
+      color: Color.fromARGB(200, 255, 255, 255),
+      alignment: Alignment.bottomCenter,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: (Container(
+            height: 75,
+            width: 260,
+            decoration: BoxDecoration(
+              color: AppColors.customBackground,
+              borderRadius: BorderRadius.circular(10.0),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.grey, // Color of the shadow
+                  blurRadius: 5.0, // Spread radius of the shadow
+                  offset: Offset(0, 3), // Offset of the shadow
+                ),
+              ],
+            ),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Center(
+                child: Text(
+                  'Please select a time slot!',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ),
+          )),
+        ),
+      ),
+    );
   }
 }
