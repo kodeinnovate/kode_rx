@@ -9,7 +9,7 @@ import 'home.dart';
 import 'login.dart'; // Import the login screen
 
 void main() {
-  runApp(MaterialApp(home: CreateAppointment()));
+  runApp(CreateAppointment());
 }
 
 class MyApp extends StatelessWidget {
@@ -17,12 +17,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/login',
+      initialRoute: '/patientHome',
       routes: {
         '/login': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),
         '/selectMedicenesScreen': (context) => MediceneListScreen(),
         '/patientAppointmentScreen': (context) => PatientAppointmentsScreen(),
+        '/patientHome' :(context) => PatientHome(),
+        '/createAppointment': (context) => CreateAppointment(),
       },
       home: LoginScreen(), // Use the LoginScreen widget here
     );
