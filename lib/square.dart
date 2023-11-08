@@ -63,14 +63,17 @@ class MySquare extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Appointment Date:',
-                        style: TextStyle(
-                          fontSize:
-                              DeviceHelper.getDeviceType == DeviceType.tablet
-                                  ? 20
-                                  : 14,
-                          fontWeight: FontWeight.bold,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: const Text(
+                          'Appointment Date:',
+                          style: TextStyle(
+                            fontSize:
+                                DeviceHelper.getDeviceType == DeviceType.tablet
+                                    ? 20
+                                    : 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                       Text(
@@ -91,7 +94,7 @@ class MySquare extends StatelessWidget {
                   // ),
 
                  Text(
-                    '--------------------------------------------------------', style: TextStyle(color: AppColors.customDividerColor)// Use the desired gray color.
+                    '---------------------------------------------------------------------------------------', style: TextStyle(color: AppColors.customDividerColor)// Use the desired gray color.
                   ),
                   SizedBox(
                     child: Text(

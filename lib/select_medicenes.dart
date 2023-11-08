@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kode_rx/device_helper.dart';
 
 
 class MedicationReminderApp extends StatelessWidget {
@@ -34,9 +35,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Medicine List'),
-      ),
+      appBar: DeviceHelper.deviceAppBar(),
       body: Column(
         children: [
           SearchField(
