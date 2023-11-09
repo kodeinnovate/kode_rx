@@ -94,7 +94,7 @@ class LoginScreen extends StatelessWidget {
                             child: TextField(
                               keyboardType: TextInputType.number,
                               onSubmitted: (String value) {
-                                Navigator.of(context).pushReplacementNamed('/patientHome');
+                                Navigator.of(context).pushReplacementNamed('/otpPage');
                               },
                               decoration: InputDecoration(
                                 labelText: 'Enter your phone number',

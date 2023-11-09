@@ -45,11 +45,14 @@ class OtpPage extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: DeviceHelper.deviceAppBar(pageTitle: title),
+        backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 46,),
+              SizedBox(
+                height: 46,
+              ),
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Container(
@@ -88,15 +91,15 @@ class OtpPage extends StatelessWidget {
                     )),
               )),
               SizedBox(
-                    height: 10,
-                  ),
+                height: 10,
+              ),
               Container(
                 // height: 200,
                 alignment: Alignment.center,
                 child: Form(
                   child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 12),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: List.generate(
@@ -109,7 +112,8 @@ class OtpPage extends StatelessWidget {
                               filled: true,
                               fillColor: Color.fromARGB(255, 218, 218, 218),
                               enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: AppColors.customBackground),
+                                borderSide: BorderSide(
+                                    color: AppColors.customBackground),
                                 borderRadius: BorderRadius.circular(7.7),
                               ),
                             ),
@@ -127,6 +131,9 @@ class OtpPage extends StatelessWidget {
                                 focusNodes[index - 1].requestFocus();
                               }
                             },
+                            onSubmitted: (String value) {
+                                Navigator.of(context).pushReplacementNamed('/patientHome');
+                              },
                             onEditingComplete: () {
                               print('done');
                               // Handle completion if needed
@@ -145,7 +152,6 @@ class OtpPage extends StatelessWidget {
                   ),
                 ),
               ),
-              
               Padding(
                 padding: EdgeInsets.only(top: 24, left: 8, right: 8),
                 child: Container(

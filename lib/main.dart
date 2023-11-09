@@ -10,7 +10,7 @@ import 'home.dart';
 import 'login.dart'; // Import the login screen
 
 void main() {
-  runApp(OtpPage());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
