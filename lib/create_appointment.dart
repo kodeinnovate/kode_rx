@@ -58,12 +58,13 @@ class _TableBasicsExampleState extends State<CreateAppointment> {
   DateTime? _selectedDay;
   bool showOverlay = false;
   bool showToastMessage = false;
+  String title = 'Appointment';
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: DeviceHelper.deviceAppBar(),
+        appBar: DeviceHelper.deviceAppBar(pageTitle: title!),
         body: Stack(
           children: [
             // if (showOverlay) GradientContainer(),
@@ -335,7 +336,7 @@ class _TableBasicsExampleState extends State<CreateAppointment> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 16.0),
+                              horizontal: 8.0, vertical: 12.0),
                           child: Container(
                             width: 300,
                             height: 50,
@@ -429,8 +430,9 @@ class ToastMessage extends StatelessWidget {
               padding: EdgeInsets.all(8.0),
               child: Center(
                 child: Text(
-                  'Please select a time slot!',
+                  'Please select a time slot !',
                   style: TextStyle(
+                    fontWeight: FontWeight.bold,
                     color: Colors.white,
                     fontSize: 20,
                   ),

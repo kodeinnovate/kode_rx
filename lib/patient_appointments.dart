@@ -28,6 +28,8 @@ class PatientAppointmentsScreen extends StatelessWidget {
     AppointmentList(name: 'Alberto Cortez', date: DateTime.parse('2023-11-20 20:18:04Z'), status: Status.ongoing),
   ];
 
+  String title = 'Appointments';
+
   PatientAppointmentsScreen({super.key});
 
   @override
@@ -35,7 +37,7 @@ class PatientAppointmentsScreen extends StatelessWidget {
     return MaterialApp(
       // textDirection: TextDirection.ltr, // Or TextDirection.rtl for right-to-left text direction
       home: Scaffold(
-        appBar: DeviceHelper.deviceAppBar(),
+        appBar: DeviceHelper.deviceAppBar(pageTitle: title),
         body:
 
         Column(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kode_rx/create_appointment.dart';
+import 'package:kode_rx/otp_page.dart';
 import 'package:kode_rx/patient_appointments.dart';
 import 'package:kode_rx/patient_home.dart';
 import 'package:kode_rx/select_medicenes.dart';
@@ -9,7 +10,7 @@ import 'home.dart';
 import 'login.dart'; // Import the login screen
 
 void main() {
-  runApp(MyApp());
+  runApp(OtpPage());
 }
 
 class MyApp extends StatelessWidget {
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         '/patientAppointmentScreen': (context) => PatientAppointmentsScreen(),
         '/patientHome' :(context) => PatientHome(),
         '/createAppointment': (context) => CreateAppointment(),
+        '/otpPage' : (context) => OtpPage()
       },
       home: LoginScreen(), // Use the LoginScreen widget here
     );
