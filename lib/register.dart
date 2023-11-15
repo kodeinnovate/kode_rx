@@ -1,17 +1,73 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kode_rx/Components/custom_button.dart';
 import 'package:kode_rx/Components/custom_textfield.dart';
 import 'package:kode_rx/app_colors.dart';
 import 'package:kode_rx/device_helper.dart';
+import 'package:kode_rx/home.dart';
+import 'package:kode_rx/otp_screen.dart';
+import 'verification_id.dart';
+import 'Controllers/authentication_repo.dart';
 
 class Signup extends StatelessWidget {
+  static Signup get instance => Get.find();
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneNumberController = TextEditingController();
+  // final _auth = FirebaseAuth.instance;
+  // late final Rx<User?> firebaseUser;
+
+  
+
+  // void data(String userName, String email, String number) {
+  //   var myInt = int.parse(number);
+  //   assert(myInt is int);
+  //   print(myInt); // 12345
+  //   print(userName);
+  //   print(email);
+  //   print(number);
+  // }
+
+  // Future<void> phoneAuthentication(String number) async {
+  //   print(number);
+  //   try {
+  //     print('called1');
+  //     await _auth.verifyPhoneNumber(phoneNumber: number, verificationCompleted: (credential) async {
+  //     await _auth.signInWithCredential(credential);
+  //   },codeSent: (verificationId, resendToken) {
+  //     print('called2');
+  //     verificationID.value = verificationId;
+  //     print('Verification ID set: $verificationId');
+  //     print(verificationID.value);
+  //   },codeAutoRetrievalTimeout: (verificationId) {
+  //     verificationID.value = verificationId;
+  //   },
+  //    verificationFailed: (e) {
+  //     if (e.code == 'invalid-phone-number') {
+  //       Get.snackbar('Error', 'The provided phone number is not valid.');
+  //     } else {
+  //       Get.snackbar('Error', 'Something went wrong. Try again.');
+  //     }
+  //   },   timeout: const Duration(seconds: 120));
+  //   } catch (e) {
+  //     print('Error during phone authentication: $e');
+  //   Get.snackbar('Error', 'Something went wrong. Try again.');
+  //   }
+    
+  // }
+
+  // Future<bool> verifyOTP(String otp) async {
+  //   print(verificationID.value);
+  //   print("final verification ${otp} ${verificationID.value}");
+  //   var credentials = await _auth.signInWithCredential(
+  //       PhoneAuthProvider.credential(verificationId: verificationID.value, smsCode: otp));
+  //   return credentials.user != null ? true : false;
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       home: Scaffold(
         body: SingleChildScrollView(
           child: SafeArea(
@@ -92,14 +148,25 @@ class Signup extends StatelessWidget {
                     buttonText: 'SIGN UP',
                     onTap: signUserUp,
                   ),
-        
-                  const SizedBox(height: 50,),
+                  const SizedBox(
+                    height: 50,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Having trouble signing up?', style: TextStyle(fontSize: 16, color: Colors.grey.shade600),),
-                      const SizedBox(width: 4,),
-                      Text('Contact Us', style: TextStyle(color: AppColors.customBackground, fontSize: 16),),
+                      Text(
+                        'Having trouble signing up?',
+                        style: TextStyle(
+                            fontSize: 16, color: Colors.grey.shade600),
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      const Text(
+                        'Contact Us',
+                        style: TextStyle(
+                            color: AppColors.customBackground, fontSize: 16),
+                      ),
                     ],
                   )
                 ],
@@ -113,5 +180,26 @@ class Signup extends StatelessWidget {
 
   signUserUp() {
     print('Working');
+    // data(usernameController.text.toString(), emailController.text.toString(),
+    //     phoneNumberController.text.toString());
+    // phoneAuthentication(phoneNumberController.text.toString());
+    AuthenticationRepo.instance.phoneAuthentication(phoneNumberController.text.toString());
+    Get.to(() => OTPScreen());
+    //  Navigator.of(context).push(
+    //                         MaterialPageRoute<void>(
+    //                           builder: (BuildContext context) {
+    //                             // Replace `DestinationScreen` with your actual destination screen widget
+    //                             return OTPScreen();
+    //                           },
+    //                         ),
+    //                       );
+  }
+
+   void otpOnSubmit(String otp) async {
+    print('function is working');
+    // var isVerified = await verifyOTP(otp);
+    var isVerified = await AuthenticationRepo.instance.verifyOTP(otp);
+    print('working further');
+    isVerified ? Get.to(HomeScreen()) : Get.to(Signup());
   }
 }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'app_colors.dart';
 import 'device_helper.dart';
 
 
 class HomeScreen extends StatelessWidget {
+  static HomeScreen get instance => Get.find();
   @override
   Widget build(BuildContext context) {
     final isTablet = DeviceHelper.getDeviceType() == DeviceType.tablet;
