@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kode_rx/Components/custom_button.dart';
 import 'package:kode_rx/Components/custom_textfield.dart';
+import 'package:kode_rx/Controllers/user_repo.dart';
 import 'package:kode_rx/app_colors.dart';
+import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/device_helper.dart';
 import 'package:kode_rx/home.dart';
 import 'package:kode_rx/otp_screen.dart';
@@ -12,13 +14,12 @@ import 'Controllers/authentication_repo.dart';
 
 class Signup extends StatelessWidget {
   static Signup get instance => Get.find();
+  final userRepository = Get.put(UserRepo());
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneNumberController = TextEditingController();
   // final _auth = FirebaseAuth.instance;
   // late final Rx<User?> firebaseUser;
-
-  
 
   // void data(String userName, String email, String number) {
   //   var myInt = int.parse(number);
@@ -54,7 +55,7 @@ class Signup extends StatelessWidget {
   //     print('Error during phone authentication: $e');
   //   Get.snackbar('Error', 'Something went wrong. Try again.');
   //   }
-    
+
   // }
 
   // Future<bool> verifyOTP(String otp) async {
@@ -180,9 +181,15 @@ class Signup extends StatelessWidget {
 
   signUserUp() {
     print('Working');
+    final user = UserModel(
+      fullname: usernameController.text.trim(),
+      email: emailController.text.trim(),
+      phoneNo: phoneNumberController.text.toString().trim(),
+    );
     // data(usernameController.text.toString(), emailController.text.toString(),
     //     phoneNumberController.text.toString());
     // phoneAuthentication(phoneNumberController.text.toString());
+    dataStore(user);
     AuthenticationRepo.instance.phoneAuthentication(phoneNumberController.text.toString());
     Get.to(() => OTPScreen());
     //  Navigator.of(context).push(
@@ -195,7 +202,13 @@ class Signup extends StatelessWidget {
     //                       );
   }
 
-   void otpOnSubmit(String otp) async {
+  Future<void> dataStore(UserModel user) async {
+    print('Working dataStore');
+    await userRepository.createUser(user);
+    // AuthenticationRepo.instance.phoneAuthentication(phoneNumberController.text.toString().trim());
+  }
+
+  void otpOnSubmit(String otp) async {
     print('function is working');
     // var isVerified = await verifyOTP(otp);
     var isVerified = await AuthenticationRepo.instance.verifyOTP(otp);

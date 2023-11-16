@@ -23,7 +23,7 @@ class AuthenticationRepo extends GetxController {
 
   Future<void> phoneAuthentication(String number) async {
     try {
-      firebaseUser.value == null ? Get.offAll(() => Signup()) : Get.offAll(() => HomeScreen());
+      // firebaseUser.value == null ? Get.offAll(() => Signup()) : Get.offAll(() => HomeScreen());
       await _auth.verifyPhoneNumber(
           phoneNumber: number,
           verificationCompleted: (credential) async {

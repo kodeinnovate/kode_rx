@@ -32,6 +32,7 @@ class OTPScreen extends StatelessWidget {
                 onSubmit: (code) {
                   print('auto submit');
                   otp = code;
+                  Signup.instance.otpOnSubmit(otp);
                 //   print(otp);
                 //   // verifyOTP(otp);
                 //   // Signup.instance.otpOnSubmit(otp);
