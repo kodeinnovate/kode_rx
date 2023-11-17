@@ -1,10 +1,24 @@
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:kode_rx/Controllers/user_repo.dart';
+import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/home.dart';
 import 'package:kode_rx/register.dart';
 
 class AuthenticationRepo extends GetxController {
   static AuthenticationRepo get instance => Get.find();
+  // final String? fullname;
+  // final String? email;
+  // final String? phoneNo;
+  // late final UserModel user;
+
+  //  final userRepository = Get.put(UserRepo());
+
+  // AuthenticationRepo({
+  //   this.fullname,
+  //   this.email,
+  //   this.phoneNo,
+  // });
 
   final _auth = FirebaseAuth.instance;
   late final Rx<User?> firebaseUser;
@@ -18,8 +32,34 @@ class AuthenticationRepo extends GetxController {
   }
 
   _setInitialScreen(User? user) {
-    user == null ? Get.offAll(() => Signup()) : Get.offAll(() => HomeScreen());
+    if (user == null) {
+      Get.offAll(() => Signup());
+    } else {
+      Get.offAll(() => HomeScreen());
+      // final user = UserModel(
+      //   fullname: fullname,
+      //   email: email,
+      //   phoneNo: phoneNo,
+      // );
+      // dataStore(user);
+      // Signup.instance.dataStore(user);
+    }
+    // user == null ? Get.offAll(() => Signup()) : Get.offAll(() => HomeScreen());
   }
+
+  // Future<void> dataStore(UserModel user) async {
+  //   print('Working dataStore');
+  //   await userRepository.createUser(user);
+  //   // AuthenticationRepo.instance.phoneAuthentication(phoneNumberController.text.toString().trim());
+  // }
+
+  // dataTransfer(String fullname, String email, String number) {
+  //   final user = UserModel(
+  //     fullname: fullname,
+  //     email: email,
+  //     phoneNo: number,
+  //   );
+  // }
 
   Future<void> phoneAuthentication(String number) async {
     try {
@@ -29,7 +69,6 @@ class AuthenticationRepo extends GetxController {
           verificationCompleted: (credential) async {
             await _auth.signInWithCredential(credential);
           },
-          
           codeSent: (verificationId, resendToken) {
             this.verificationId.value = verificationId;
             // print('Verification ID set: $verificationId');
