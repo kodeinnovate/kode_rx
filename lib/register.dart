@@ -134,10 +134,10 @@ class Signup extends StatelessWidget {
   }
 
   signUserUp() {
-    print('Working');
-    if (usernameController.text.toString().isNotEmpty &&
-        emailController.text.toString().isNotEmpty &&
-        phoneNumberController.text.toString().isNotEmpty) {
+    // print('Working');
+    // if (usernameController.text.toString().isNotEmpty &&
+    //     emailController.text.toString().isNotEmpty &&
+    //     phoneNumberController.text.toString().isNotEmpty) {
       userController.userName.value = usernameController.text.toString().trim();
       userController.userEmail.value = emailController.text.toString().trim();
       userController.userPhoneNumber.value =
@@ -146,13 +146,13 @@ class Signup extends StatelessWidget {
       AuthenticationRepo.instance
           .phoneAuthentication(phoneNumberController.text.toString());
       Get.to(() => OTPScreen(AuthOperation.signUp));
-    } else {
-      Get.snackbar('Field Empty!', 'Please fill all the inputs',
-          barBlur: 10,
-          backgroundColor: Colors.white.withOpacity(0.6),
-          icon: Icon(Icons.warning_amber_outlined),
-          margin: EdgeInsets.only(top: 20.0));
-    }
+    // } else {
+    //   Get.snackbar('Field Empty!', 'Please fill all the inputs',
+    //       barBlur: 10,
+    //       backgroundColor: Colors.white.withOpacity(0.6),
+    //       icon: Icon(Icons.warning_amber_outlined),
+    //       margin: EdgeInsets.only(top: 20.0));
+    // }
   }
 
   Future<void> dataStore(UserModel user) async {
