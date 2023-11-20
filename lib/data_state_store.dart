@@ -6,3 +6,5 @@ class UserController extends GetxController {
   final RxString userEmail = RxString('');
   final RxString userPhoneNumber = RxString('');
 }
+
+final RxString loginPhoneNumber = RxString('');

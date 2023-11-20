@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 enum DeviceType { phone, tablet }
+enum AuthOperation { signUp, signIn }
 
 class DeviceHelper {
   static DeviceType getDeviceType() {

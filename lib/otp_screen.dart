@@ -4,14 +4,15 @@ import 'package:get/get.dart';
 import 'register.dart';
 
 class OTPScreen extends StatelessWidget {
-  OTPScreen({Key? key}) : super(key: key);
   static OTPScreen get instance => Get.find();
+   final AuthOperation authOperation;
+
+  OTPScreen(this.authOperation, {super.key});
   var otp;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         body: Container(
           padding: EdgeInsets.all(8.0),
           child: Column(
@@ -32,7 +33,7 @@ class OTPScreen extends StatelessWidget {
                 onSubmit: (code) {
                   print('auto submit');
                   otp = code;
-                  Signup.instance.otpOnSubmit(otp);
+                  Signup.instance.otpOnSubmit(otp, authOperation);
                 //   print(otp);
                 //   // verifyOTP(otp);
                 //   // Signup.instance.otpOnSubmit(otp);
@@ -46,13 +47,12 @@ class OTPScreen extends StatelessWidget {
                     print('Clicked on the otp submit button');
                     // verifyOTP(otp);
                     print(otp);
-                   Signup.instance.otpOnSubmit(otp);
+                   Signup.instance.otpOnSubmit(otp, authOperation);
                   },
                   child: Text('Submit'))
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

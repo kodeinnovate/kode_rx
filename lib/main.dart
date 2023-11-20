@@ -24,16 +24,17 @@ void main() async {
   ).then((value) => Get.put(AuthenticationRepo()));
   runApp(MyApp());
   Get.put(Signup());
-  Get.put(OTPScreen());
+  // Get.put(OTPScreen());
   Get.put(HomeScreen());
   Get.put(SplashScreen());
+  Get.put(LoginScreen());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       // initialRoute: '/login',
       // routes: {
       //   '/login': (context) => LoginScreen(),
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
       //   '/register': (context) => Signup(),
       //   '/otpPage': (context) => OTPScreen(),
       // },
-      home: Signup(), // Use the LoginScreen widget here
+      home: LoginScreen(), // Use the LoginScreen widget here
     );
   }
 }

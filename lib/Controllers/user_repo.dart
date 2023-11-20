@@ -9,7 +9,7 @@ class UserRepo extends GetxController {
   final _db = FirebaseFirestore.instance;
 
   createUser(UserModel user) async {
-   await _db
+    await _db
         .collection("Users")
         .add(user.toJson())
         .whenComplete(() => Get.snackbar(
@@ -24,5 +24,19 @@ class UserRepo extends GetxController {
           colorText: Colors.red);
       print(error.toString());
     });
+  }
+
+  Future<UserModel?> getUserDetails(String phoneNo) async {
+    print('Running');
+    final snapshot =
+        await _db.collection('Users').where('Phone', isEqualTo: phoneNo).get();
+    if (snapshot.docs.isNotEmpty) {
+      final getUserData =
+          snapshot.docs.map((e) => UserModel.fromSnapshot(e)).first;
+      return getUserData;
+    } else {
+      print('found nothing');
+      return null;
+    }
   }
 }
