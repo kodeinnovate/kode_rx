@@ -130,6 +130,8 @@ class LoginScreen extends StatelessWidget {
                                       user.phoneNo ==
                                           '$countryCode$enteredPhoneNumber') {
                                     // Phone number exists and matches, navigate to OTP page
+                                     loginPhoneNumber.value =
+                                        '$countryCode$enteredPhoneNumber';
                                     print('Go to OTP page');
                                     AuthOperation.signIn;
                                     AuthenticationRepo.instance

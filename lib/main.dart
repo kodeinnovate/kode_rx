@@ -22,7 +22,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   ).then((value) => Get.put(AuthenticationRepo()));
-  runApp(MyApp());
+  runApp( const MyApp());
   Get.put(Signup());
   // Get.put(OTPScreen());
   Get.put(HomeScreen());
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
       //   '/register': (context) => Signup(),
       //   '/otpPage': (context) => OTPScreen(),
       // },
-      home: LoginScreen(), // Use the LoginScreen widget here
+      home: MedicationListScreen(), // Use the LoginScreen widget here
     );
   }
 }

@@ -35,7 +35,7 @@ class PatientAppointmentsScreen extends StatelessWidget {
     return MaterialApp(
       // textDirection: TextDirection.ltr, // Or TextDirection.rtl for right-to-left text direction
       home: Scaffold(
-        appBar: DeviceHelper.deviceAppBar(),
+        appBar: DeviceHelper.deviceAppBar(title: 'Appointments'),
         body:
 
         Column(

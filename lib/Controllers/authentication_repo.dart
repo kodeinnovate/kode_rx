@@ -7,18 +7,6 @@ import 'package:kode_rx/register.dart';
 
 class AuthenticationRepo extends GetxController {
   static AuthenticationRepo get instance => Get.find();
-  // final String? fullname;
-  // final String? email;
-  // final String? phoneNo;
-  // late final UserModel user;
-
-  //  final userRepository = Get.put(UserRepo());
-
-  // AuthenticationRepo({
-  //   this.fullname,
-  //   this.email,
-  //   this.phoneNo,
-  // });
 
   final _auth = FirebaseAuth.instance;
   late final Rx<User?> firebaseUser;
@@ -36,30 +24,9 @@ class AuthenticationRepo extends GetxController {
       Get.offAll(() => Signup());
     } else {
       Get.offAll(() => HomeScreen());
-      // final user = UserModel(
-      //   fullname: fullname,
-      //   email: email,
-      //   phoneNo: phoneNo,
-      // );
-      // dataStore(user);
-      // Signup.instance.dataStore(user);
     }
-    // user == null ? Get.offAll(() => Signup()) : Get.offAll(() => HomeScreen());
   }
 
-  // Future<void> dataStore(UserModel user) async {
-  //   print('Working dataStore');
-  //   await userRepository.createUser(user);
-  //   // AuthenticationRepo.instance.phoneAuthentication(phoneNumberController.text.toString().trim());
-  // }
-
-  // dataTransfer(String fullname, String email, String number) {
-  //   final user = UserModel(
-  //     fullname: fullname,
-  //     email: email,
-  //     phoneNo: number,
-  //   );
-  // }
 
   Future<void> phoneAuthentication(String number) async {
     try {
@@ -71,8 +38,6 @@ class AuthenticationRepo extends GetxController {
           },
           codeSent: (verificationId, resendToken) {
             this.verificationId.value = verificationId;
-            // print('Verification ID set: $verificationId');
-            // print(verificationID.value);
           },
           codeAutoRetrievalTimeout: (verificationId) {
             this.verificationId.value = verificationId;
@@ -85,6 +50,7 @@ class AuthenticationRepo extends GetxController {
             }
           },
           timeout: const Duration(seconds: 120));
+          
     } catch (e) {
       print('Error during phone authentication: $e');
       Get.snackbar('Error', 'Something went wrong. Try again.');

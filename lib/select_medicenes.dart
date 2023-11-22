@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kode_rx/device_helper.dart';
 
 
 class MedicationReminderApp extends StatelessWidget {
+  static MedicationReminderApp get instance => Get.find();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MedicationListScreen(),
-    );
+    return  MedicationListScreen();
   }
 }
 
@@ -35,7 +35,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DeviceHelper.deviceAppBar(),
+      appBar: DeviceHelper.deviceAppBar(title: 'Medicine'),
       body: Column(
         children: [
           SearchField(

@@ -133,32 +133,33 @@ class Signup extends StatelessWidget {
     );
   }
 
+
+//Authentication Function, the data 
   signUserUp() {
-    // print('Working');
-    // if (usernameController.text.toString().isNotEmpty &&
-    //     emailController.text.toString().isNotEmpty &&
-    //     phoneNumberController.text.toString().isNotEmpty) {
-      userController.userName.value = usernameController.text.toString().trim();
-      userController.userEmail.value = emailController.text.toString().trim();
-      userController.userPhoneNumber.value =
-          phoneNumberController.text.toString().trim();
+
+    userController.userName.value = usernameController.text.toString().trim();
+    userController.userEmail.value = emailController.text.toString().trim();
+    userController.userPhoneNumber.value =
+        phoneNumberController.text.toString().trim();
+
+    if (usernameController.text.toString().isNotEmpty &&
+        emailController.text.toString().isNotEmpty &&
+        phoneNumberController.text.toString().isNotEmpty) {
       AuthOperation.signUp;
       AuthenticationRepo.instance
           .phoneAuthentication(phoneNumberController.text.toString());
       Get.to(() => OTPScreen(AuthOperation.signUp));
-    // } else {
-    //   Get.snackbar('Field Empty!', 'Please fill all the inputs',
-    //       barBlur: 10,
-    //       backgroundColor: Colors.white.withOpacity(0.6),
-    //       icon: Icon(Icons.warning_amber_outlined),
-    //       margin: EdgeInsets.only(top: 20.0));
-    // }
+    } else {
+      Get.snackbar('Field Empty!', 'Please fill all the inputs',
+          barBlur: 10,
+          backgroundColor: Colors.white.withOpacity(0.6),
+          icon: const Icon(Icons.warning_amber_outlined),
+          margin: const EdgeInsets.only(top: 20.0));
+    }
   }
 
   Future<void> dataStore(UserModel user) async {
-    print('Working dataStore');
     await userRepository.createUser(user);
-    // AuthenticationRepo.instance.phoneAuthentication(phoneNumberController.text.toString().trim());
   }
 
   void otpOnSubmit(String otp, AuthOperation authOperation) async {
@@ -167,21 +168,17 @@ class Signup extends StatelessWidget {
       email: userController.userEmail.value,
       phoneNo: userController.userPhoneNumber.value,
     );
-    print('function is working');
-    // var isVerified = await verifyOTP(otp);
     var isVerified = await AuthenticationRepo.instance.verifyOTP(otp);
-    print('working further');
     if (isVerified) {
       if (authOperation == AuthOperation.signUp) {
         Get.to(() => HomeScreen());
         dataStore(user);
       } else if (authOperation == AuthOperation.signIn) {
         Get.to(() => HomeScreen());
-        Get.snackbar('SIGNED IN', 'You have Successfull signed in!');
+        Get.snackbar('SIGNED IN', 'You have Successfull signed in!', icon:const Icon(Icons.check_circle));
       }
     } else {
       Get.to(() => Signup());
     }
-    // isVerified ? Get.to(HomeScreen()) : Get.to(Signup());
   }
 }
