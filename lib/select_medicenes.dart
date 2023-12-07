@@ -427,8 +427,8 @@ class Medicine {
 
   factory Medicine.fromMedicineModel(MedicineModel medicineModel) {
     return Medicine(
-      medicineModel.medicineName,  
-      medicineModel.id!,  
+      medicineModel.medicineName,
+      medicineModel.id!,
     );
   }
 }
@@ -449,11 +449,12 @@ class MedicationListView extends StatelessWidget {
           if (snapshot.hasData) {
             List<MedicineModel> medicineData = snapshot.data!;
             List<Medicine> medicines = medicineData
-                .map((medicineModel) => Medicine.fromMedicineModel(medicineModel))
+                .map((medicineModel) =>
+                    Medicine.fromMedicineModel(medicineModel))
                 .toList();
             return GridView.builder(
-              gridDelegate:
-                const  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3),
               itemCount: medicineData.length,
               itemBuilder: (context, index) {
                 Medicine medicine = medicines[index];
@@ -505,7 +506,6 @@ class MedicationListView extends StatelessWidget {
       },
     );
   }
-  
 }
 
 //Selected medicine tile

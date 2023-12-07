@@ -25,7 +25,6 @@ class UserRepo extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.redAccent.withOpacity(0.1),
           colorText: Colors.red);
-      print(error.toString());
     });
   }
 
@@ -44,7 +43,6 @@ class UserRepo extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.redAccent.withOpacity(0.1),
           colorText: Colors.red);
-      print(error.toString());
     });
   }
 
@@ -57,7 +55,6 @@ class UserRepo extends GetxController {
 
 // For Login Authentication and to check if the user Exists in the db
   Future<UserModel?> getUserDetails(String phoneNo) async {
-    print('Running');
     final snapshot =
         await _db.collection('Users').where('Phone', isEqualTo: phoneNo).get();
     if (snapshot.docs.isNotEmpty) {
@@ -65,7 +62,6 @@ class UserRepo extends GetxController {
           snapshot.docs.map((e) => UserModel.fromSnapshot(e)).first;
       return getUserData;
     } else {
-      print('found nothing');
       return null;
     }
   }

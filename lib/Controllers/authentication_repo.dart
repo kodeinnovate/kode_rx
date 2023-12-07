@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kode_rx/Controllers/user_repo.dart';
 import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/home.dart';
+import 'package:kode_rx/login.dart';
 import 'package:kode_rx/register.dart';
 
 class AuthenticationRepo extends GetxController {
@@ -14,6 +15,7 @@ class AuthenticationRepo extends GetxController {
 
   @override
   void onReady() {
+    Future.delayed(const Duration(seconds: 6));
     firebaseUser = Rx<User?>(_auth.currentUser);
     firebaseUser.bindStream(_auth.userChanges());
     ever(firebaseUser, (callback) => _setInitialScreen);
@@ -21,7 +23,7 @@ class AuthenticationRepo extends GetxController {
 
   _setInitialScreen(User? user) {
     if (user == null) {
-      Get.offAll(() => Signup());
+      Get.offAll(() => LoginScreen());
     } else {
       Get.offAll(() => HomeScreen());
     }
