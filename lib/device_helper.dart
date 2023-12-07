@@ -13,12 +13,13 @@ class DeviceHelper {
   }
 
   static AppBar deviceAppBar({String? title}) {
+    String defaultTitle = 'KodeNeo';
     final deviceType = getDeviceType();
 
     if (deviceType == DeviceType.tablet) {
       return AppBar(
         leading: null,
-        title: Text((title ?? 'KodeNeo'),
+        title: Text((title ?? defaultTitle),
             style: const TextStyle(fontSize: 40.0, color: Colors.white)),
         toolbarHeight: 120,
         backgroundColor: AppColors.customBackground,
@@ -29,7 +30,7 @@ class DeviceHelper {
         centerTitle: true,
         toolbarHeight: 65,
         title: Text(
-          (title ?? 'KodeNeo'),
+          (title ?? defaultTitle),
           style: const TextStyle(color: Colors.white, fontSize: 25),
         ),
         backgroundColor: AppColors.customBackground,
@@ -38,7 +39,7 @@ class DeviceHelper {
       return AppBar(
         leading: null,
         title: Text(
-          (title ?? 'KodeNeo'),
+          (title ?? defaultTitle),
           style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: AppColors.customBackground,

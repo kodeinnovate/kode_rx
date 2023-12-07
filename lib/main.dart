@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/instance_manager.dart';
 import 'package:kode_rx/Controllers/authentication_repo.dart';
+import 'package:kode_rx/Pages/add_medicine_screen.dart';
+import 'package:kode_rx/Pages/pdf_genarater.dart';
 import 'package:kode_rx/Pages/splashscreen.dart';
 import 'package:kode_rx/patient_appointments.dart';
 import 'package:kode_rx/patient_home.dart';
@@ -44,7 +46,7 @@ class MyApp extends StatelessWidget {
       //   '/register': (context) => Signup(),
       //   '/otpPage': (context) => OTPScreen(),
       // },
-      home: MedicationListScreen(), // Use the LoginScreen widget here
+      home: MedicationReminderApp(), // Use the LoginScreen widget here
     );
   }
 }
