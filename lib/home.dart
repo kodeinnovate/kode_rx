@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kode_rx/patient_appointments.dart';
 
 import 'app_colors.dart';
 import 'device_helper.dart';
@@ -12,10 +13,7 @@ class HomeScreen extends StatelessWidget {
     final isTablet = DeviceHelper.getDeviceType() == DeviceType.tablet;
 
     return  Scaffold(
-      appBar: AppBar(
-        title: Text('Doctor Prescription App'),
-        backgroundColor: AppColors.customBackground,
-      ),
+      appBar: DeviceHelper.deviceAppBar(title: 'Doctor Prescription App'),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -26,14 +24,14 @@ class HomeScreen extends StatelessWidget {
             ),
             SizedBox(height: 20.0),
             Text(
-              'Dr. John Doe',
+              'Dr. Azhar Khan',
               style: TextStyle(
                 fontSize: isTablet ? 36.0 : 24.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-              'General Practitioner',
+              'Chest Physician',
               style: TextStyle(
                 fontSize: isTablet ? 24.0 : 18.0,
               ),
@@ -75,7 +73,8 @@ class SquareModule extends StatelessWidget {
       onTap: () {
         // Handle module tap
         if (text == 'Appointments') {
-          Navigator.of(context).pushReplacementNamed('/patientAppointmentScreen');
+          // Navigator.of(context).pushReplacementNamed('/patientAppointmentScreen');
+          Get.to(() => PatientAppointmentsScreen());
         } else if (text == 'Appointment History') {
           // Navigate to Appointment History screen
           // Add your navigation code here

@@ -24,8 +24,10 @@ class AuthenticationRepo extends GetxController {
   _setInitialScreen(User? user) {
     if (user == null) {
       Get.offAll(() => LoginScreen());
+      print('Logged in');
     } else {
       Get.offAll(() => HomeScreen());
+      print('User logged out');
     }
   }
 

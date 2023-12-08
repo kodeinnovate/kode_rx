@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 // import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
@@ -37,16 +38,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      // initialRoute: '/login',
-      // routes: {
-      //   '/login': (context) => LoginScreen(),
-      //   '/home': (context) => HomeScreen(),
-      //   '/selectMedicenesScreen': (context) => MedicationReminderApp(),
-      //   '/patientAppointmentScreen': (context) => PatientAppointmentsScreen(),
-      //   '/register': (context) => Signup(),
-      //   '/otpPage': (context) => OTPScreen(),
-      // },
-      home: MedicationReminderApp(), // Use the LoginScreen widget here
+      initialRoute: FirebaseAuth.instance.currentUser == null ? '/login' : '/home',
+      routes: {
+        '/login': (context) => LoginScreen(),
+        '/home': (context) => HomeScreen(),
+        '/selectMedicenesScreen': (context) => MedicationReminderApp(),
+        '/patientAppointmentScreen': (context) => PatientAppointmentsScreen(),
+        '/register': (context) => Signup(),
+        // '/otpPage': (context) => OTPScreen(),
+      },
+      home: LoginScreen(), // Use the LoginScreen widget here
     );
   }
 }

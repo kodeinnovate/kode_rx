@@ -36,24 +36,12 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
   List<Medicine> selectedMedicines = [];
 
   @override
-  // void initState() {
-  //   super.initState();
+  void initState() {
+    super.initState();
 
-  //   // Add dummy medicine data
-  //   medicines = [
-  //     Medicine('Abciximab'),
-  //     Medicine('Atenolol'),
-  //     Medicine('Benidipine'),
-  //     Medicine('Diltiazem'),
-  //     Medicine('Erythrityl Tetranitrate'),
-  //     Medicine('Isosorbide'),
-  //     Medicine('Nadolol'),
-  //     Medicine('Nicardipine'),
-  //     Medicine('Nitroglycerin Skin Patches'),
-  //     Medicine('Nitroglycerin Skin Patches'),
-  //     Medicine('Medicine C'),
-  //   ];
-  // }
+    // Add dummy medicine data
+    medicines = [];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +107,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                   GestureDetector(
                     onTap: pdfDataSubmit,
                     child: Container(
-                      width: 100,
+                      width: 150,
                       padding:
                           EdgeInsets.symmetric(horizontal: 16.0, vertical: 18),
                       margin: EdgeInsets.only(right: 8),
@@ -400,6 +388,7 @@ class SearchField extends StatelessWidget {
                     ),
                     focusColor: Colors.red),
                 onChanged: (query) {
+                  print("aaaaaaa : $medicines");
                   final filteredMedicines = medicines
                       .where((medicine) => medicine.name
                           .toLowerCase()
@@ -420,18 +409,21 @@ class SearchField extends StatelessWidget {
 class Medicine {
   final String id;
   final String name;
+  final String details;
   List<String> timesToTake = [];
   bool beforeMeal = false;
 
-  Medicine(this.name, this.id);
+  Medicine(this.name, this.id, this.details);
 
   factory Medicine.fromMedicineModel(MedicineModel medicineModel) {
     return Medicine(
       medicineModel.medicineName,
       medicineModel.id!,
+      medicineModel.medicineDetails,
     );
   }
 }
+
 
 class MedicationListView extends StatelessWidget {
   final List<Medicine> medicines;
@@ -448,7 +440,7 @@ class MedicationListView extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           if (snapshot.hasData) {
             List<MedicineModel> medicineData = snapshot.data!;
-            List<Medicine> medicines = medicineData
+            List<Medicine>medicines  = medicineData
                 .map((medicineModel) =>
                     Medicine.fromMedicineModel(medicineModel))
                 .toList();
@@ -474,10 +466,14 @@ class MedicationListView extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       // ignore: prefer_const_constructors
-                      subtitle: Text(
-                        'Details: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
-                        style: const TextStyle(fontSize: 20.0),
-                        textAlign: TextAlign.justify,
+                      subtitle: Container(
+                        height: 130,
+                        child: Text(
+                          'Content: ${medicine.details}',
+                          style: const TextStyle(fontSize: 20.0),
+                          // textAlign: TextAlign.justify,
+                          overflow: TextOverflow.fade,
+                        ),
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
