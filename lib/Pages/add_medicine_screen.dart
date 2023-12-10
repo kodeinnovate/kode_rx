@@ -15,26 +15,29 @@ class AddNewMedicine extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DeviceHelper.deviceAppBar(),
-      body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        const Text('Medicine Name'),
-        const SizedBox(
-          height: 10,
-        ),
-        TextField(
-          controller: medicineNameController,
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        const Text('Medicine Details'),
-        TextField(
-          controller: medicineDetailController,
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        CustomButtom(buttonText: 'Submit', onTap: medicineDataStore)
-      ]),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          const Text('Medicine Name'),
+          const SizedBox(
+            height: 10,
+          ),
+          TextField(
+            controller: medicineNameController,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Text('Medicine Details'),
+          TextField(
+            controller: medicineDetailController,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          CustomButtom(buttonText: 'Submit', onTap: medicineDataStore)
+        ]),
+      ),
     );
   }
 

@@ -38,16 +38,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      initialRoute: FirebaseAuth.instance.currentUser == null ? '/login' : '/home',
-      routes: {
-        '/login': (context) => LoginScreen(),
-        '/home': (context) => HomeScreen(),
-        '/selectMedicenesScreen': (context) => MedicationReminderApp(),
-        '/patientAppointmentScreen': (context) => PatientAppointmentsScreen(),
-        '/register': (context) => Signup(),
-        // '/otpPage': (context) => OTPScreen(),
-      },
-      home: LoginScreen(), // Use the LoginScreen widget here
+      // initialRoute: FirebaseAuth.instance.currentUser == null ? '/login' : '/home',
+      // routes: {
+      //   '/login': (context) => LoginScreen(),
+      //   '/home': (context) => HomeScreen(),
+      //   '/selectMedicenesScreen': (context) => MedicationReminderApp(),
+      //   '/patientAppointmentScreen': (context) => PatientAppointmentsScreen(),
+      //   '/register': (context) => Signup(),
+      //   // '/otpPage': (context) => OTPScreen(),
+      // },
+      home: MedicationReminderApp(), // Use the LoginScreen widget here
     );
   }
 }

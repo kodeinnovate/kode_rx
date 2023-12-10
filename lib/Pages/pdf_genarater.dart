@@ -72,6 +72,9 @@ class _PDFGeneratorState extends State<PDFGenerator> {
     doc.addPage(
       pw.MultiPage(
         build: (context) => [
+          pw.SizedBox(
+            height: 90.0,
+          ),
           buildTitle(context),
           pw.SizedBox(
             height: 20.0,
@@ -141,7 +144,7 @@ pw.Widget buildTitle(pw.Context context) => pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
         pw.Text(
-          'Invoice',
+          'Rx',
           style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
         )
       ],
