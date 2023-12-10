@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kode_rx/Controllers/data_fetch_controller.dart';
 import 'package:kode_rx/Pages/pdf_genarater.dart';
+import 'package:kode_rx/Pages/pdf_preview_screen.dart';
 import 'package:kode_rx/app_colors.dart';
 import 'package:kode_rx/data_state_store.dart';
 import 'package:kode_rx/database/medicine_data_fetch.dart';
@@ -28,19 +29,29 @@ class MedicationListScreen extends StatefulWidget {
 //   MedicineList({this.medicine, this.medicineDescription}); // Constructor
 // }
 final controller = Get.put(DataController());
+final PDFGenerator pdfGenerator = Get.find<PDFGenerator>();
 
 class _MedicationListScreenState extends State<MedicationListScreen> {
   UserController userController = UserController();
   final noteController = TextEditingController();
-  List<Medicine> medicines = [];
+  // List<Medicine> medicines = [];
   List<Medicine> selectedMedicines = [];
 
   @override
   void initState() {
     super.initState();
 
-    // Add dummy medicine data
-    medicines = [];
+    // Fetch all medicines from the database and set them initially
+    controller.getAllMedicine().then((medicineData) {
+      setState(() {
+        GlobalMedicineList.medicines = medicineData
+            .map((medicineModel) => Medicine.fromMedicineModel(medicineModel))
+            .toList();
+
+        // Set displayedMedicines initially to show all medicines
+        displayedMedicines = GlobalMedicineList.medicines;
+      });
+    });
   }
 
   @override
@@ -53,17 +64,18 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
           child: Column(
             children: [
               SearchField(
-                medicines: medicines,
+                medicines: GlobalMedicineList.medicines,
                 onSearch: (filteredMedicines) {
+                  print("Filtered Medicines: $filteredMedicines");
                   setState(() {
-                    medicines = filteredMedicines;
+                    displayedMedicines = filteredMedicines;
                   });
+                  print("Display Medicines: $displayedMedicines");
                 },
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.49,
                 child: MedicationListView(
-                  medicines: medicines,
                   onSelect: (selectedMedicine) {
                     showMedicineTimeDialog(selectedMedicine);
                   },
@@ -339,7 +351,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
     if (selectedMedicines.isEmpty) {
       Get.snackbar('No medicine Added', "please add medicines");
     } else {
-      Get.to(() => PDFGenerator(
+      Get.to( () => PDFGenerator(
             selectedMedicines: selectedMedicines,
             notes: noteController.text.toString().trim(),
           ));
@@ -388,12 +400,16 @@ class SearchField extends StatelessWidget {
                     ),
                     focusColor: Colors.red),
                 onChanged: (query) {
+                  print("Query: $query");
+                  print(
+                      "Medicine Count: ${medicines.length}");
                   print("aaaaaaa : $medicines");
-                  final filteredMedicines = medicines
+                  final filteredMedicines = GlobalMedicineList.medicines
                       .where((medicine) => medicine.name
                           .toLowerCase()
                           .contains(query.toLowerCase()))
                       .toList();
+                  print(filteredMedicines.length);
                   onSearch(filteredMedicines);
                 },
               ),
@@ -424,32 +440,39 @@ class Medicine {
   }
 }
 
+class GlobalMedicineList {
+  static List<Medicine> medicines = [];
+}
+ List<Medicine> displayedMedicines = [];
+
 
 class MedicationListView extends StatelessWidget {
-  final List<Medicine> medicines;
+  // final List<Medicine> medicines;
   final Function(Medicine) onSelect;
 
 // Medicine Grid below the search bar
-  MedicationListView({required this.medicines, required this.onSelect});
+  MedicationListView({required this.onSelect});
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: controller.getAllMedicine(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            List<MedicineModel> medicineData = snapshot.data!;
-            List<Medicine>medicines  = medicineData
-                .map((medicineModel) =>
-                    Medicine.fromMedicineModel(medicineModel))
-                .toList();
+    // return FutureBuilder(
+    //   future: controller.getAllMedicine(),
+    //   builder: (context, snapshot) {
+    //     if (snapshot.connectionState == ConnectionState.done) {
+    //       if (snapshot.hasData) {
+    //         List<MedicineModel> medicineData = snapshot.data!;
+    //         GlobalMedicineList.medicines = medicineData
+    //             .map((medicineModel) =>
+    //                 Medicine.fromMedicineModel(medicineModel))
+    //             .toList();
+    //         // displayedMedicines = GlobalMedicineList.medicines;
+    //         print("Displayed Medicines Count: ${displayedMedicines.length}");
             return GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3),
-              itemCount: medicineData.length,
+              itemCount: displayedMedicines.length,
               itemBuilder: (context, index) {
-                Medicine medicine = medicines[index];
+                Medicine medicine = displayedMedicines[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 12.0, horizontal: 10),
@@ -480,27 +503,27 @@ class MedicationListView extends StatelessWidget {
                       ),
                       focusColor: Colors.greenAccent,
                       onTap: () {
-                        onSelect(medicines[index]);
+                        onSelect(displayedMedicines[index]);
                       },
                     ),
                   ),
                 );
               },
             );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text(snapshot.error.toString()),
-            );
-          } else {
-            return const Center(
-              child: Text('Something went wrong'),
-            );
-          }
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      },
-    );
+    //       } else if (snapshot.hasError) {
+    //         return Center(
+    //           child: Text(snapshot.error.toString()),
+    //         );
+    //       } else {
+    //         return const Center(
+    //           child: Text('Something went wrong'),
+    //         );
+    //       }
+    //     } else {
+    //       return const Center(child: CircularProgressIndicator());
+    //     }
+    //   },
+    // );
   }
 }
 

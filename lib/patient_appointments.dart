@@ -51,24 +51,22 @@ class PatientAppointmentsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: DeviceHelper.deviceAppBar(title: 'Appointments'),
-        body: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: lists.length,
-                itemBuilder: (context, index) {
-                  return MySquare(
-                      name: lists[index].name!,
-                      date: lists[index].date!,
-                      status: lists[index].status!);
-                },
-              ),
+    return Scaffold(
+      appBar: DeviceHelper.deviceAppBar(title: 'Appointments'),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: lists.length,
+              itemBuilder: (context, index) {
+                return MySquare(
+                    name: lists[index].name!,
+                    date: lists[index].date!,
+                    status: lists[index].status!);
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -21,113 +21,65 @@ class MySquare extends StatelessWidget {
     Color statusColor = getStatusColor(status);
 
     return Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: GestureDetector(
-          onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MedicationReminderApp(),
-                  )
-                );
-          } ,
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                DeviceHelper.getDeviceType == DeviceType.tablet ? 15.0 : 10.0,
+      padding: const EdgeInsets.all(5.0),
+      child: GestureDetector(
+        onTap: () {
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => MedicationReminderApp(),
+          //     )
+          //   );
+          Get.to(() => MedicationReminderApp());
+        },
+        child: Card(
+          elevation: 8.0,
+          margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                border:
+                    Border(left: BorderSide(width: 15, color: statusColor))),
+            child: ListTile(
+              contentPadding:
+                  EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+             
+              title: const Text(
+                "Appointment Date",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
               ),
-            ),
-            elevation: 5,
-            child: Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(
-                        DeviceHelper.getDeviceType == DeviceType.tablet
-                            ? 20
-                            : 10,
+              // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      const Icon(Icons.access_time),
+                      const SizedBox(
+                        width: 6,
                       ),
-                      bottomLeft: Radius.circular(
-                        DeviceHelper.getDeviceType == DeviceType.tablet
-                            ? 20
-                            : 10,
-                      ),
-                    ),
-                    color: statusColor,
-                  ),
-                  width:
-                      DeviceHelper.getDeviceType == DeviceType.tablet ? 10 : 5,
-                  height: DeviceHelper.getDeviceType == DeviceType.tablet
-                      ? 200
-                      : 100,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(
-                    DeviceHelper.getDeviceType == DeviceType.tablet
-                        ? 20.0
-                        : 10.0,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8.0),
-                            child: Text(
-                              'Appointment Date:',
-                              style: TextStyle(
-                                fontSize: DeviceHelper.getDeviceType ==
-                                        DeviceType.tablet
-                                    ? 20
-                                    : 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            format.format(date),
-                            style: const TextStyle(
-                              fontSize: DeviceHelper.getDeviceType ==
-                                      DeviceType.tablet
-                                  ? 24
-                                  : 16,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                      // // This is where you add your red Container
-                      // Container(
-                      //   child: Divider(color: Colors.amber, thickness: 2),
-                      // ),
-                      
-                      Text(
-                          '---------------------------------------------------------------------------------------',
-                          style: TextStyle(
-                              color: AppColors
-                                  .customDividerColor) // Use the desired gray color.
-                          ),
-                      SizedBox(
-                        child: Text(
-                          name,
-                          style: const TextStyle(
-                            fontSize:
-                                DeviceHelper.getDeviceType == DeviceType.tablet
-                                    ? 38
-                                    : 18,
-                          ),
-                        ),
-                      ),
+                      Text(format.format(date),
+                          style: const TextStyle(fontSize: 24)),
                     ],
                   ),
-                ),
-              ],
+                  Divider(
+                    thickness: 2,
+                  ),
+                  Text(
+                    name,
+                    style: TextStyle(fontSize: 30),
+                    textAlign: TextAlign.start,
+                  )
+                ],
+              ),
+              trailing: Icon(Icons.keyboard_arrow_right_rounded, size: 40.0),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Color getStatusColor(Status status) {

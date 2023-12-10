@@ -116,8 +116,7 @@ class LoginScreen extends StatelessWidget {
                                 if (phoneNumberController.text
                                     .toString()
                                     .isNotEmpty) {
-                                  print(
-                                      '$countryCode${phoneNumberController.text.toString().trim()}');
+                                  
                                   String enteredPhoneNumber =
                                       phoneNumberController.text
                                           .toString()
@@ -125,14 +124,14 @@ class LoginScreen extends StatelessWidget {
                                   UserModel? user =
                                       await _userRepo.getUserDetails(
                                           '$countryCode$enteredPhoneNumber');
-                                  print('$countryCode$enteredPhoneNumber');
+
                                   if (user != null &&
                                       user.phoneNo ==
                                           '$countryCode$enteredPhoneNumber') {
                                     // Phone number exists and matches, navigate to OTP page
-                                     loginPhoneNumber.value =
+                                    loginPhoneNumber.value =
                                         '$countryCode$enteredPhoneNumber';
-                                    print('Go to OTP page');
+
                                     AuthOperation.signIn;
                                     AuthenticationRepo.instance
                                         .phoneAuthentication(
@@ -141,17 +140,28 @@ class LoginScreen extends StatelessWidget {
                                     Get.to(
                                         () => OTPScreen(AuthOperation.signIn));
                                   } else {
-                                    print('Go to the Registeration page');
                                     loginPhoneNumber.value =
                                         '$countryCode$enteredPhoneNumber';
                                     Get.to(() => Signup());
                                     Get.snackbar('Phone Number Not Registered!',
-                                      'Please Create your account', barBlur: 10, backgroundColor: Colors.red.withOpacity(0.9), icon: Icon(Icons.warning_amber_outlined), margin: EdgeInsets.only(top: 20.0), colorText: Colors.white, duration: Duration(seconds: 5));
-                    
+                                        'Please Create your account',
+                                        barBlur: 10,
+                                        backgroundColor:
+                                            Colors.red.withOpacity(0.9),
+                                        icon:
+                                            Icon(Icons.warning_amber_outlined),
+                                        margin: EdgeInsets.only(top: 20.0),
+                                        colorText: Colors.white,
+                                        duration: Duration(seconds: 5));
                                   }
                                 } else {
                                   Get.snackbar('No Phone Number Added!',
-                                      'Please add your phone number', barBlur: 10, backgroundColor: Colors.white.withOpacity(0.6), icon: Icon(Icons.warning_amber_outlined), margin: EdgeInsets.only(top: 20.0));
+                                      'Please add your phone number',
+                                      barBlur: 10,
+                                      backgroundColor:
+                                          Colors.white.withOpacity(0.6),
+                                      icon: Icon(Icons.warning_amber_outlined),
+                                      margin: EdgeInsets.only(top: 20.0));
                                 }
                               },
                               decoration: const InputDecoration(

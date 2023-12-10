@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => Signup(),
         // '/otpPage': (context) => OTPScreen(),
       },
-      home: LoginScreen(), // Use the LoginScreen widget here
+      home: PatientAppointmentsScreen(), // Use the LoginScreen widget here
     );
   }
 }
