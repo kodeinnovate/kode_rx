@@ -8,13 +8,41 @@ import 'device_helper.dart';
 
 class HomeScreen extends StatelessWidget {
   static HomeScreen get instance => Get.find();
+
   @override
   Widget build(BuildContext context) {
+    Future<bool> showExitPopup() async {
+      return await showDialog( //show confirm dialogue
+        //the return value will be from "Yes" or "No" options
+        context: Get.overlayContext!,
+        builder: (context) => AlertDialog(
+          title: Text('Exit App'),
+          content: Text('Do you want to exit an App?'),
+          actions:[
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              //return false when click on "NO"
+              child:Text('No'),
+            ),
+
+            ElevatedButton(
+              onPressed: () => Get.back(result: true),
+              //return true when click on "Yes"
+              child:Text('Yes'),
+            ),
+
+          ],
+        ),
+      )??false; //if showDialouge had returned null, then return false
+    }
+
     final isTablet = DeviceHelper.getDeviceType() == DeviceType.tablet;
 
-    return  Scaffold(
-      appBar: DeviceHelper.deviceAppBar(title: 'Doctor Prescription App'),
-      body: Center(
+    return  WillPopScope(
+        onWillPop: showExitPopup,
+        child: Scaffold(
+        appBar: DeviceHelper.deviceAppBar(title: 'Doctor Prescription App'),
+    body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -56,7 +84,7 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ));
   }
 }
 

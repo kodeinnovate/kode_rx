@@ -81,10 +81,16 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                   },
                 ),
               ),
-              const Text(
+              SizedBox(
+
+                  child: Container(
+                    width: double.infinity,
+                      color: AppColors.customBackground,
+                      padding: EdgeInsets.all(5),
+                      child: Text(
                 'Selected Medicines',
-                style: TextStyle(fontSize: 26, fontWeight: FontWeight.w600),
-              ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600,color: Colors.white),
+              ))),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.17,
                 child: SelectedMedicationsList(
@@ -272,7 +278,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
 
 // Dialog no.2 // Meal Dialogue
   void showMealDialog(Medicine medicine, List<String> selectedTimesToTake) {
-    var isBeforeMeal = false;
+    var mealType = 'before'; // Default value, can be 'before' or 'after'
 
     final mealDialogKey = GlobalKey<FormState>();
 
@@ -289,21 +295,23 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Text('Select when to take before or after meal:'),
-                    CheckboxListTile(
+                    RadioListTile(
                       title: Text('Before Meal'),
-                      value: isBeforeMeal,
+                      value: 'before',
+                      groupValue: mealType,
                       onChanged: (value) {
                         setState(() {
-                          isBeforeMeal = value!;
+                          mealType = value as String;
                         });
                       },
                     ),
-                    CheckboxListTile(
+                    RadioListTile(
                       title: Text('After Meal'),
-                      value: !isBeforeMeal,
+                      value: 'after',
+                      groupValue: mealType,
                       onChanged: (value) {
                         setState(() {
-                          isBeforeMeal = !value!;
+                          mealType = value as String;
                         });
                       },
                     ),
@@ -317,14 +325,14 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
               onPressed: () {
                 if (mealDialogKey.currentState!.validate()) {
                   medicine.timesToTake = selectedTimesToTake;
-                  medicine.beforeMeal = isBeforeMeal;
+                  medicine.beforeMeal = mealType == 'before';
                   setState(() {
                     selectedMedicines.add(medicine);
                   });
                   Navigator.of(context).pop();
                 }
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
               child: Text(
                 'Add',
                 style: TextStyle(color: Colors.white),
@@ -334,7 +342,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              style: TextButton.styleFrom(backgroundColor: Colors.red),
+              style: TextButton.styleFrom(backgroundColor: Colors.orange),
               child: Text(
                 'Discard',
                 style: TextStyle(color: Colors.white),
@@ -374,13 +382,13 @@ class SearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(height: 20.0),
+        const SizedBox(height: 10.0),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
               TextField(
-                style: TextStyle(fontSize: 25),
+                style: TextStyle(fontSize: 18),
                 // decoration: const InputDecoration(labelText: 'Search Medicine', contentPadding: EdgeInsets.symmetric(vertical: 25.0),),
                 decoration: InputDecoration(
                     // icon: Icon(Icons.search),
@@ -445,87 +453,60 @@ class GlobalMedicineList {
 }
  List<Medicine> displayedMedicines = [];
 
-
 class MedicationListView extends StatelessWidget {
-  // final List<Medicine> medicines;
   final Function(Medicine) onSelect;
 
-// Medicine Grid below the search bar
   MedicationListView({required this.onSelect});
 
   @override
   Widget build(BuildContext context) {
-    // return FutureBuilder(
-    //   future: controller.getAllMedicine(),
-    //   builder: (context, snapshot) {
-    //     if (snapshot.connectionState == ConnectionState.done) {
-    //       if (snapshot.hasData) {
-    //         List<MedicineModel> medicineData = snapshot.data!;
-    //         GlobalMedicineList.medicines = medicineData
-    //             .map((medicineModel) =>
-    //                 Medicine.fromMedicineModel(medicineModel))
-    //             .toList();
-    //         // displayedMedicines = GlobalMedicineList.medicines;
-    //         print("Displayed Medicines Count: ${displayedMedicines.length}");
-            return GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3),
-              itemCount: displayedMedicines.length,
-              itemBuilder: (context, index) {
-                Medicine medicine = displayedMedicines[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 12.0, horizontal: 10),
-                  child: Material(
-                    borderRadius: BorderRadius.circular(10.0),
-                    elevation: 5,
-                    child: ListTile(
-                      tileColor: const Color.fromARGB(255, 173, 205, 255),
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 12),
-                      title: Text(
-                        medicine.name,
-                        style: const TextStyle(fontSize: 26),
-                        textAlign: TextAlign.center,
-                      ),
-                      // ignore: prefer_const_constructors
-                      subtitle: Container(
-                        height: 130,
-                        child: Text(
-                          'Content: ${medicine.details}',
-                          style: const TextStyle(fontSize: 20.0),
-                          // textAlign: TextAlign.justify,
-                          overflow: TextOverflow.fade,
-                        ),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      focusColor: Colors.greenAccent,
-                      onTap: () {
-                        onSelect(displayedMedicines[index]);
-                      },
-                    ),
-                  ),
-                );
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        childAspectRatio: 3 / 2.2, // Adjust the aspect ratio based on your needs
+      ),
+      itemCount: displayedMedicines.length,
+      itemBuilder: (context, index) {
+        Medicine medicine = displayedMedicines[index];
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 10),
+          child: Material(
+            borderRadius: BorderRadius.circular(10.0),
+            elevation: 5,
+            child: ListTile(
+              tileColor: Colors.white,
+              contentPadding: const EdgeInsets.symmetric(
+                vertical: 10,
+                horizontal: 12,
+              ),
+              title: Text(
+                medicine.name,
+                style: const TextStyle(fontSize: 20),
+              ),
+              subtitle: Text(
+                '${medicine.details}',
+                style: const TextStyle(fontSize: 16.0),
+                maxLines: 4,
+                overflow: TextOverflow.ellipsis,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              focusColor: Colors.greenAccent,
+              onTap: () {
+                onSelect(displayedMedicines[index]);
               },
-            );
-    //       } else if (snapshot.hasError) {
-    //         return Center(
-    //           child: Text(snapshot.error.toString()),
-    //         );
-    //       } else {
-    //         return const Center(
-    //           child: Text('Something went wrong'),
-    //         );
-    //       }
-    //     } else {
-    //       return const Center(child: CircularProgressIndicator());
-    //     }
-    //   },
-    // );
+            ),
+          ),
+        );
+      },
+    );
   }
 }
+
+
 
 //Selected medicine tile
 class SelectedMedicationsList extends StatelessWidget {
@@ -556,11 +537,11 @@ class SelectedMedicationsList extends StatelessWidget {
                   title: Text(
                     medicine.name,
                     style: TextStyle(
-                        fontSize: 24, color: AppColors.customBackground),
+                        fontSize: 20, color: AppColors.customBackground),
                   ),
                   subtitle: Text(
                     'Time to take: ${medicine.timesToTake.isNotEmpty ? medicine.timesToTake.join(', ') : 'No specific time'} | Meal: ${medicine.beforeMeal ? 'Before Meal' : 'After Meal'}',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
               ),

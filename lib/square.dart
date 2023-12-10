@@ -24,12 +24,6 @@ class MySquare extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       child: GestureDetector(
         onTap: () {
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (context) => MedicationReminderApp(),
-          //     )
-          //   );
           Get.to(() => MedicationReminderApp());
         },
         child: Card(
@@ -44,10 +38,12 @@ class MySquare extends StatelessWidget {
               contentPadding:
                   EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
              
-              title: const Text(
+              title: Container(
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                  child: Text(
                 "Appointment Date",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
-              ),
+                style: TextStyle(fontWeight: FontWeight.normal, fontSize: 18.0),
+              )),
               // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
 
               subtitle: Column(
@@ -61,7 +57,7 @@ class MySquare extends StatelessWidget {
                         width: 6,
                       ),
                       Text(format.format(date),
-                          style: const TextStyle(fontSize: 24)),
+                          style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
                     ],
                   ),
                   Divider(
@@ -69,7 +65,7 @@ class MySquare extends StatelessWidget {
                   ),
                   Text(
                     name,
-                    style: TextStyle(fontSize: 30),
+                    style: TextStyle(fontSize: 22,color: Colors.black),
                     textAlign: TextAlign.start,
                   )
                 ],

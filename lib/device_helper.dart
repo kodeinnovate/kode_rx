@@ -20,8 +20,8 @@ class DeviceHelper {
       return AppBar(
         leading: null,
         title: Text((title ?? defaultTitle),
-            style: const TextStyle(fontSize: 40.0, color: Colors.white)),
-        toolbarHeight: 120,
+            style: const TextStyle(fontSize: 20.0, color: Colors.white)),
+        toolbarHeight: 100,
         backgroundColor: AppColors.customBackground,
       );
     } else if (deviceType == DeviceType.phone) {

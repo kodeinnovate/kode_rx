@@ -4,7 +4,6 @@ import 'package:kode_rx/device_helper.dart';
 import 'package:kode_rx/square.dart';
 import 'app_colors.dart';
 import 'package:get/get.dart';
-
 class AppointmentList {
   DateTime? date;
   String? name;
@@ -12,8 +11,6 @@ class AppointmentList {
 
   AppointmentList({this.date, this.name, this.status}); // Constructor
 }
-
-// ignore: must_be_immutable
 class PatientAppointmentsScreen extends StatelessWidget {
   static PatientAppointmentsScreen get instance => Get.find();
   List<AppointmentList> lists = [
@@ -47,27 +44,59 @@ class PatientAppointmentsScreen extends StatelessWidget {
         status: Status.ongoing),
   ];
 
-  PatientAppointmentsScreen({super.key});
-
+  PatientAppointmentsScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: DeviceHelper.deviceAppBar(title: 'Appointments'),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: lists.length,
-              itemBuilder: (context, index) {
-                return MySquare(
-                    name: lists[index].name!,
-                    date: lists[index].date!,
-                    status: lists[index].status!);
-              },
-            ),
+    return DefaultTabController(
+      length: 3, // Number of tabs
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 100,
+          backgroundColor: AppColors.customBackground,
+          title: Text('Appointments',style: const TextStyle(fontSize: 30.0, color: Colors.white)),
+          bottom: TabBar(
+            labelStyle: TextStyle(fontSize: 20.0), // Increase the text size here
+            tabs: [
+              Tab(text: 'Pending'),
+              Tab(text: 'Ongoing'),
+              Tab(text: 'Completed'),
+            ],
           ),
-        ],
+        ),
+        body: TabBarView(
+          children: [
+            _buildTab(Status.pending),
+            _buildTab(Status.ongoing),
+            _buildTab(Status.completed),
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildTab(Status status) {
+    // Filter the list based on the provided status
+    List<AppointmentList> filteredList =
+    lists.where((appointment) => appointment.status == status).toList();
+
+    // Sort the filtered list by date and time in descending order
+    filteredList.sort((a, b) => b.date!.compareTo(a.date!));
+
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: filteredList.length,
+            itemBuilder: (context, index) {
+              return MySquare(
+                name: filteredList[index].name!,
+                date: filteredList[index].date!,
+                status: filteredList[index].status!,
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
