@@ -37,6 +37,24 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
   // List<Medicine> medicines = [];
   List<Medicine> selectedMedicines = [];
 
+  // Function to handle deletion
+  void onDeleteMedicine(Medicine medicine) {
+    setState(() {
+      selectedMedicines.remove(medicine);
+    });
+  }
+
+   void onEditMedicine(Medicine medicine) {
+    setState(() {
+      // Find the index of the medicine in the selectedMedicines list
+      int index = selectedMedicines.indexWhere((element) => element.name == medicine.name);
+      if (index != -1) {
+        // Update the medicine at the found index
+        selectedMedicines[index] = medicine;
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -74,7 +92,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                 },
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.49,
+                height: MediaQuery.of(context).size.height * 0.42,
                 child: MedicationListView(
                   onSelect: (selectedMedicine) {
                     showMedicineTimeDialog(selectedMedicine);
@@ -82,19 +100,23 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                 ),
               ),
               SizedBox(
-
                   child: Container(
-                    width: double.infinity,
+                      width: double.infinity,
                       color: AppColors.customBackground,
-                      padding: EdgeInsets.all(5),
-                      child: Text(
-                'Selected Medicines',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600,color: Colors.white),
-              ))),
+                      padding: const EdgeInsets.all(5),
+                      child: const Text(
+                        'Selected Medicines',
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white),
+                      ))),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.17,
+                height: MediaQuery.of(context).size.height * 0.27,
                 child: SelectedMedicationsList(
                   selectedMedicines: selectedMedicines,
+                  onDelete: onDeleteMedicine,
+                  onEdit: onEditMedicine,
                 ),
               ),
               Row(
@@ -148,6 +170,8 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
       ),
     );
   }
+
+  
 
 // Popup menu for routine Selection
   void showMedicineTimeDialog(Medicine medicine) {
@@ -359,7 +383,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
     if (selectedMedicines.isEmpty) {
       Get.snackbar('No medicine Added', "please add medicines");
     } else {
-      Get.to( () => PDFGenerator(
+      Get.to(() => PDFGenerator(
             selectedMedicines: selectedMedicines,
             notes: noteController.text.toString().trim(),
           ));
@@ -397,27 +421,22 @@ class SearchField extends StatelessWidget {
                     hintStyle: TextStyle(color: Colors.grey.shade500),
                     fillColor: Color.fromARGB(255, 238, 238, 238),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                           color: AppColors.customBackground, width: 2.0),
                       borderRadius: BorderRadius.circular(7.7),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                           color: AppColors.customBackground, width: 2.0),
                       borderRadius: BorderRadius.circular(7.7),
                     ),
                     focusColor: Colors.red),
                 onChanged: (query) {
-                  print("Query: $query");
-                  print(
-                      "Medicine Count: ${medicines.length}");
-                  print("aaaaaaa : $medicines");
                   final filteredMedicines = GlobalMedicineList.medicines
                       .where((medicine) => medicine.name
                           .toLowerCase()
                           .contains(query.toLowerCase()))
                       .toList();
-                  print(filteredMedicines.length);
                   onSearch(filteredMedicines);
                 },
               ),
@@ -451,7 +470,8 @@ class Medicine {
 class GlobalMedicineList {
   static List<Medicine> medicines = [];
 }
- List<Medicine> displayedMedicines = [];
+
+List<Medicine> displayedMedicines = [];
 
 class MedicationListView extends StatelessWidget {
   final Function(Medicine) onSelect;
@@ -461,11 +481,12 @@ class MedicationListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        childAspectRatio: 3 / 2.2, // Adjust the aspect ratio based on your needs
+        childAspectRatio:
+            3 / 2.3, // Adjust the aspect ratio based on your needs
       ),
       itemCount: displayedMedicines.length,
       itemBuilder: (context, index) {
@@ -506,13 +527,136 @@ class MedicationListView extends StatelessWidget {
   }
 }
 
-
-
 //Selected medicine tile
 class SelectedMedicationsList extends StatelessWidget {
   final List<Medicine> selectedMedicines;
+  final Function(Medicine) onDelete;
+  final Function(Medicine) onEdit;
 
-  SelectedMedicationsList({required this.selectedMedicines});
+  SelectedMedicationsList(
+      {required this.selectedMedicines, required this.onDelete, required this.onEdit});
+
+  // ...
+void _showEditDialog(BuildContext context, Medicine medicine) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      // Create controllers for editing times and meal preference
+      List<String> editedTimesToTake = List.from(medicine.timesToTake);
+      bool editedBeforeMeal = medicine.beforeMeal;
+
+      return AlertDialog(
+        title: Text('Edit Medicine'),
+        content: StatefulBuilder(
+          builder: (context, setState) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                // Display the current times to take
+                Text('Current times to take: ${editedTimesToTake.join(', ')}'),
+
+                // Add form fields for editing times and meal preference
+                // (You may want to include additional fields as needed)
+                Row(
+                  children: [
+                    Radio(
+                      value: true,
+                      groupValue: editedBeforeMeal,
+                      onChanged: (value) {
+                        setState(() {
+                          editedBeforeMeal = value as bool;
+                        });
+                      },
+                    ),
+                    Text('Before Meal'),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Radio(
+                      value: false,
+                      groupValue: editedBeforeMeal,
+                      onChanged: (value) {
+                        setState(() {
+                          editedBeforeMeal = value as bool;
+                        });
+                      },
+                    ),
+                    Text('After Meal'),
+                  ],
+                ),
+                // Add form fields for editing other times if needed
+              ],
+            );
+          },
+        ),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              // Perform the edit operation and update the medicine
+              Medicine editedMedicine = Medicine(
+                medicine.name,
+                medicine.id,
+                medicine.details,
+              );
+              editedMedicine.timesToTake = editedTimesToTake;
+              editedMedicine.beforeMeal = editedBeforeMeal;
+              
+              // Call the onEdit function with the edited medicine
+              onEdit(editedMedicine);
+
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+            child: const Text(
+              'Save',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
+
+// Delete function
+   Future<void> _showDeleteConfirmationDialog(BuildContext context, Medicine medicine) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Medicine'),
+          content: Text('Are you sure you want to delete ${medicine.name}?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                onDelete(medicine); // Call the onDelete function
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }   
 
   @override
   Widget build(BuildContext context) {
@@ -532,16 +676,41 @@ class SelectedMedicationsList extends StatelessWidget {
                 elevation: 2,
                 child: ListTile(
                   contentPadding:
-                      EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   tileColor: Colors.grey.shade200,
                   title: Text(
                     medicine.name,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 20, color: AppColors.customBackground),
                   ),
                   subtitle: Text(
                     'Time to take: ${medicine.timesToTake.isNotEmpty ? medicine.timesToTake.join(', ') : 'No specific time'} | Meal: ${medicine.beforeMeal ? 'Before Meal' : 'After Meal'}',
                     style: TextStyle(fontSize: 16),
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.edit,
+                          color: AppColors.customBackground,
+                        ),
+                        onPressed: () {
+                          _showEditDialog(context, medicine);
+                          // Handle edit action
+                          // You can implement the edit functionality here
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.delete,
+                          color: AppColors.customBackground,
+                        ),
+                        onPressed: () {
+                          _showDeleteConfirmationDialog(context, medicine);
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),

@@ -4,6 +4,7 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/instance_manager.dart';
 import 'package:kode_rx/Controllers/authentication_repo.dart';
 import 'package:kode_rx/Pages/splashscreen.dart';
+import 'package:kode_rx/app_colors.dart';
 import 'package:kode_rx/patient_appointments.dart';
 import 'package:kode_rx/register.dart';
 import 'package:kode_rx/select_medicenes.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      theme: ThemeData(primaryColor: AppColors.customBackground),
       initialRoute: FirebaseAuth.instance.currentUser == null ? '/login' : '/home',
       routes: {
         '/login': (context) => LoginScreen(),
@@ -45,6 +47,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => Signup(),
         // '/otpPage': (context) => OTPScreen(),
       }, // Use the LoginScreen widget here
+      home: LoginScreen(),
     );
   }
 }

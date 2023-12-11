@@ -56,6 +56,9 @@ class PatientAppointmentsScreen extends StatelessWidget {
           title: Text('Appointments',style: const TextStyle(fontSize: 30.0, color: Colors.white)),
           bottom: TabBar(
             labelStyle: TextStyle(fontSize: 20.0), // Increase the text size here
+            indicatorColor: Colors.white,
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.white70,
             tabs: [
               Tab(text: 'Pending'),
               Tab(text: 'Ongoing'),
