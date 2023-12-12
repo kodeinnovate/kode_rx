@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:kode_rx/Controllers/profile_controller.dart';
 import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/patient_appointments.dart';
+import 'package:kode_rx/select_medicenes.dart';
 
 import 'app_colors.dart';
 import 'device_helper.dart';
@@ -45,62 +46,75 @@ final controller = Get.put(ProfileController());
         child: Scaffold(
         appBar: DeviceHelper.deviceAppBar(title: 'Doctor Prescription App'),
     body: Center(
-        child: FutureBuilder(
+      child: FutureBuilder(
           future: controller.getUserData(),
           builder: (context, snapshot) {
-            UserModel userData = snapshot.data as UserModel;
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                CircleAvatar(
-                  backgroundImage: NetworkImage(userData.profileImage),
-                  // backgroundImage: AssetImage('assets/doctor_profile.jpg'), // Replace with the actual image path
-                  radius: isTablet ? 120.0 : 80.0,
-                ),
-                SizedBox(height: 20.0),
-            
-            
-                Text(
-                 'Dr. ${userData.fullname}',
-                  style: TextStyle(
-                    fontSize: isTablet ? 36.0 : 24.0,
-                    fontWeight: FontWeight.bold,
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              // Show a loading indicator or placeholder content
+              return CircularProgressIndicator(); // Replace with your loading indicator or widget
+            } else if (snapshot.hasError) {
+              // Handle error state
+              return Text('Error: ${snapshot.error}');
+            } else if (!snapshot.hasData || snapshot.data == null) {
+              // No data available yet, show default content or handle accordingly
+              return Text('No user data available');
+            } else {
+              // Data is available, build the UI
+              UserModel userData = snapshot.data as UserModel;
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(userData.profileImage),
+                    // backgroundImage: AssetImage('assets/doctor_profile.jpg'), // Replace with the actual image path
+                    radius: isTablet ? 120.0 : 80.0,
                   ),
-                ),
-                Text(
-                  'Chest Physician',
-                  style: TextStyle(
-                    fontSize: isTablet ? 24.0 : 18.0,
+                  SizedBox(height: 20.0),
+
+
+                  Text(
+                    'Dr. ${userData.fullname}',
+                    style: TextStyle(
+                      fontSize: isTablet ? 36.0 : 24.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                SizedBox(height: 40.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SquareModule(
-                      icon: Icons.calendar_today,
-                      text: 'Appointments',
-                      isTablet: isTablet,
+                  Text(
+                    'Chest Physician',
+                    style: TextStyle(
+                      fontSize: isTablet ? 24.0 : 18.0,
                     ),
-                    SizedBox(width: isTablet ? 40.0 : 20.0), // Add space between modules
-                    SquareModule(
-                      icon: Icons.history,
-                      text: 'Appointment History',
-                      isTablet: isTablet,
-                    ),
-                  ],
-                ),
-              ],
-            );
+                  ),
+                  SizedBox(height: 40.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SquareModule(
+                        icon: 'assets/images/ic_rx.png',
+                        text: 'Make Rx',
+                        isTablet: isTablet,
+                      ),
+                      SizedBox(width: isTablet ? 40.0 : 20.0), // Add space between modules
+                      SquareModule(
+                        icon: 'assets/images/ic_rx_history.png',
+                        text: 'Rx History',
+                        isTablet: isTablet,
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            }
           }
-        ),
       ),
+
+    ),
     ));
   }
 }
 
 class SquareModule extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String text;
   final bool isTablet;
 
@@ -111,9 +125,9 @@ class SquareModule extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Handle module tap
-        if (text == 'Appointments') {
+        if (text == 'Make Rx') {
           // Navigator.of(context).pushReplacementNamed('/patientAppointmentScreen');
-          Get.to(() => PatientAppointmentsScreen());
+          Get.to(() => MedicationReminderApp());
         } else if (text == 'Appointment History') {
           // Navigate to Appointment History screen
           // Add your navigation code here
@@ -129,10 +143,10 @@ class SquareModule extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(
-              icon,
-              size: isTablet ? 60.0 : 40.0,
-              color: Colors.white,
+            Image(
+              image: AssetImage(icon), // Replace with the actual path to your image asset
+              width: isTablet ? 80.0 : 40.0,
+              height: isTablet ? 80.0 : 40.0,
             ),
             SizedBox(height: 10.0),
             Center( // Center the text both vertically and horizontally
