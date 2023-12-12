@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => Signup(),
         // '/otpPage': (context) => OTPScreen(),
       }, // Use the LoginScreen widget here
-      home: LoginScreen(),
+      // home: Signup(),
     );
   }
 }

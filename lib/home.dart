@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kode_rx/Controllers/profile_controller.dart';
+import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/patient_appointments.dart';
 
 import 'app_colors.dart';
@@ -37,51 +39,60 @@ class HomeScreen extends StatelessWidget {
     }
 
     final isTablet = DeviceHelper.getDeviceType() == DeviceType.tablet;
-
+final controller = Get.put(ProfileController());
     return  WillPopScope(
         onWillPop: showExitPopup,
         child: Scaffold(
         appBar: DeviceHelper.deviceAppBar(title: 'Doctor Prescription App'),
     body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CircleAvatar(
-              backgroundImage: AssetImage('assets/doctor_profile.jpg'), // Replace with the actual image path
-              radius: isTablet ? 120.0 : 80.0,
-            ),
-            SizedBox(height: 20.0),
-            Text(
-              'Dr. Azhar Khan',
-              style: TextStyle(
-                fontSize: isTablet ? 36.0 : 24.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'Chest Physician',
-              style: TextStyle(
-                fontSize: isTablet ? 24.0 : 18.0,
-              ),
-            ),
-            SizedBox(height: 40.0),
-            Row(
+        child: FutureBuilder(
+          future: controller.getUserData(),
+          builder: (context, snapshot) {
+            UserModel userData = snapshot.data as UserModel;
+            return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SquareModule(
-                  icon: Icons.calendar_today,
-                  text: 'Appointments',
-                  isTablet: isTablet,
+                CircleAvatar(
+                  backgroundImage: NetworkImage(userData.profileImage),
+                  // backgroundImage: AssetImage('assets/doctor_profile.jpg'), // Replace with the actual image path
+                  radius: isTablet ? 120.0 : 80.0,
                 ),
-                SizedBox(width: isTablet ? 40.0 : 20.0), // Add space between modules
-                SquareModule(
-                  icon: Icons.history,
-                  text: 'Appointment History',
-                  isTablet: isTablet,
+                SizedBox(height: 20.0),
+            
+            
+                Text(
+                 'Dr. ${userData.fullname}',
+                  style: TextStyle(
+                    fontSize: isTablet ? 36.0 : 24.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'Chest Physician',
+                  style: TextStyle(
+                    fontSize: isTablet ? 24.0 : 18.0,
+                  ),
+                ),
+                SizedBox(height: 40.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SquareModule(
+                      icon: Icons.calendar_today,
+                      text: 'Appointments',
+                      isTablet: isTablet,
+                    ),
+                    SizedBox(width: isTablet ? 40.0 : 20.0), // Add space between modules
+                    SquareModule(
+                      icon: Icons.history,
+                      text: 'Appointment History',
+                      isTablet: isTablet,
+                    ),
+                  ],
                 ),
               ],
-            ),
-          ],
+            );
+          }
         ),
       ),
     ));

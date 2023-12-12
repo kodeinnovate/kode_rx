@@ -1,8 +1,13 @@
+import 'dart:typed_data';
+
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kode_rx/Components/custom_button.dart';
 import 'package:kode_rx/Components/custom_textfield.dart';
 import 'package:kode_rx/Controllers/user_repo.dart';
+import 'package:kode_rx/Controllers/utils.dart';
 import 'package:kode_rx/app_colors.dart';
 import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/home.dart';
@@ -21,6 +26,29 @@ class Signup extends StatelessWidget {
   final emailController = TextEditingController();
   final phoneNumberController =
       TextEditingController(text: loginPhoneNumber.value);
+  Uint8List? _profileImage;
+
+  void selectImage() async {
+    Uint8List img = await pickImage(ImageSource.gallery);
+    // Set the image URL in your model
+    _profileImage = img;
+    // Generate a unique filename for the image
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+
+    // Reference to the Firebase Storage bucket
+    firebase_storage.Reference reference = firebase_storage.FirebaseStorage.instance
+        .ref('profile_images/$fileName.jpg');
+
+    // Upload the image to Firebase Storage
+    await reference.putData(img);
+
+    // Get the download URL for the uploaded image
+    String imageUrl = await reference.getDownloadURL();
+
+    userController.userProfileImageUrl.value = imageUrl;
+    Get.find<UserController>().update();
+    // Get.update();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +62,61 @@ class Signup extends StatelessWidget {
                 const SizedBox(
                   height: 50,
                 ),
-                const Icon(
-                  Icons.cloud_outlined,
-                  size: 100,
-                  color: AppColors.customBackground,
+                // const Icon(
+                //   Icons.cloud_outlined,
+                //   size: 100,
+                //   color: AppColors.customBackground,
+                // ),
+                
+                GetBuilder<UserController>(
+                  builder: (_) {
+                    return Stack(
+                      children: [
+                        _profileImage != null
+                            ? CircleAvatar(
+                                radius: 64,
+                                backgroundImage: MemoryImage(_profileImage!),
+                              )
+                            : const CircleAvatar(
+                                radius: 64,
+                                backgroundImage: NetworkImage(
+                                    'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
+                              ),
+                        Positioned(
+                          bottom: -10,
+                          right: -10,
+                          child: IconButton(
+                            icon: const Icon(Icons.add_a_photo),
+                            onPressed: selectImage,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
+
+                // Stack(
+                //   children: [
+                //     _profileImage != null ? CircleAvatar(
+                //       radius: 64,
+                //       backgroundImage: MemoryImage(
+                //           _profileImage!),
+                //     ) :
+                //     const CircleAvatar(
+                //       radius: 64,
+                //       backgroundImage: NetworkImage(
+                //           'https://cdn-icons-png.flaticon.com/512/1053/1053244.png'),
+                //     ),
+                //     Positioned(
+                //       bottom: -10,
+                //       right: -10,
+                //       child: IconButton(
+                //         icon: const Icon(Icons.add_a_photo),
+                //         onPressed: selectImage,
+                //       ),
+                //     )
+                //   ],
+                // ),
                 const SizedBox(
                   height: 50,
                 ),
@@ -133,10 +211,8 @@ class Signup extends StatelessWidget {
     );
   }
 
-
-//Authentication Function, the data 
+//Authentication Function, the data
   signUserUp() {
-
     userController.userName.value = usernameController.text.toString().trim();
     userController.userEmail.value = emailController.text.toString().trim();
     userController.userPhoneNumber.value =
@@ -164,10 +240,11 @@ class Signup extends StatelessWidget {
 
   void otpOnSubmit(String otp, AuthOperation authOperation) async {
     final user = UserModel(
-      fullname: userController.userName.value,
-      email: userController.userEmail.value,
-      phoneNo: userController.userPhoneNumber.value,
-    );
+        fullname: userController.userName.value,
+        email: userController.userEmail.value,
+        phoneNo: userController.userPhoneNumber.value,
+        profileImage: userController.userProfileImageUrl.value,
+        signature: '');
     var isVerified = await AuthenticationRepo.instance.verifyOTP(otp);
     if (isVerified) {
       if (authOperation == AuthOperation.signUp) {
@@ -175,7 +252,8 @@ class Signup extends StatelessWidget {
         dataStore(user);
       } else if (authOperation == AuthOperation.signIn) {
         Get.to(() => HomeScreen());
-        Get.snackbar('SIGNED IN', 'You have Successfull signed in!', icon:const Icon(Icons.check_circle));
+        Get.snackbar('SIGNED IN', 'You have Successfull signed in!',
+            icon: const Icon(Icons.check_circle));
       }
     } else {
       Get.to(() => Signup());
