@@ -1,74 +1,69 @@
-import 'app_colors.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 
-class Demo extends StatelessWidget {
-  Demo({super.key});
+
+class ZoomOutSplashScreen extends StatefulWidget {
+  @override
+  _ZoomOutSplashScreenState createState() => _ZoomOutSplashScreenState();
+}
+
+class _ZoomOutSplashScreenState extends State<ZoomOutSplashScreen>
+    with TickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 2),
+    );
+
+    _animation = Tween<double>(
+      begin: 1.0,
+      end: 2.0,
+    ).animate(_controller);
+
+    _controller.forward();
+
+    Timer(Duration(seconds: 3), () {
+      // Navigate to the next screen after 3 seconds
+      Navigator.pushReplacementNamed(context, '/home');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(height: 25,),
-            //Container 1
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Center(
-                child: Container(
-                  width: 200,
-                  height: 200,
-                  color: Colors.blue,
-                  child: Center(child: Text('Hello Pedo')),
+      backgroundColor: Colors.white,
+      body: Center(
+        child: AnimatedBuilder(
+          animation: _animation,
+          builder: (context, child) {
+            return Transform.scale(
+              scale: _animation.value,
+              child: Container(
+                width: 200, // Adjust the width of your image
+                height: 200, // Adjust the height of your image
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/ic_logo.png'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
-             SizedBox(height: 25,),
-             //Container 2
-               Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Center(
-                child: Container(
-                  width: 200,
-                  height: 200,
-                  color: Colors.blue,
-                  child: Center(child: Text('Hello Pedo')),
-                ),
-              ),
-            ),
-            Row(
-          children: [
-            SizedBox(height: 25,),
-            //Container 1
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Center(
-                child: Container(
-                  width: 200,
-                  height: 200,
-                  color: Colors.blue,
-                  child: Center(child: Text('Hello Pedo')),
-                ),
-              ),
-            ),
-             SizedBox(height: 25,),
-             //Container 2
-               Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Center(
-                child: Container(
-                  width: 200,
-                  height: 200,
-                  color: Colors.blue,
-                  child: Center(child: Text('Hello Pedo')),
-                ),
-              ),
-            ),
-          ],
-        ),
-          ],
+            );
+          },
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

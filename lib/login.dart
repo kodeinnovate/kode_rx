@@ -7,7 +7,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
      home: Scaffold(
-      backgroundColor: AppColors.customBackground,
+      backgroundColor: const Color.fromRGBO(0, 128, 149, 1),
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: SingleChildScrollView(

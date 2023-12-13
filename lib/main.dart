@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:kode_rx/demo.dart';
+import 'package:kode_rx/forgot_pass.dart';
+import 'package:kode_rx/list.dart';
 import 'package:kode_rx/patient_appointments.dart';
 import 'package:kode_rx/patient_home.dart';
+import 'package:kode_rx/patient_info.dart';
 import 'package:kode_rx/select_medicenes.dart';
-import 'package:kode_rx/splash_screen.dart';
+import 'package:kode_rx/splash_screen_new.dart';
 import 'package:kode_rx/test.dart';
 import 'app_colors.dart';
 import 'home.dart';
 import 'login.dart'; // Import the login screen
 
 void main() {
-  runApp(MyApp()); //MaterialApp(home: Demo())
+  runApp(MaterialApp(home: Patient_info(),)); //MaterialApp(home: Demo())
 }
 
 class MyApp extends StatelessWidget {
@@ -18,15 +21,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/splash',
+      initialRoute: '/login',
       routes: {
-        '/splash' : (context) => Splashscreen(), 
+        '/splash' : (context) => SplashScreenNew(), 
+        '/list' : (context) => List(),
         '/login': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),
         '/selectMedicenesScreen': (context) => MedicationReminderApp(),
         '/patientAppointmentScreen': (context) => PatientAppointmentsScreen(),
+        '/info' :(context) => Patient_info(),
+        
       },
-      home:Splashscreen(), // Use the LoginScreen widget here
+      home:SplashScreenNew(), // Use the LoginScreen widget here
     );
   }
 }
