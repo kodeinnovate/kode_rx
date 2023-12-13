@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:kode_rx/Controllers/user_repo.dart';
 import 'package:kode_rx/database/database_fetch.dart';
+import 'package:kode_rx/Controllers/profile_controller.dart';
+import 'package:kode_rx/Controllers/user_repo.dart';
 import 'package:kode_rx/home.dart';
 import 'package:kode_rx/login.dart';
 import 'package:kode_rx/register.dart';
@@ -14,11 +16,11 @@ class AuthenticationRepo extends GetxController {
   var verificationId = ''.obs;
 
   @override
-  void onReady() {
-    Future.delayed(const Duration(seconds: 6));
+  void onReady() async {
+  //  await Future.delayed(const Duration(seconds: 6));
     firebaseUser = Rx<User?>(_auth.currentUser);
     firebaseUser.bindStream(_auth.userChanges());
-    ever(firebaseUser, (callback) => _setInitialScreen);
+    ever(firebaseUser, (user) => _setInitialScreen(user));
   }
 
   _setInitialScreen(User? user) {

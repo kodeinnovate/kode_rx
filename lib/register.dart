@@ -27,6 +27,7 @@ class Signup extends StatelessWidget {
   final phoneNumberController =
       TextEditingController(text: loginPhoneNumber.value);
   Uint8List? _profileImage;
+  final specialtyController = TextEditingController();
 
   void selectImage() async {
     Uint8List img = await pickImage(ImageSource.gallery);
@@ -157,7 +158,7 @@ class Signup extends StatelessWidget {
                 CustomTextfield(
                   controller: usernameController,
                   hintText: 'Enter your full name',
-                  obsecureText: false,
+                  obsecureText: false, keyboardType: TextInputType.name,
                 ),
                 const SizedBox(
                   height: 10,
@@ -165,7 +166,7 @@ class Signup extends StatelessWidget {
                 CustomTextfield(
                   controller: emailController,
                   hintText: 'Enter your email',
-                  obsecureText: false,
+                  obsecureText: false, keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(
                   height: 10,
@@ -173,8 +174,12 @@ class Signup extends StatelessWidget {
                 CustomTextfield(
                   controller: phoneNumberController,
                   hintText: 'Enter your phone number',
-                  obsecureText: false,
+                  obsecureText: false, keyboardType: TextInputType.phone,
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
+                CustomTextfield(controller: specialtyController, hintText: 'Speciality', obsecureText: false, keyboardType: TextInputType.text),
                 const SizedBox(
                   height: 50,
                 ),
@@ -217,10 +222,11 @@ class Signup extends StatelessWidget {
     userController.userEmail.value = emailController.text.toString().trim();
     userController.userPhoneNumber.value =
         phoneNumberController.text.toString().trim();
+        userController.userSpecialty.value = specialtyController.text.toString().trim();
 
     if (usernameController.text.toString().isNotEmpty &&
         emailController.text.toString().isNotEmpty &&
-        phoneNumberController.text.toString().isNotEmpty) {
+        phoneNumberController.text.toString().isNotEmpty && specialtyController.text.toString().isNotEmpty) {
       AuthOperation.signUp;
       AuthenticationRepo.instance
           .phoneAuthentication(phoneNumberController.text.toString());
@@ -244,6 +250,7 @@ class Signup extends StatelessWidget {
         email: userController.userEmail.value,
         phoneNo: userController.userPhoneNumber.value,
         profileImage: userController.userProfileImageUrl.value,
+        specialist: userController.userSpecialty.value,
         signature: '');
     var isVerified = await AuthenticationRepo.instance.verifyOTP(otp);
     if (isVerified) {

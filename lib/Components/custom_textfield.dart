@@ -3,11 +3,12 @@ import '../app_colors.dart';
 
 class CustomTextfield extends StatelessWidget {
   final controller;
+  final TextInputType keyboardType;
   final String hintText;
   final bool obsecureText;
 
   const CustomTextfield(
-      {super.key, required this.controller, required this.hintText, required this.obsecureText});
+      {super.key, required this.controller, required this.hintText, required this.obsecureText, required this.keyboardType});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +17,7 @@ class CustomTextfield extends StatelessWidget {
       child: TextField(
         controller: controller,
         obscureText: obsecureText,
+        keyboardType: keyboardType,
         decoration: InputDecoration(
             enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey),
