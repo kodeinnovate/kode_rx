@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             CircleAvatar(
-              backgroundImage: AssetImage('assets/doctor_profile.jpg'), // Replace with the actual image path
+              backgroundImage: AssetImage('assets/images/doctor_profile.jpg'), // Replace with the actual image path
               radius: isTablet ? 120.0 : 80.0,
             ),
             SizedBox(height: 20.0),

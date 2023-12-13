@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.only(left: 0),
-                          child: Image.asset('assets/images/kodeinnovate.png',
+                          child: Image.asset('assets/images/ic_logo.png',
                               width: 50.0, height: 50.0),
                         ),
                         const Align(
