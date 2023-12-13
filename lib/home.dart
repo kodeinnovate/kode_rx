@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:kode_rx/Controllers/profile_controller.dart';
 import 'package:kode_rx/Pages/patient_info.dart';
 import 'package:kode_rx/database/database_fetch.dart';
-import 'package:kode_rx/patient_appointments.dart';
 
 import 'app_colors.dart';
 import 'device_helper.dart';
@@ -78,17 +77,12 @@ class HomeScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              SquareModule(
-                                icon: Icons.calendar_today,
-                                text: 'Appointments',
-                                isTablet: isTablet,
-                              ),
                               SizedBox(
                                   width: isTablet
                                       ? 40.0
                                       : 20.0), // Add space between modules
                               SquareModule(
-                                icon: Icons.history,
+                                icon: 'ic_rx.png',
                                 text: 'Appointment History',
                                 isTablet: isTablet,
                               ),
@@ -126,17 +120,12 @@ class HomeScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              SquareModule(
-                                icon: Icons.calendar_today,
-                                text: 'Appointments',
-                                isTablet: isTablet,
-                              ),
                               SizedBox(
                                   width: isTablet
                                       ? 40.0
                                       : 20.0), // Add space between modules
                               SquareModule(
-                                icon: Icons.history,
+                                icon: 'ic_rx_history.png',
                                 text: 'Appointment History',
                                 isTablet: isTablet,
                               ),
@@ -157,7 +146,7 @@ class HomeScreen extends StatelessWidget {
 }
 
 class SquareModule extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String text;
   final bool isTablet;
 
@@ -169,7 +158,7 @@ class SquareModule extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         // Handle module tap
-        if (text == 'Appointments') {
+        if (text == 'Make Rx') {
           // Navigator.of(context).pushReplacementNamed('/patientAppointmentScreen');
           Get.to(() => Patient_info());
         } else if (text == 'Appointment History') {
@@ -187,10 +176,10 @@ class SquareModule extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(
-              icon,
-              size: isTablet ? 60.0 : 40.0,
-              color: Colors.white,
+            Image(
+              image: AssetImage(icon), // Replace with the actual path to your image asset
+              width: isTablet ? 80.0 : 40.0,
+              height: isTablet ? 80.0 : 40.0,
             ),
             SizedBox(height: 10.0),
             Center(
