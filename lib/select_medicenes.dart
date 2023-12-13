@@ -95,7 +95,8 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                 height: MediaQuery.of(context).size.height * 0.42,
                 child: MedicationListView(
                   onSelect: (selectedMedicine) {
-                    showMedicineTimeDialog(selectedMedicine);
+                    showSingleChoiceListDialog(selectedMedicine);
+                    //showMedicineTimeDialog(selectedMedicine);
                   },
                 ),
               ),
@@ -300,6 +301,32 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
     }
   }
 
+  // Function to show single choice list dialog
+
+// Usage in your showSingleChoiceListDialog function
+  void showSingleChoiceListDialog(Medicine medicine) {
+  List<String> options = ["10", "20", "30", "40"];
+  String? selectedValue;
+
+  showDialog(
+  context: context,
+  builder: (context) {
+  return SingleChoiceDialog(
+  options: options,
+  onSelected: (value) {
+  selectedValue = value;
+  if (selectedValue != null) {
+  // Handle the selected value (selectedValue)
+  // For example, you can call the showMedicineTimeDialog function
+
+  }
+  },
+  );
+  },
+  );
+  }
+
+
 // Dialog no.2 // Meal Dialogue
   void showMealDialog(Medicine medicine, List<String> selectedTimesToTake) {
     var mealType = 'before'; // Default value, can be 'before' or 'after'
@@ -392,6 +419,52 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
     //   final pdfPrint = ('${med.name}, Time to take: ${med.timesToTake.join(', ')} Meal: ${med.beforeMeal ? 'Before Meal' : 'After Meal'}');
     //   print(pdfPrint);
     // }
+  }
+}
+class SingleChoiceDialog extends StatefulWidget {
+  final List<String> options;
+  final Function(String?) onSelected;
+
+  SingleChoiceDialog({required this.options, required this.onSelected});
+
+  @override
+  _SingleChoiceDialogState createState() => _SingleChoiceDialogState();
+}
+
+class _SingleChoiceDialogState extends State<SingleChoiceDialog> {
+  String? selectedValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Select Value'),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: widget.options.map((option) {
+            return RadioListTile<String>(
+              title: Text(option),
+              value: option,
+              groupValue: selectedValue,
+              onChanged: (value) {
+                setState(() {
+                  selectedValue = value;
+                });
+              },
+            );
+          }).toList(),
+        ),
+      ),
+      actions: <Widget>[
+        ElevatedButton(
+          onPressed: () {
+            widget.onSelected(selectedValue);
+            Navigator.of(context).pop();
+            
+          },
+          child: Text('OK'),
+        ),
+      ],
+    );
   }
 }
 

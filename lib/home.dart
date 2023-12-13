@@ -14,134 +14,162 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Future<bool> showExitPopup() async {
       return await showDialog(
-            //show confirm dialogue
-            //the return value will be from "Yes" or "No" options
-            context: Get.overlayContext!,
-            builder: (context) => AlertDialog(
-              title: Text('Exit App'),
-              content: Text('Do you want to exit an App?'),
-              actions: [
-                ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  //return false when click on "NO"
-                  child: Text('No'),
-                ),
-                ElevatedButton(
-                  onPressed: () => Get.back(result: true),
-                  //return true when click on "Yes"
-                  child: Text('Yes'),
-                ),
-              ],
+        context: Get.overlayContext!,
+        builder: (context) => AlertDialog(
+          title: Text('Exit App'),
+          content: Text('Do you want to exit the app?'),
+          actions: [
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text('No'),
             ),
-          ) ??
-          false; //if showDialouge had returned null, then return false
+            ElevatedButton(
+              onPressed: () => Get.back(result: true),
+              child: Text('Yes'),
+            ),
+          ],
+        ),
+      ) ??
+          false;
     }
 
     final isTablet = DeviceHelper.getDeviceType() == DeviceType.tablet;
-  final controller = Get.put(ProfileController());
+    final controller = Get.put(ProfileController());
+
     return WillPopScope(
-        onWillPop: showExitPopup,
-        child: Scaffold(
-          appBar: DeviceHelper.deviceAppBar(title: 'Doctor Prescription App'),
-          body: Center(
-            child: FutureBuilder(
+      onWillPop: showExitPopup,
+      child: Scaffold(
+        appBar: DeviceHelper.deviceAppBar(
+          title: 'Doctor Prescription App',
+          isTablet: isTablet,
+        ),
+        drawer: isTablet
+            ? Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              FutureBuilder(
                 future: controller.getUserData(),
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    if (snapshot.hasData) {
-                  UserModel userData = snapshot.data as UserModel;
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(userData.profileImage),
-                            // backgroundImage: AssetImage('assets/doctor_profile.jpg'), // Replace with the actual image path
-                            radius: isTablet ? 120.0 : 80.0,
-                          ),
-                          SizedBox(height: 20.0),
-                          Text(
-                            'Dr. ${userData.fullname}',
-                            style: TextStyle(
-                              fontSize: isTablet ? 36.0 : 24.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            userData.specialist,
-                            style: TextStyle(
-                              fontSize: isTablet ? 24.0 : 18.0,
-                            ),
-                          ),
-                          SizedBox(height: 40.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              SizedBox(
-                                  width: isTablet
-                                      ? 40.0
-                                      : 20.0), // Add space between modules
-                              SquareModule(
-                                icon: 'ic_rx.png',
-                                text: 'Appointment History',
-                                isTablet: isTablet,
-                              ),
-                            ],
-                          ),
-                        ],
-                      );
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text('Error here${snapshot.error.toString()}'),);
-                    } else {
-                      return  Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          CircleAvatar(
-                            // backgroundImage:
-                                // NetworkImage(userData.profileImage),
-                            backgroundImage: AssetImage('assets/doctor_profile.jpg'), // Replace with the actual image path
-                            radius: isTablet ? 120.0 : 80.0,
-                          ),
-                          SizedBox(height: 20.0),
-                          Text(
-                            'Dr. ',
-                            style: TextStyle(
-                              fontSize: isTablet ? 36.0 : 24.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'Chest Physician',
-                            style: TextStyle(
-                              fontSize: isTablet ? 24.0 : 18.0,
-                            ),
-                          ),
-                          SizedBox(height: 40.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              SizedBox(
-                                  width: isTablet
-                                      ? 40.0
-                                      : 20.0), // Add space between modules
-                              SquareModule(
-                                icon: 'ic_rx_history.png',
-                                text: 'Appointment History',
-                                isTablet: isTablet,
-                              ),
-                            ],
-                          ),
-                        ],
-                      );
-                    }
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.hasData) {
+                    UserModel userData = snapshot.data as UserModel;
+                    return DrawerHeader(
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                      ),
+                      child: Text(
+                        'Hello, Dr ${userData.fullname}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                        ),
+                      ),
                     );
                   }
-                }),
+                  return DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                    ),
+                    child: Text(
+                      'Hello, Dr',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                title: Text('Profile'),
+                onTap: () {
+                  // Handle navigation to profile
+                },
+              ),
+              ListTile(
+                title: Text('Settings'),
+                onTap: () {
+                  // Handle navigation to settings
+                },
+              ),
+            ],
           ),
-        ),);
+        )
+            : null,
+        body: Center(
+          child: FutureBuilder(
+            future: controller.getUserData(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
+                  UserModel userData = snapshot.data as UserModel;
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      userData.profileImage != null
+                          ? CircleAvatar(
+                        radius: 120.0,
+                        backgroundImage: NetworkImage(
+                          userData.profileImage!,
+                        ),
+                      )
+                          : const CircleAvatar(
+                        radius: 120.0,
+                        backgroundImage: NetworkImage(
+                            'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
+                      ),
+                      SizedBox(height: 20.0),
+                      Text(
+                        'Dr. ${userData.fullname}',
+                        style: TextStyle(
+                          fontSize: isTablet ? 36.0 : 24.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        userData.specialist,
+                        style: TextStyle(
+                          fontSize: isTablet ? 24.0 : 18.0,
+                        ),
+                      ),
+                      SizedBox(height: 40.0),
+                     Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+
+                          children: [
+                          SquareModule(
+                            icon: 'assets/images/ic_rx.png',
+                            text: 'Make Rx',
+                            isTablet: isTablet,
+                          ),
+                            SizedBox(width: 20.0),
+                          SquareModule(
+                            icon: 'assets/images/ic_rx_history.png',
+                            text: 'Rx History',
+                            isTablet: isTablet,
+                          ),
+                        ],
+                      ),
+                    ],
+
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error.toString()}'),
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }
+              return Container();
+            },
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -150,47 +178,59 @@ class SquareModule extends StatelessWidget {
   final String text;
   final bool isTablet;
 
-  SquareModule(
-      {required this.icon, required this.text, required this.isTablet});
+  SquareModule({
+    required this.icon,
+    required this.text,
+    required this.isTablet,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Handle module tap
         if (text == 'Make Rx') {
-          // Navigator.of(context).pushReplacementNamed('/patientAppointmentScreen');
           Get.to(() => Patient_info());
-        } else if (text == 'Appointment History') {
-          // Navigate to Appointment History screen
-          // Add your navigation code here
+        } else if (text == 'Rx History') {
+          // Handle navigation to Rx History screen
         }
       },
       child: Container(
-        width: isTablet ? 200.0 : 150.0,
-        height: isTablet ? 200.0 : 150.0,
+        width: isTablet ? 250.0 : 150.0,
+        height: isTablet ? 250.0 : 150.0,
         decoration: BoxDecoration(
-          color: AppColors.customBackground,
-          borderRadius: BorderRadius.circular(10.0),
+          gradient: LinearGradient(
+            colors: [Color(0xFF008095), Color(0xFF008095)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(15.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, 3),
+            ),
+          ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Image(
-              image: AssetImage(icon), // Replace with the actual path to your image asset
-              width: isTablet ? 80.0 : 40.0,
-              height: isTablet ? 80.0 : 40.0,
+              image: AssetImage(icon),
+              width: isTablet ? 100.0 : 40.0,
+              height: isTablet ? 100.0 : 40.0,
             ),
             SizedBox(height: 10.0),
             Center(
-              // Center the text both vertically and horizontally
               child: Text(
                 text,
                 style: TextStyle(
-                  fontSize: isTablet ? 24.0 : 16.0,
+                  fontSize: isTablet ? 20.0 : 16.0,
                   color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
-                textAlign: TextAlign.center, // Center the text horizontally
+                textAlign: TextAlign.center,
               ),
             ),
           ],

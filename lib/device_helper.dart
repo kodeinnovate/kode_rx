@@ -12,8 +12,8 @@ class DeviceHelper {
     return data.size.shortestSide < 600 ? DeviceType.phone : DeviceType.tablet;
   }
 
-  static AppBar deviceAppBar({String? title}) {
-    String defaultTitle = 'KodeNeo';
+  static AppBar deviceAppBar({String? title,  bool isTablet = true}) {
+    String defaultTitle = 'KodeRx';
     final deviceType = getDeviceType();
 
     if (deviceType == DeviceType.tablet) {
