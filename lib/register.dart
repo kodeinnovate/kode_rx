@@ -26,15 +26,35 @@ class Signup extends StatelessWidget {
   final emailController = TextEditingController();
   final phoneNumberController =
       TextEditingController(text: loginPhoneNumber.value);
-  Uint8List? _profileImage;
+  Uint8List? profileImage;
   final specialtyController = TextEditingController();
 
   void selectImage() async {
     Uint8List img = await pickImage(ImageSource.gallery);
     // Set the image URL in your model
-    _profileImage = img;
+    profileImage = img;
+    userController.profileImage.value = img;
+    Get.find<UserController>().update();
     // Generate a unique filename for the image
-    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    // String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+
+    // // Reference to the Firebase Storage bucket
+    // firebase_storage.Reference reference = firebase_storage.FirebaseStorage.instance
+    //     .ref('profile_images/$fileName.jpg');
+
+    // // Upload the image to Firebase Storage
+    // await reference.putData(img);
+
+    // // Get the download URL for the uploaded image
+    // String imageUrl = await reference.getDownloadURL();
+
+    // userController.userProfileImageUrl.value = imageUrl;
+    // Get.update();
+    // uploadImage(img);
+  }
+
+  Future<void> uploadImage(Uint8List img) async {
+   String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
     // Reference to the Firebase Storage bucket
     firebase_storage.Reference reference = firebase_storage.FirebaseStorage.instance
@@ -47,8 +67,6 @@ class Signup extends StatelessWidget {
     String imageUrl = await reference.getDownloadURL();
 
     userController.userProfileImageUrl.value = imageUrl;
-    Get.find<UserController>().update();
-    // Get.update();
   }
 
   @override
@@ -73,10 +91,10 @@ class Signup extends StatelessWidget {
                   builder: (_) {
                     return Stack(
                       children: [
-                        _profileImage != null
+                        profileImage != null
                             ? CircleAvatar(
                                 radius: 64,
-                                backgroundImage: MemoryImage(_profileImage!),
+                                backgroundImage: MemoryImage(profileImage!),
                               )
                             : const CircleAvatar(
                                 radius: 64,
@@ -230,6 +248,7 @@ class Signup extends StatelessWidget {
       AuthOperation.signUp;
       AuthenticationRepo.instance
           .phoneAuthentication(phoneNumberController.text.toString());
+         
       Get.to(() => OTPScreen(AuthOperation.signUp));
     } else {
       Get.snackbar('Field Empty!', 'Please fill all the inputs',
@@ -255,8 +274,11 @@ class Signup extends StatelessWidget {
     var isVerified = await AuthenticationRepo.instance.verifyOTP(otp);
     if (isVerified) {
       if (authOperation == AuthOperation.signUp) {
+        print(userController.profileImage.value);
+        uploadImage(userController.profileImage.value!);
+        // await Future.delayed(const Duration(seconds: 2));
+       dataStore(user);
         Get.to(() => HomeScreen());
-        dataStore(user);
       } else if (authOperation == AuthOperation.signIn) {
         Get.to(() => HomeScreen());
         Get.snackbar('SIGNED IN', 'You have Successfull signed in!',

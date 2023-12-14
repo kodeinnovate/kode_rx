@@ -14,22 +14,22 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Future<bool> showExitPopup() async {
       return await showDialog(
-        context: Get.overlayContext!,
-        builder: (context) => AlertDialog(
-          title: Text('Exit App'),
-          content: Text('Do you want to exit the app?'),
-          actions: [
-            ElevatedButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text('No'),
+            context: Get.overlayContext!,
+            builder: (context) => AlertDialog(
+              title: Text('Exit App'),
+              content: Text('Do you want to exit the app?'),
+              actions: [
+                ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text('No'),
+                ),
+                ElevatedButton(
+                  onPressed: () => Get.back(result: true),
+                  child: Text('Yes'),
+                ),
+              ],
             ),
-            ElevatedButton(
-              onPressed: () => Get.back(result: true),
-              child: Text('Yes'),
-            ),
-          ],
-        ),
-      ) ??
+          ) ??
           false;
     }
 
@@ -45,57 +45,57 @@ class HomeScreen extends StatelessWidget {
         ),
         drawer: isTablet
             ? Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              FutureBuilder(
-                future: controller.getUserData(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done &&
-                      snapshot.hasData) {
-                    UserModel userData = snapshot.data as UserModel;
-                    return DrawerHeader(
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                      ),
-                      child: Text(
-                        'Hello, Dr ${userData.fullname}',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                        ),
-                      ),
-                    );
-                  }
-                  return DrawerHeader(
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: <Widget>[
+                    FutureBuilder(
+                      future: controller.getUserData(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done &&
+                            snapshot.hasData) {
+                          UserModel userData = snapshot.data as UserModel;
+                          return DrawerHeader(
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                            ),
+                            child: Text(
+                              'Hello, Dr ${userData.fullname}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                              ),
+                            ),
+                          );
+                        }
+                        return DrawerHeader(
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                          ),
+                          child: Text(
+                            'Hello, Dr',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                    child: Text(
-                      'Hello, Dr',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      ),
+                    ListTile(
+                      title: Text('Profile'),
+                      onTap: () {
+                        // Handle navigation to profile
+                      },
                     ),
-                  );
-                },
-              ),
-              ListTile(
-                title: Text('Profile'),
-                onTap: () {
-                  // Handle navigation to profile
-                },
-              ),
-              ListTile(
-                title: Text('Settings'),
-                onTap: () {
-                  // Handle navigation to settings
-                },
-              ),
-            ],
-          ),
-        )
+                    ListTile(
+                      title: Text('Settings'),
+                      onTap: () {
+                        // Handle navigation to settings
+                      },
+                    ),
+                  ],
+                ),
+              )
             : null,
         body: Center(
           child: FutureBuilder(
@@ -107,18 +107,25 @@ class HomeScreen extends StatelessWidget {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      userData.profileImage != null
-                          ? CircleAvatar(
+                      CircleAvatar(
                         radius: 120.0,
-                        backgroundImage: NetworkImage(
-                          userData.profileImage!,
-                        ),
-                      )
-                          : const CircleAvatar(
-                        radius: 120.0,
-                        backgroundImage: NetworkImage(
-                            'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
+                        backgroundImage: userData.profileImage != ''
+                            ? NetworkImage(userData.profileImage)
+                            : NetworkImage(
+                                'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
                       ),
+                      // userData.profileImage != null
+                      //     ? CircleAvatar(
+                      //   radius: 120.0,
+                      //   backgroundImage: NetworkImage(
+                      //     userData.profileImage,
+                      //   ),
+                      // )
+                      //     : const CircleAvatar(
+                      //   radius: 120.0,
+                      //   backgroundImage: NetworkImage(
+                      //       'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
+                      // ),
                       SizedBox(height: 20.0),
                       Text(
                         'Dr. ${userData.fullname}',
@@ -134,16 +141,15 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 40.0),
-                     Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-
-                          children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
                           SquareModule(
                             icon: 'assets/images/ic_rx.png',
                             text: 'Make Rx',
                             isTablet: isTablet,
                           ),
-                            SizedBox(width: 20.0),
+                          SizedBox(width: 20.0),
                           SquareModule(
                             icon: 'assets/images/ic_rx_history.png',
                             text: 'Rx History',
@@ -152,7 +158,6 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                     ],
-
                   );
                 } else if (snapshot.hasError) {
                   return Center(

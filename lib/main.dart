@@ -1,3 +1,4 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/get_navigation.dart';
@@ -22,6 +23,8 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    await FirebaseAppCheck.instance
+        .activate(androidProvider: AndroidProvider.playIntegrity);
     Get.put(AuthenticationRepo());
   } catch (e) {
     print("Error initializing Firebase: $e");
@@ -33,14 +36,14 @@ void main() async {
   Get.put(LoginScreen());
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
       theme: ThemeData(primaryColor: AppColors.customBackground),
-      initialRoute: FirebaseAuth.instance.currentUser == null ? '/login' : '/home',
+      // initialRoute:
+      //     FirebaseAuth.instance.currentUser == null ? '/login' : '/home',
       routes: {
         '/login': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),
@@ -49,7 +52,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => Signup(),
         // '/otpPage': (context) => OTPScreen(),
       }, // Use the LoginScreen widget here
-      // home: Signup(),
+      home: CircularProgressIndicator(),
     );
   }
 }
