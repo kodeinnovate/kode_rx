@@ -305,26 +305,28 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
 
 // Usage in your showSingleChoiceListDialog function
   void showSingleChoiceListDialog(Medicine medicine) {
-  List<String> options = ["10", "20", "30", "40"];
-  String? selectedValue;
+    List<String> options = ["10Mg", "20Mg", "30Mg", "40Mg"];
+    String? selectedValue;
 
-  showDialog(
-  context: context,
-  builder: (context) {
-  return SingleChoiceDialog(
-  options: options,
-  onSelected: (value) {
-  selectedValue = value;
-  if (selectedValue != null) {
-  // Handle the selected value (selectedValue)
-  // For example, you can call the showMedicineTimeDialog function
+    showDialog(
+      context: context,
+      builder: (context) {
+        return SingleChoiceDialog(
+          options: options,
+          onSelected: (value) {
+            selectedValue = value;
+          },
+          onOkPressed: () {
+            // Call the showMedicineTimeDialog function with the selected value
+            if (selectedValue != null) {
+              showMedicineTimeDialog(medicine!);
+            }
+          },
+        );
+      },
+    );
+  }
 
-  }
-  },
-  );
-  },
-  );
-  }
 
 
 // Dialog no.2 // Meal Dialogue
@@ -424,8 +426,13 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
 class SingleChoiceDialog extends StatefulWidget {
   final List<String> options;
   final Function(String?) onSelected;
+  final VoidCallback? onOkPressed;
 
-  SingleChoiceDialog({required this.options, required this.onSelected});
+  SingleChoiceDialog({
+    required this.options,
+    required this.onSelected,
+    this.onOkPressed,
+  });
 
   @override
   _SingleChoiceDialogState createState() => _SingleChoiceDialogState();
@@ -459,7 +466,11 @@ class _SingleChoiceDialogState extends State<SingleChoiceDialog> {
           onPressed: () {
             widget.onSelected(selectedValue);
             Navigator.of(context).pop();
-            
+
+            // Call the onOkPressed callback if provided
+            if (widget.onOkPressed != null) {
+              widget.onOkPressed!();
+            }
           },
           child: Text('OK'),
         ),

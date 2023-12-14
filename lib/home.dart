@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:kode_rx/Controllers/profile_controller.dart';
 import 'package:kode_rx/Pages/patient_info.dart';
 import 'package:kode_rx/database/database_fetch.dart';
+import 'package:kode_rx/profile.dart';
 
 import 'app_colors.dart';
 import 'device_helper.dart';
@@ -35,148 +36,161 @@ class HomeScreen extends StatelessWidget {
 
     final isTablet = DeviceHelper.getDeviceType() == DeviceType.tablet;
     final controller = Get.put(ProfileController());
-
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return WillPopScope(
       onWillPop: showExitPopup,
       child: Scaffold(
-        appBar: DeviceHelper.deviceAppBar(
-          title: 'Doctor Prescription App',
-          isTablet: isTablet,
+        key: _scaffoldKey,
+        drawer: Drawer(child:
+          Drawer(
+          // Add a ListView to the drawer. This ensures the user can scroll
+          // through the options in the drawer if there isn't enough vertical
+          // space to fit everything.
+          child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('Drawer Header'),
+            ),
+            ListTile(
+              title: const Text('Item 1'),
+              onTap: () {
+                // Update the state of the app.
+                // ...
+              },
+            ),
+            ListTile(
+              title: const Text('Item 2'),
+              onTap: () {
+                // Update the state of the app.
+                // ...
+              },
+            ),
+          ],
         ),
-        drawer: isTablet
-            ? Drawer(
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: <Widget>[
-                    FutureBuilder(
+      )),
+        body: Column( children:[
+
+          Container(
+          height:  MediaQuery.of(context).size.height * 0.7,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.white, Color(0xFF008095)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(top: 20.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+              Padding(
+              padding: EdgeInsets.fromLTRB(20, 40, 0, 0),
+                  child:IconButton(
+                    icon: Icon(Icons.menu,color:AppColors.customBackground),
+                    onPressed: () {
+                      _scaffoldKey.currentState?.openDrawer();
+                    },
+                  )),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(20, 20, 0, 0), // Updated padding
+                    child: FutureBuilder(
                       future: controller.getUserData(),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done &&
-                            snapshot.hasData) {
-                          UserModel userData = snapshot.data as UserModel;
-                          return DrawerHeader(
-                            decoration: BoxDecoration(
-                              color: Colors.blue,
-                            ),
-                            child: Text(
-                              'Hello, Dr ${userData.fullname}',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24,
-                              ),
-                            ),
-                          );
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.hasData) {
+                            UserModel userData = snapshot.data as UserModel;
+                            return Row(
+                              children: [
+                                userData.profileImage != null
+                                    ? CircleAvatar(
+                                  radius: 30.0,
+                                  backgroundImage: NetworkImage(
+                                    userData.profileImage!,
+                                  ),
+                                )
+                                    : const CircleAvatar(
+                                  radius: 120.0,
+                                  backgroundImage: NetworkImage(
+                                      'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
+                                ),
+                                SizedBox(width: 10.0),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Hello, Dr. ${userData.fullname}',
+                                      style: TextStyle(
+                                        fontSize: isTablet ? 28.0 : 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.customBackground,
+                                      ),
+                                    ),
+                                    Text(
+                                      userData.specialist,
+                                      style: TextStyle(
+                                        fontSize: isTablet ? 28.0 : 14.0,
+                                        color: AppColors.customBackground,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          }
                         }
-                        return DrawerHeader(
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                          ),
-                          child: Text(
-                            'Hello, Dr',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                            ),
-                          ),
-                        );
+                        return Container();
                       },
                     ),
-                    ListTile(
-                      title: Text('Profile'),
-                      onTap: () {
-                        // Handle navigation to profile
-                      },
-                    ),
-                    ListTile(
-                      title: Text('Settings'),
-                      onTap: () {
-                        // Handle navigation to settings
-                      },
-                    ),
-                  ],
+                  ),
+                  SizedBox(height: 180.0),
+              Container(
+                width: double.infinity, // Full width
+                height: 500.0,
+                child: Image.asset(
+                  'assets/images/ic_home_bg.png',// Adjust the BoxFit as per your requirement
                 ),
-              )
-            : null,
-        body: Center(
-          child: FutureBuilder(
-            future: controller.getUserData(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
-                  UserModel userData = snapshot.data as UserModel;
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      CircleAvatar(
-                        radius: 120.0,
-                        backgroundImage: userData.profileImage != ''
-                            ? NetworkImage(userData.profileImage)
-                            : NetworkImage(
-                                'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
-                      ),
-                      // userData.profileImage != null
-                      //     ? CircleAvatar(
-                      //   radius: 120.0,
-                      //   backgroundImage: NetworkImage(
-                      //     userData.profileImage,
-                      //   ),
-                      // )
-                      //     : const CircleAvatar(
-                      //   radius: 120.0,
-                      //   backgroundImage: NetworkImage(
-                      //       'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
-                      // ),
-                      SizedBox(height: 20.0),
-                      Text(
-                        'Dr. ${userData.fullname}',
-                        style: TextStyle(
-                          fontSize: isTablet ? 36.0 : 24.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        userData.specialist,
-                        style: TextStyle(
-                          fontSize: isTablet ? 24.0 : 18.0,
-                        ),
-                      ),
-                      SizedBox(height: 40.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SquareModule(
-                            icon: 'assets/images/ic_rx.png',
-                            text: 'Make Rx',
-                            isTablet: isTablet,
-                          ),
-                          SizedBox(width: 20.0),
-                          SquareModule(
-                            icon: 'assets/images/ic_rx_history.png',
-                            text: 'Rx History',
-                            isTablet: isTablet,
-                          ),
-                        ],
-                      ),
-                    ],
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error: ${snapshot.error.toString()}'),
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              }
-              return Container();
-            },
+              ),
+
+                ],
+
+              ),
+
+            ),
           ),
+
         ),
+    SizedBox(height: 50,),
+    Padding(
+    padding: EdgeInsets.all(20.0),
+    child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+    SquareModule(
+    icon: 'assets/images/ic_rx.png',
+    text: 'Make Rx',
+    isTablet: isTablet,
+    ),
+    SquareModule(
+    icon: 'assets/images/ic_rx_history.png',
+    text: 'Rx History',
+    isTablet: isTablet,
+    ),
+    ],
+    ),
+    ),
+]
       ),
-    );
+    ));
   }
 }
+
 
 class SquareModule extends StatelessWidget {
   final String icon;

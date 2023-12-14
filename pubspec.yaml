@@ -85,6 +85,8 @@ flutter:
     - assets/images/OTP_image.png
     - assets/images/ic_rx.png
     - assets/images/ic_rx_history.png
+    - assets/images/ic_signature.png
+    - assets/images/ic_home_bg.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -40,10 +40,12 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+
     return GetMaterialApp(
-      theme: ThemeData(primaryColor: AppColors.customBackground),
-      // initialRoute:
-      //     FirebaseAuth.instance.currentUser == null ? '/login' : '/home',
+
+      theme: ThemeData(primaryColor: AppColors.customBackground,backgroundColor: Colors.white),
+      initialRoute: FirebaseAuth.instance.currentUser == null ? '/login' : '/home',
+
       routes: {
         '/login': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),

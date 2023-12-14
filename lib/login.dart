@@ -43,7 +43,7 @@ class LoginScreen extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: EdgeInsets.only(left: 10.0),
-                            child: Text('NEORx',
+                            child: Text('KodeRX',
                                 style: TextStyle(
                                     fontSize: 44.0, color: Colors.white)),
                           ),
