@@ -65,168 +65,172 @@ class Signup extends StatelessWidget {
 
     // Get the download URL for the uploaded image
     String imageUrl = await reference.getDownloadURL();
-
     userController.userProfileImageUrl.value = imageUrl;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(
-                  height: 50,
-                ),
-                // const Icon(
-                //   Icons.cloud_outlined,
-                //   size: 100,
-                //   color: AppColors.customBackground,
-                // ),
-                
-                GetBuilder<UserController>(
-                  builder: (_) {
-                    return Stack(
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  // const Icon(
+                  //   Icons.cloud_outlined,
+                  //   size: 100,
+                  //   color: AppColors.customBackground,
+                  // ),
+                  
+                  GetBuilder<UserController>(
+                    builder: (_) {
+                      return Stack(
+                        children: [
+                          profileImage != null
+                              ? CircleAvatar(
+                                  radius: 64,
+                                  backgroundImage: MemoryImage(profileImage!),
+                                )
+                              : const CircleAvatar(
+                                  radius: 64,
+                                  backgroundImage: NetworkImage(
+                                      'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
+                                ),
+                          Positioned(
+                            bottom: -10,
+                            right: -10,
+                            child: IconButton(
+                              icon: const Icon(Icons.add_a_photo),
+                              onPressed: selectImage,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+        
+                  // Stack(
+                  //   children: [
+                  //     _profileImage != null ? CircleAvatar(
+                  //       radius: 64,
+                  //       backgroundImage: MemoryImage(
+                  //           _profileImage!),
+                  //     ) :
+                  //     const CircleAvatar(
+                  //       radius: 64,
+                  //       backgroundImage: NetworkImage(
+                  //           'https://cdn-icons-png.flaticon.com/512/1053/1053244.png'),
+                  //     ),
+                  //     Positioned(
+                  //       bottom: -10,
+                  //       right: -10,
+                  //       child: IconButton(
+                  //         icon: const Icon(Icons.add_a_photo),
+                  //         onPressed: selectImage,
+                  //       ),
+                  //     )
+                  //   ],
+                  // ),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  const Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        profileImage != null
-                            ? CircleAvatar(
-                                radius: 64,
-                                backgroundImage: MemoryImage(profileImage!),
-                              )
-                            : const CircleAvatar(
-                                radius: 64,
-                                backgroundImage: NetworkImage(
-                                    'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
-                              ),
-                        Positioned(
-                          bottom: -10,
-                          right: -10,
-                          child: IconButton(
-                            icon: const Icon(Icons.add_a_photo),
-                            onPressed: selectImage,
+                        Text(
+                          "Welcome",
+                          style: TextStyle(
+                              fontSize: 42, color: AppColors.customBackground),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 25.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: const Text(
+                            "Enter your name, email and phone number for signup.",
+                            style: TextStyle(fontSize: 16, color: Colors.grey),
                           ),
                         ),
                       ],
-                    );
-                  },
-                ),
-
-                // Stack(
-                //   children: [
-                //     _profileImage != null ? CircleAvatar(
-                //       radius: 64,
-                //       backgroundImage: MemoryImage(
-                //           _profileImage!),
-                //     ) :
-                //     const CircleAvatar(
-                //       radius: 64,
-                //       backgroundImage: NetworkImage(
-                //           'https://cdn-icons-png.flaticon.com/512/1053/1053244.png'),
-                //     ),
-                //     Positioned(
-                //       bottom: -10,
-                //       right: -10,
-                //       child: IconButton(
-                //         icon: const Icon(Icons.add_a_photo),
-                //         onPressed: selectImage,
-                //       ),
-                //     )
-                //   ],
-                // ),
-                const SizedBox(
-                  height: 50,
-                ),
-                const Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  CustomTextfield(
+                    controller: usernameController,
+                    hintText: 'Enter your full name',
+                    obsecureText: false, keyboardType: TextInputType.name,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  CustomTextfield(
+                    controller: emailController,
+                    hintText: 'Enter your email',
+                    obsecureText: false, keyboardType: TextInputType.emailAddress,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  CustomTextfield(
+                    controller: phoneNumberController,
+                    hintText: 'Enter your phone number',
+                    obsecureText: false, keyboardType: TextInputType.phone,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  CustomTextfield(controller: specialtyController, hintText: 'Speciality', obsecureText: false, keyboardType: TextInputType.text),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  CustomButtom(
+                    buttonText: 'SIGN UP',
+                    onTap: signUserUp,
+                  ),
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Welcome",
+                        'Having trouble signing up?',
+                        style:
+                            TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      const Text(
+                        'Contact Us',
                         style: TextStyle(
-                            fontSize: 42, color: AppColors.customBackground),
+                            color: AppColors.customBackground, fontSize: 16),
                       ),
                     ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        child: const Text(
-                          "Enter your name, email and phone number for signup.",
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                CustomTextfield(
-                  controller: usernameController,
-                  hintText: 'Enter your full name',
-                  obsecureText: false, keyboardType: TextInputType.name,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomTextfield(
-                  controller: emailController,
-                  hintText: 'Enter your email',
-                  obsecureText: false, keyboardType: TextInputType.emailAddress,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomTextfield(
-                  controller: phoneNumberController,
-                  hintText: 'Enter your phone number',
-                  obsecureText: false, keyboardType: TextInputType.phone,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                CustomTextfield(controller: specialtyController, hintText: 'Speciality', obsecureText: false, keyboardType: TextInputType.text),
-                const SizedBox(
-                  height: 50,
-                ),
-                CustomButtom(
-                  buttonText: 'SIGN UP',
-                  onTap: signUserUp,
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Having trouble signing up?',
-                      style:
-                          TextStyle(fontSize: 16, color: Colors.grey.shade600),
-                    ),
-                    const SizedBox(
-                      width: 4,
-                    ),
-                    const Text(
-                      'Contact Us',
-                      style: TextStyle(
-                          color: AppColors.customBackground, fontSize: 16),
-                    ),
-                  ],
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -248,7 +252,12 @@ class Signup extends StatelessWidget {
       AuthOperation.signUp;
       AuthenticationRepo.instance
           .phoneAuthentication(phoneNumberController.text.toString());
-         
+          if(userController.profileImage.value == null){
+
+          }
+          else{
+          uploadImage(userController.profileImage.value!);
+          }
       Get.to(() => OTPScreen(AuthOperation.signUp));
     } else {
       Get.snackbar('Field Empty!', 'Please fill all the inputs',
@@ -264,6 +273,7 @@ class Signup extends StatelessWidget {
   }
 
   void otpOnSubmit(String otp, AuthOperation authOperation) async {
+       
     final user = UserModel(
         fullname: userController.userName.value,
         email: userController.userEmail.value,
@@ -274,11 +284,10 @@ class Signup extends StatelessWidget {
     var isVerified = await AuthenticationRepo.instance.verifyOTP(otp);
     if (isVerified) {
       if (authOperation == AuthOperation.signUp) {
+        Get.to(() => HomeScreen());
         print(userController.profileImage.value);
-        uploadImage(userController.profileImage.value!);
         // await Future.delayed(const Duration(seconds: 2));
        dataStore(user);
-        Get.to(() => HomeScreen());
       } else if (authOperation == AuthOperation.signIn) {
         Get.to(() => HomeScreen());
         Get.snackbar('SIGNED IN', 'You have Successfull signed in!',

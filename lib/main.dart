@@ -6,6 +6,7 @@ import 'package:get/instance_manager.dart';
 import 'package:kode_rx/Controllers/authentication_repo.dart';
 import 'package:kode_rx/Controllers/profile_controller.dart';
 import 'package:kode_rx/Controllers/user_repo.dart';
+import 'package:kode_rx/Pages/patient_info.dart';
 import 'package:kode_rx/Pages/splashscreen.dart';
 import 'package:kode_rx/app_colors.dart';
 import 'package:kode_rx/patient_appointments.dart';
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),
         '/selectMedicenesScreen': (context) => MedicationReminderApp(),
+        '/Patient_info' : (context) => Patient_info(),
         '/patientAppointmentScreen': (context) => PatientAppointmentsScreen(),
         '/register': (context) => Signup(),
         // '/otpPage': (context) => OTPScreen(),

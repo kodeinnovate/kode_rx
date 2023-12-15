@@ -156,7 +156,7 @@ class _Patient_infoState extends State<Patient_info> {
       pastHistory: pastHistory.text.toString().trim(),
       phoneNumber: phoneNumber.text.toString().trim()
     );
-    Get.to(() => MedicationReminderApp());
     // await userRepository.addPatientDetails(patientData);
+    Get.to(() => MedicationReminderApp());
   }
 }

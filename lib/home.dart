@@ -108,15 +108,15 @@ class HomeScreen extends StatelessWidget {
                             UserModel userData = snapshot.data as UserModel;
                             return Row(
                               children: [
-                                userData.profileImage != null
+                                userData.profileImage != ''
                                     ? CircleAvatar(
-                                  radius: 30.0,
+                                  radius: 55.0,
                                   backgroundImage: NetworkImage(
-                                    userData.profileImage!,
+                                    userData.profileImage,
                                   ),
                                 )
                                     : const CircleAvatar(
-                                  radius: 120.0,
+                                  radius: 55.0,
                                   backgroundImage: NetworkImage(
                                       'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
                                 ),
@@ -143,9 +143,13 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               ],
                             );
+                          } else {
+                            return Center(child: CircularProgressIndicator(),);
                           }
+                        } else {
+                          return Center(child: CircularProgressIndicator(),);
                         }
-                        return Container();
+                        // return Container();
                       },
                     ),
                   ),

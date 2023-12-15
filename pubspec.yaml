@@ -48,12 +48,15 @@ dependencies:
   cloud_firestore: ^4.13.1
   firebase_storage: ^11.5.5
   firebase_app_check: ^0.2.1+8
+  flutter_native_splash: ^2.3.8
   pdf: ^3.10.6
   printing: ^5.11.1
   image_picker: ^1.0.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -64,6 +67,21 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+flutter_native_splash:
+   image: assets/images/ic-rx-logo_wgU1aCu4.png
+   color: "#ffffff"
+   color_dark: "#121212"
+   image_dark: assets/images/ic-rx-logo_wgU1aCu4.png
+   android_gravity: center
+
+   android_12:
+    image: assets/images/ic-rx-logo_wgU1aCu4.png
+    icon_background_color: "#ffffff"
+    image_dark: assets/images/ic-rx-logo_wgU1aCu4.png
+    icon_background_color_dark: "#121212"
+    android_gravity: center
+
 
 # The following section is specific to Flutter packages.
 flutter:
@@ -87,6 +105,10 @@ flutter:
     - assets/images/ic_rx_history.png
     - assets/images/ic_signature.png
     - assets/images/ic_home_bg.png
+    - assets/images/ic_rx_logo.png
+    - assets/images/ic_rx_dark_mode_logo.png
+    - assets/images/login_page_background_image.png
+    - assets/images/ic-rx-logo_wgU1aCu4.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
