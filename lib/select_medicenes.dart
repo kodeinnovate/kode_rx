@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:kode_rx/Controllers/data_fetch_controller.dart';
 import 'package:kode_rx/Controllers/pdf_controller.dart';
+import 'package:kode_rx/Controllers/user_repo.dart';
 import 'package:kode_rx/Pages/pdf_genarater.dart';
 import 'package:kode_rx/Pages/pdf_preview_screen.dart';
 import 'package:kode_rx/app_colors.dart';
 import 'package:kode_rx/data_state_store.dart';
 import 'package:kode_rx/database/doctor_medicine_data.dart';
 import 'package:kode_rx/database/medicine_data_fetch.dart';
+import 'package:kode_rx/database/patient_data.dart';
 import 'package:kode_rx/device_helper.dart';
 
 class MedicationReminderApp extends StatelessWidget {
@@ -30,9 +33,10 @@ class MedicationListScreen extends StatefulWidget {
 
 //   MedicineList({this.medicine, this.medicineDescription}); // Constructor
 // }
-
+final userRepository = Get.put(UserRepo());
 final controller = Get.put(DataController());
 final PDFGenerator pdfGenerator = Get.find<PDFGenerator>();
+
 // PdfController pdfController = Get.put(PdfController());
 
 
@@ -65,6 +69,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
   @override
   void initState() {
     super.initState();
+    
 // final userId = userController.userId.value;
     // Fetch all medicines from the database and set them initially
     controller.getUserMedicines().then((medicineData) {
@@ -75,6 +80,11 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
 
         // Set displayedMedicines initially to show all medicines
         displayedMedicines = GlobalMedicineList.medicines;
+
+      //   DateTime currentDate = DateTime.now();
+      //  String formattedDate = DateFormat.yMMMMd().add_jm().format(currentDate);
+      //  userController.formatedDate.value = formattedDate;
+      //  print('Formatted date $formattedDate');
       });
     });
   }
@@ -416,7 +426,15 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
   
 
 // !Important Data transfer to Generate PDF
-  void pdfDataSubmit()  {
+  Future<void> pdfDataSubmit()  async {
+    final patientData = PatientModel(
+      patientName: userController.patientName.value,
+      patientAge: userController.patientAge.value,
+      patientGender: userController.patientGender.value,
+      pastHistory: userController.patientPastHistory.value,
+      phoneNumber: userController.patientPhoneNo.value
+    );
+       
     if (selectedMedicines.isEmpty) {
       Get.snackbar('No medicine Added', "please add medicines");
     } else {
@@ -426,12 +444,11 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
       //       notes: noteController.text.toString().trim(),
       //     ))
        // Assuming you have instances of PdfController and PDFGenerator
+    // await userRepository.addPatientDetails(userController.userId.value, patientData);
     PdfController pdfController = PdfController(selectedMedicines: selectedMedicines, notes: notes, );
-      // pdfController.setNotes(notes);
-      // pdfController.addMedicine(selectedMedicines);
-      // await Future.delayed(const Duration(seconds: 6));
       pdfController.createAndDisplayPdf();
     }
+
     // for (var med in selectedMedicines) {
     //   final pdfPrint = ('${med.name}, Time to take: ${med.timesToTake.join(', ')} Meal: ${med.beforeMeal ? 'Before Meal' : 'After Meal'}');
     //   print(pdfPrint);

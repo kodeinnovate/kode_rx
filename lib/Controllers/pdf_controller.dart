@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:kode_rx/Pages/pdf_preview_screen.dart';
 import 'package:kode_rx/data_state_store.dart';
 import 'package:kode_rx/select_medicenes.dart';
@@ -9,16 +10,17 @@ import 'package:printing/printing.dart';
 class PdfController extends GetxController {
   static PdfController get instance => Get.find();
   UserController userController = Get.put(UserController());
-  
 
   List<Medicine>? selectedMedicines;
   String? notes;
 
   PdfController({required this.selectedMedicines, required this.notes});
-  
+
   void addMedicine(List<Medicine> medicine) {
     selectedMedicines?.addAll(medicine);
   }
+
+  DateTime currentDate = DateTime.now();
 
   // void removeMedicine(Medicine medicine) {
   //   selectedMedicines?.remove(medicine);
@@ -38,8 +40,9 @@ class PdfController extends GetxController {
     final pastHistory = userController.patientPastHistory.value;
     final patientGender = userController.patientGender.value;
     final patientPhoneNo = userController.patientPhoneNo.value;
-    print('$patientName, $patientAge, $pastHistory, $patientPhoneNo, $patientGender');
-    
+    print(
+        '$patientName, $patientAge, $pastHistory, $patientPhoneNo, $patientGender');
+
     print('selected Medicine $selectedMedicines');
     print('note $notes');
     if (selectedMedicines == null || selectedMedicines!.isEmpty) {
@@ -47,9 +50,6 @@ class PdfController extends GetxController {
     } else {
       final doc = pw.Document();
       pdfCreate(doc); // PDF Layout creation Function
-      // await Printing.layoutPdf(
-      //   onLayout: (PdfPageFormat format) async => doc.save(),
-      // );
       Get.to(() => PreviewScreen(doc: doc));
     }
   }
@@ -59,7 +59,11 @@ class PdfController extends GetxController {
       pw.MultiPage(
         build: (context) => [
           pw.SizedBox(height: 90.0),
-          buildTitle(context),
+          pw.Row(
+            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+            children: [buildTitle(context), dateTime(context)]),
+          pw.SizedBox(height: 20.0),
+          patientDetails(context),
           pw.SizedBox(height: 20.0),
           buildInvoice(context),
           pw.SizedBox(height: 20.0),
@@ -107,6 +111,44 @@ class PdfController extends GetxController {
           pw.Text(
             'Rx',
             style: pw.TextStyle(fontSize: 24, fontWeight: pw.FontWeight.bold),
+          ),
+        ],
+      );
+
+  pw.Widget patientDetails(pw.Context context) => pw.Column(
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Text(
+            'Patient Name: ${userController.patientName.value}',
+            style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.normal),
+          ),
+          pw.Text(
+            'Patient Age: ${userController.patientAge.value}',
+            style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.normal),
+          ),
+          pw.Wrap(
+            children: [
+              pw.Text(
+                'Patient History: ${userController.patientPastHistory.value}',
+                style: pw.TextStyle(
+                    fontSize: 16, fontWeight: pw.FontWeight.normal),
+              ),
+            ],
+          ),
+        ],
+      );
+
+  pw.Widget dateTime(pw.Context context) => pw.Column(
+        //  String formattedDate = DateFormat.yMMMMd().add_jm().format(currentDate);
+        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        children: [
+          pw.Text(
+            'Date:',
+            style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold),
+          ),
+          pw.Text(
+            DateFormat.yMd().add_jm().format(currentDate),
+            style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.normal),
           ),
         ],
       );
