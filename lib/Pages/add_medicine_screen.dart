@@ -2,15 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kode_rx/Components/custom_button.dart';
 import 'package:kode_rx/Controllers/user_repo.dart';
+import 'package:kode_rx/data_state_store.dart';
+import 'package:kode_rx/database/doctor_medicine_data.dart';
 import 'package:kode_rx/database/medicine_data_fetch.dart';
 import 'package:kode_rx/device_helper.dart';
 
 class AddNewMedicine extends StatelessWidget {
   AddNewMedicine({super.key});
   static AddNewMedicine get instance => Get.find();
+  UserController userController = Get.put(UserController());
   final userRepository = Get.put(UserRepo());
   final medicineNameController = TextEditingController();
-  final medicineDetailController = TextEditingController();
+  final medicineContentController = TextEditingController();
+  final medicineMgController = TextEditingController();
+  final medicineTypeController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +35,21 @@ class AddNewMedicine extends StatelessWidget {
           ),
           const Text('Medicine Details'),
           TextField(
-            controller: medicineDetailController,
+            controller: medicineContentController,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Text('Medicine Mg'),
+          TextField(
+            controller: medicineMgController,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const Text('Medicine Type'),
+          TextField(
+            controller: medicineTypeController,
           ),
           const SizedBox(
             height: 10,
@@ -42,11 +61,12 @@ class AddNewMedicine extends StatelessWidget {
   }
 
   Future<void> medicineDataStore() async {
-    print(medicineDetailController.text.toString().trim());
+    print(medicineContentController.text.toString().trim());
     print(medicineNameController.text.toString().trim());
-    final medicine = MedicineModel(
+    final userId = userController.userId.value;
+    final medicine = UserMedicineModel(
         medicineName: medicineNameController.text.toString().trim(),
-        medicineDetails: medicineDetailController.text.toString().trim());
-    await userRepository.addMedicine(medicine);
+        medicineContent: medicineContentController.text.toString().trim(), medicineMg: medicineMgController.text.toString().trim(), medicineType: medicineTypeController.text.toString().trim(), status: '');
+    await userRepository.addMedicineForUser(userId, medicine);
   }
 }

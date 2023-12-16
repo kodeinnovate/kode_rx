@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kode_rx/database/database_fetch.dart';
+import 'package:kode_rx/database/doctor_medicine_data.dart';
 import 'package:kode_rx/database/medicine_data_fetch.dart';
 import 'package:kode_rx/database/patient_data.dart';
 
@@ -24,6 +25,33 @@ class UserRepo extends GetxController {
         .whenComplete(() => Get.snackbar(
               'Success',
               'Patient details have been added.',
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.green.withOpacity(0.1),
+              colorText: Colors.green,
+            ))
+        .catchError((error, stackTrace) {
+          Get.snackbar(
+            'Error',
+            'Something went wrong. Try again',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.redAccent.withOpacity(0.1),
+            colorText: Colors.red,
+          );
+        });
+  }
+
+///Doctor Specific medicines Data store
+  addMedicineForUser(String userId, UserMedicineModel medicine) async {
+    // Create a reference to the user's document
+    DocumentReference userRef = _db.collection("Users").doc(userId);
+
+    // Add medicine details to a subcollection named 'Medicines'
+    await userRef
+        .collection("Medicines")
+        .add(medicine.toJson())
+        .whenComplete(() => Get.snackbar(
+              'Success',
+              'Medicine details have been added for the user.',
               snackPosition: SnackPosition.BOTTOM,
               backgroundColor: Colors.green.withOpacity(0.1),
               colorText: Colors.green,
@@ -103,10 +131,18 @@ class UserRepo extends GetxController {
     });
   }
 
+//Test List Don't use
   Future<List<MedicineModel>> getMedicineList() async {
     final snapshot = await _db.collection('Medicines').get();
     final medicineData =
         snapshot.docs.map((e) => MedicineModel.fromSnapshot(e)).toList();
+    return medicineData;
+  }
+
+//Doctor Specific medicine List 
+  Future<List<UserMedicineModel>> getUserMedicines(String userId) async {
+    final snapshot = await _db.collection('Users').doc(userId).collection('Medicines').get();
+    final medicineData = snapshot.docs.map((e) => UserMedicineModel.fromSnapshot(e)).toList();
     return medicineData;
   }
 

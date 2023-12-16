@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kode_rx/Controllers/data_fetch_controller.dart';
+import 'package:kode_rx/Controllers/pdf_controller.dart';
 import 'package:kode_rx/Pages/pdf_genarater.dart';
 import 'package:kode_rx/Pages/pdf_preview_screen.dart';
 import 'package:kode_rx/app_colors.dart';
 import 'package:kode_rx/data_state_store.dart';
+import 'package:kode_rx/database/doctor_medicine_data.dart';
 import 'package:kode_rx/database/medicine_data_fetch.dart';
 import 'package:kode_rx/device_helper.dart';
 
@@ -28,12 +30,17 @@ class MedicationListScreen extends StatefulWidget {
 
 //   MedicineList({this.medicine, this.medicineDescription}); // Constructor
 // }
+
 final controller = Get.put(DataController());
 final PDFGenerator pdfGenerator = Get.find<PDFGenerator>();
+// PdfController pdfController = Get.put(PdfController());
+
 
 class _MedicationListScreenState extends State<MedicationListScreen> {
   UserController userController = UserController();
   final noteController = TextEditingController();
+  
+  
   // List<Medicine> medicines = [];
   List<Medicine> selectedMedicines = [];
 
@@ -58,9 +65,9 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
   @override
   void initState() {
     super.initState();
-
+// final userId = userController.userId.value;
     // Fetch all medicines from the database and set them initially
-    controller.getAllMedicine().then((medicineData) {
+    controller.getUserMedicines().then((medicineData) {
       setState(() {
         GlobalMedicineList.medicines = medicineData
             .map((medicineModel) => Medicine.fromMedicineModel(medicineModel))
@@ -406,16 +413,24 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
       },
     );
   }
+  
 
 // !Important Data transfer to Generate PDF
-  void pdfDataSubmit() {
+  void pdfDataSubmit()  {
     if (selectedMedicines.isEmpty) {
       Get.snackbar('No medicine Added', "please add medicines");
     } else {
-      Get.to(() => PDFGenerator(
-            selectedMedicines: selectedMedicines,
-            notes: noteController.text.toString().trim(),
-          ));
+      final notes = noteController.text.toString().trim();
+      // Get.to(() => PDFGenerator(
+      //       selectedMedicines: selectedMedicines,
+      //       notes: noteController.text.toString().trim(),
+      //     ))
+       // Assuming you have instances of PdfController and PDFGenerator
+    PdfController pdfController = PdfController(selectedMedicines: selectedMedicines, notes: notes, );
+      // pdfController.setNotes(notes);
+      // pdfController.addMedicine(selectedMedicines);
+      // await Future.delayed(const Duration(seconds: 6));
+      pdfController.createAndDisplayPdf();
     }
     // for (var med in selectedMedicines) {
     //   final pdfPrint = ('${med.name}, Time to take: ${med.timesToTake.join(', ')} Meal: ${med.beforeMeal ? 'Before Meal' : 'After Meal'}');
@@ -542,11 +557,11 @@ class Medicine {
 
   Medicine(this.name, this.id, this.details);
 
-  factory Medicine.fromMedicineModel(MedicineModel medicineModel) {
+  factory Medicine.fromMedicineModel(UserMedicineModel medicineModel) {
     return Medicine(
       medicineModel.medicineName,
       medicineModel.id!,
-      medicineModel.medicineDetails,
+      medicineModel.medicineContent,
     );
   }
 }

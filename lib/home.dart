@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kode_rx/Controllers/profile_controller.dart';
+import 'package:kode_rx/Pages/add_medicine_screen.dart';
 import 'package:kode_rx/Pages/patient_info.dart';
 import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/profile.dart';
@@ -61,6 +62,7 @@ class HomeScreen extends StatelessWidget {
               onTap: () {
                 // Update the state of the app.
                 // ...
+                Get.to(() => AddNewMedicine());
               },
             ),
             ListTile(

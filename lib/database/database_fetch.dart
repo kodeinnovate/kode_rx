@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:kode_rx/database/medicine_data_fetch.dart';
 
 class UserModel {
   final String? id;
@@ -10,6 +11,7 @@ class UserModel {
   final String profileImage;
   final String specialist;
   final String signature;
+  // final List<MedicineModel> medicines;
 
   const UserModel(
       {this.id,

@@ -4,6 +4,7 @@ import 'package:kode_rx/Components/custom_button.dart';
 import 'package:kode_rx/Components/custom_textfield.dart';
 import 'package:kode_rx/Controllers/user_repo.dart';
 import 'package:kode_rx/app_colors.dart';
+import 'package:kode_rx/data_state_store.dart';
 import 'package:kode_rx/database/patient_data.dart';
 import 'package:kode_rx/device_helper.dart';
 import 'package:kode_rx/select_medicenes.dart';
@@ -18,6 +19,7 @@ class Patient_info extends StatefulWidget {
 
 class _Patient_infoState extends State<Patient_info> {
   final userRepository = Get.put(UserRepo());
+  UserController userController = Get.put(UserController());
   final patientName = TextEditingController();
   final phoneNumber = TextEditingController();
   final pastHistory = TextEditingController();
@@ -149,14 +151,21 @@ class _Patient_infoState extends State<Patient_info> {
                   print(pastHistory.text.toString().trim());
                   print(patientGender);
                   print(phoneNumber.text.toString().trim());
-    final patientData = PatientModel(
-      patientName: patientName.text.toString().trim(),
-      patientAge: patientAge.text.toString().trim(),
-      patientGender: patientGender,
-      pastHistory: pastHistory.text.toString().trim(),
-      phoneNumber: phoneNumber.text.toString().trim()
-    );
-    // await userRepository.addPatientDetails(patientData);
+
+    userController.patientName.value = patientName.text.toString().trim();
+    userController.patientAge.value = patientAge.text.toString().trim();
+    userController.patientGender.value = patientGender;
+    userController.patientPhoneNo.value = phoneNumber.text.toString().trim();
+    userController.patientPastHistory.value = pastHistory.text.toString().trim();
+    print(userController.userId.value);
+    // final patientData = PatientModel(
+    //   patientName: patientName.text.toString().trim(),
+    //   patientAge: patientAge.text.toString().trim(),
+    //   patientGender: patientGender,
+    //   pastHistory: pastHistory.text.toString().trim(),
+    //   phoneNumber: phoneNumber.text.toString().trim()
+    // );
+    // await userRepository.addPatientDetails(userController.userId.value, patientData);
     Get.to(() => MedicationReminderApp());
   }
 }

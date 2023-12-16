@@ -11,6 +11,12 @@ class UserController extends GetxController {
   final RxString userProfileImageUrl = RxString('');
   final RxString userSpecialty = RxString('');
   final Rx<Uint8List?> profileImage = Rx<Uint8List?>(null);
+  final RxString patientName = RxString('');
+  final RxString patientAge= RxString('');
+  final RxString patientPhoneNo = RxString('');
+  final RxString patientGender = RxString('');
+  final RxString patientPastHistory = RxString('');
+  final RxString userId = RxString('');
 }
 
 final RxString loginPhoneNumber = RxString('');
