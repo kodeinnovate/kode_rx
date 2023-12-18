@@ -127,7 +127,7 @@ class _RxHistoryState extends State<RxHistory> {
                                             color: AppColors.customBackground),
                                       ),
                                       subtitle: Text(
-                                        'Date: ${patient.id}',
+                                        'Date: ${patient.date}',
                                         style: TextStyle(fontSize: 18),
                                       ),
                                       // trailing: const CircleAvatar(

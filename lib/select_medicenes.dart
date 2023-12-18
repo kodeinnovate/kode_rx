@@ -432,12 +432,15 @@ print(userController.patientName.value);
 
 // !Important Data transfer to Generate PDF
   Future<void> pdfDataSubmit()  async {
+    DateTime currentDate = DateTime.now();
+    String formattedDate = DateFormat.yMMMMd().add_jm().format(currentDate);
     final patientData = PatientModel(
       patientName: userController.patientName.value,
       patientAge: userController.patientAge.value,
       patientGender: userController.patientGender.value,
       pastHistory: userController.patientPastHistory.value,
-      phoneNumber: userController.patientPhoneNo.value
+      phoneNumber: userController.patientPhoneNo.value,
+      date: formattedDate
     );
     print('Data here ${userController.patientName.value}, ${userController.patientAge.value}');
        
@@ -449,7 +452,7 @@ print(userController.patientName.value);
       //       selectedMedicines: selectedMedicines,
       //       notes: noteController.text.toString().trim(),
       //     ))
-    // await userRepository.addPatientDetails(userController.userId.value, patientData);
+    await userRepository.addPatientDetails(userController.userId.value, patientData);
     PdfController pdfController = PdfController(selectedMedicines: selectedMedicines, notes: notes, );
       pdfController.createAndDisplayPdf();
     }
