@@ -110,7 +110,7 @@ print(userController.patientName.value);
                 },
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.42,
+                height: MediaQuery.of(context).size.height * 0.7,
                 child: MedicationListView(
                   onSelect: (selectedMedicine) {
                     showSingleChoiceListDialog(selectedMedicine);
@@ -118,26 +118,30 @@ print(userController.patientName.value);
                   },
                 ),
               ),
-              SizedBox(
-                  child: Container(
-                      width: double.infinity,
-                      color: AppColors.customBackground,
-                      padding: const EdgeInsets.all(5),
-                      child: const Text(
-                        'Selected Medicines',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white),
-                      ))),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.27,
-                child: SelectedMedicationsList(
-                  selectedMedicines: selectedMedicines,
-                  onDelete: onDeleteMedicine,
-                  onEdit: onEditMedicine,
+              ExpansionTile(
+                title: Text(
+                  'Selected Medicines',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.customBackground,
+                  ),
                 ),
+                children: [
+                  SizedBox(
+                    height: selectedMedicines.isNotEmpty
+                        ? MediaQuery.of(context).size.height *
+                        0.15 * selectedMedicines.length
+                        : 0,
+                    child: SelectedMedicationsList(
+                      selectedMedicines: selectedMedicines,
+                      onDelete: onDeleteMedicine,
+                      onEdit: onEditMedicine,
+                    ),
+                  ),
+                ],
               ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
