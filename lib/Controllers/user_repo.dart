@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kode_rx/data_state_store.dart';
 import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/database/doctor_medicine_data.dart';
 import 'package:kode_rx/database/medicine_data_fetch.dart';
@@ -8,6 +9,7 @@ import 'package:kode_rx/database/patient_data.dart';
 
 class UserRepo extends GetxController {
   static UserRepo get instance => Get.find();
+  UserController userController = Get.put(UserController());
 
 // Firebase database Initialization
   final _db = FirebaseFirestore.instance;
@@ -146,6 +148,14 @@ class UserRepo extends GetxController {
     return medicineData;
   }
 
+  //Doctor Specific patient List 
+Future<List<PatientModel>> getUserPatients(String userId) async {
+    final snapshot = await _db.collection('Users').doc(userId).collection('Patients').get();
+    final patientData = snapshot.docs.map((e) => PatientModel.fromSnapshot(e)).toList();
+    return patientData;
+  }
+
+
 // For Login Authentication and to check if the user Exists in the db
   Future<UserModel?> getUserDetails(String phoneNo) async {
     final snapshot =
@@ -159,6 +169,7 @@ class UserRepo extends GetxController {
     }
   }
 
+// Gets The current user details
   Future<UserModel?> getUserProfile(String phoneNo) async {
     final snapshot =
         await _db.collection('Users').where('Phone', isEqualTo: phoneNo).get();
@@ -169,5 +180,11 @@ class UserRepo extends GetxController {
     } else {
       return null;
     }
+  }
+
+// For updating the data of the current user
+  Future<void> updateUserRecords(UserModel user) async {
+    final userId = userController.userId.value;
+    await _db.collection('Users').doc(userId).update(user.toJson());
   }
 }

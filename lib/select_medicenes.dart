@@ -41,8 +41,9 @@ final PDFGenerator pdfGenerator = Get.find<PDFGenerator>();
 
 
 class _MedicationListScreenState extends State<MedicationListScreen> {
-  UserController userController = UserController();
+  UserController userController = Get.put(UserController());
   final noteController = TextEditingController();
+  
   
   
   // List<Medicine> medicines = [];
@@ -80,7 +81,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
 
         // Set displayedMedicines initially to show all medicines
         displayedMedicines = GlobalMedicineList.medicines;
-
+print(userController.patientName.value);
       //   DateTime currentDate = DateTime.now();
       //  String formattedDate = DateFormat.yMMMMd().add_jm().format(currentDate);
       //  userController.formatedDate.value = formattedDate;
@@ -434,6 +435,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
       pastHistory: userController.patientPastHistory.value,
       phoneNumber: userController.patientPhoneNo.value
     );
+    print('Data here ${userController.patientName.value}, ${userController.patientAge.value}');
        
     if (selectedMedicines.isEmpty) {
       Get.snackbar('No medicine Added', "please add medicines");
@@ -443,7 +445,6 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
       //       selectedMedicines: selectedMedicines,
       //       notes: noteController.text.toString().trim(),
       //     ))
-       // Assuming you have instances of PdfController and PDFGenerator
     // await userRepository.addPatientDetails(userController.userId.value, patientData);
     PdfController pdfController = PdfController(selectedMedicines: selectedMedicines, notes: notes, );
       pdfController.createAndDisplayPdf();
@@ -623,7 +624,7 @@ class MedicationListView extends StatelessWidget {
                 style: const TextStyle(fontSize: 20),
               ),
               subtitle: Text(
-                '${medicine.details}',
+                medicine.details,
                 style: const TextStyle(fontSize: 16.0),
                 maxLines: 4,
                 overflow: TextOverflow.ellipsis,

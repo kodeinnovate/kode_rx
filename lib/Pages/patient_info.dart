@@ -10,8 +10,8 @@ import 'package:kode_rx/device_helper.dart';
 import 'package:kode_rx/select_medicenes.dart';
 
 class Patient_info extends StatefulWidget {
- const Patient_info({super.key});
- static Patient_info get instance => Get.find();
+  const Patient_info({super.key});
+  static Patient_info get instance => Get.find();
 
   @override
   State<Patient_info> createState() => _Patient_infoState();
@@ -36,128 +36,149 @@ class _Patient_infoState extends State<Patient_info> {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: GestureDetector(
-        onTap: () {
-      // Close the keyboard when tapped anywhere on the screen
-      FocusScope.of(context).unfocus();
-    },
-    child: Scaffold(
-          appBar: DeviceHelper.deviceAppBar(title: 'Patient Information'),
-          body: GestureDetector(
             onTap: () {
               // Close the keyboard when tapped anywhere on the screen
               FocusScope.of(context).unfocus();
             },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
-                CustomTextfield(
-                    controller: patientName, hintText: 'Patient Name', keyboardType: TextInputType.name, obsecureText: false,),
-                const SizedBox(
-                  height: 30,
-                ),
-                CustomTextfield(
-                    controller: phoneNumber, hintText: 'Enter your Phone', keyboardType: TextInputType.phone, obsecureText: false,),
-                const SizedBox(
-                  height: 30,
-                ),
-                CustomTextfield(
-                  controller: patientAge,
-                  hintText: 'Enter your Age',
-                    obsecureText: false, keyboardType: TextInputType.number,
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      child: Text(
-                        'Select your gender',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+            child: Scaffold(
+              appBar: DeviceHelper.deviceAppBar(title: 'Patient Information'),
+              body: GestureDetector(
+                onTap: () {
+                  // Close the keyboard when tapped anywhere on the screen
+                  FocusScope.of(context).unfocus();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 20),
+                        CustomTextfield(
+                          controller: patientName,
+                          hintText: 'Patient Name',
+                          keyboardType: TextInputType.name,
+                          obsecureText: false,
                         ),
-                      ),
-                      padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(child: RadioListTile(
-                      title: const Text('Male'),
-                      value: 'male',
-                      groupValue: patientGender,
-                      onChanged: _handleRadioValueChange,
-                    ),),
-                    Expanded(child:RadioListTile(
-                      title: const Text('Female'),
-                      value: 'female',
-                      groupValue: patientGender,
-                      onChanged: _handleRadioValueChange,
-                    ),),
-                    Expanded(child:RadioListTile(
-                      title: const Text('Other'),
-                      value: 'other',
-                      groupValue: patientGender,
-                      onChanged: _handleRadioValueChange,
-                    ),),
-                  ],
-                ),
-
-                const SizedBox(height: 30),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: TextField(
-                    style: const TextStyle(fontSize: 18), // Set the font size for the input text
-                    controller: pastHistory,
-                    maxLines: 4,
-                    textCapitalization: TextCapitalization.sentences,
-                    decoration: InputDecoration(
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: AppColors.customBackground),
-                      ),
-                      fillColor: Colors.grey.shade200,
-                      filled: true,
-                      hintText: 'Past History',
-                      hintStyle: TextStyle(color: Colors.grey[500], fontSize: 14), // Set the font size for the placeholder
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        CustomTextfield(
+                          controller: phoneNumber,
+                          hintText: 'Enter your Phone',
+                          keyboardType: TextInputType.phone,
+                          obsecureText: false,
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        CustomTextfield(
+                          controller: patientAge,
+                          hintText: 'Enter your Age',
+                          obsecureText: false,
+                          keyboardType: TextInputType.number,
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              child: Text(
+                                'Select your gender',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: RadioListTile(
+                                title: const Text('Male'),
+                                value: 'male',
+                                groupValue: patientGender,
+                                onChanged: _handleRadioValueChange,
+                              ),
+                            ),
+                            Expanded(
+                              child: RadioListTile(
+                                title: const Text('Female'),
+                                value: 'female',
+                                groupValue: patientGender,
+                                onChanged: _handleRadioValueChange,
+                              ),
+                            ),
+                            Expanded(
+                              child: RadioListTile(
+                                title: const Text('Other'),
+                                value: 'other',
+                                groupValue: patientGender,
+                                onChanged: _handleRadioValueChange,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 30),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25),
+                          child: TextField(
+                            style: const TextStyle(
+                                fontSize:
+                                    18), // Set the font size for the input text
+                            controller: pastHistory,
+                            maxLines: 4,
+                            textCapitalization: TextCapitalization.sentences,
+                            decoration: InputDecoration(
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: AppColors.customBackground),
+                              ),
+                              fillColor: Colors.grey.shade200,
+                              filled: true,
+                              hintText: 'Past History',
+                              hintStyle: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontSize:
+                                      14), // Set the font size for the placeholder
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                        CustomButtom(
+                            buttonText: 'Next', onTap: patientDataStore),
+                      ],
                     ),
                   ),
                 ),
-                const SizedBox(height: 30),
-                CustomButtom(buttonText: 'Next', onTap: patientDataStore),
-              ],
-            ),
-          ),
-        ),
-      ),
-      
-    )));
-    
+              ),
+            )));
   }
+
   Future<void> patientDataStore() async {
-    print(patientName.text.toString().trim());
-                  print(patientAge.text.toString().trim());
-                  print(pastHistory.text.toString().trim());
-                  print(patientGender);
-                  print(phoneNumber.text.toString().trim());
+    // print(patientName.text.toString().trim());
+    //               print(patientAge.text.toString().trim());
+    //               print(pastHistory.text.toString().trim());
+    //               print(patientGender);
+    //               print(phoneNumber.text.toString().trim());
 
     userController.patientName.value = patientName.text.toString().trim();
     userController.patientAge.value = patientAge.text.toString().trim();
     userController.patientGender.value = patientGender;
     userController.patientPhoneNo.value = phoneNumber.text.toString().trim();
-    userController.patientPastHistory.value = pastHistory.text.toString().trim();
-    print(userController.userId.value);
+    userController.patientPastHistory.value =
+        pastHistory.text.toString().trim();
+    // print(userController.userId.value);
+    // print(userController.patientName.value);
     // final patientData = PatientModel(
     //   patientName: patientName.text.toString().trim(),
     //   patientAge: patientAge.text.toString().trim(),
@@ -166,6 +187,10 @@ class _Patient_infoState extends State<Patient_info> {
     //   phoneNumber: phoneNumber.text.toString().trim()
     // );
     // await userRepository.addPatientDetails(userController.userId.value, patientData);
-    Get.to(() => MedicationReminderApp());
+    if (userController.patientName.value.isNotEmpty) {
+      Get.to(() => MedicationReminderApp());
+    } else {
+      Get.snackbar('Name Field Empty', 'Please add a name');
+    }
   }
 }

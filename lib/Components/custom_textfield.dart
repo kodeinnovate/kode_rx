@@ -8,13 +8,13 @@ class CustomTextfield extends StatelessWidget {
   final bool obsecureText;
 
   const CustomTextfield(
-      {super.key, required this.controller, required this.hintText, required this.obsecureText, required this.keyboardType});
+      {super.key,  this.controller, required this.hintText, required this.obsecureText, required this.keyboardType});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
-      child: TextField(
+      child: TextFormField(
         controller: controller,
         obscureText: obsecureText,
         keyboardType: keyboardType,

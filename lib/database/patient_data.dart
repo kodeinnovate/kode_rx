@@ -17,7 +17,26 @@ class PatientModel {
       required this.patientGender});
 
   toJson() {
-    return {'PatientName': patientName, 'PatientPhoneNumber': phoneNumber, 'PatientHistory': pastHistory, 'PatientAge': patientAge, 'PatientGender': patientGender};
+    return {
+      'PatientName': patientName,
+      'PatientPhoneNumber': phoneNumber,
+      'PatientHistory': pastHistory,
+      'PatientAge': patientAge,
+      'PatientGender': patientGender
+    };
   }
 
+
+  factory PatientModel.fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> document) {
+    final data = document.data()!;
+    return PatientModel(
+      id: document.id,
+      patientName: data['PatientName'],
+      phoneNumber: data['PatientPhoneNumber'],
+      pastHistory: data['PatientHistory'],
+      patientAge: data['PatientAge'],
+      patientGender: data['PatientGender'],
+    );
+  }
 }

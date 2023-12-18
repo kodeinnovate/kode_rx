@@ -18,6 +18,8 @@ class UserController extends GetxController {
   final RxString patientPastHistory = RxString('');
   final RxString userId = RxString('');
   final RxString formatedDate = RxString('');
+  final RxString userProfileUpdateUrl = RxString('');
+  final RxString userSignitureUpdateUrl = RxString('');
 }
 
 final RxString loginPhoneNumber = RxString('');

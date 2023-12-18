@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:kode_rx/Controllers/profile_controller.dart';
 import 'package:kode_rx/Pages/add_medicine_screen.dart';
 import 'package:kode_rx/Pages/patient_info.dart';
+import 'package:kode_rx/Pages/rx_history.dart';
 import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/profile.dart';
 
@@ -58,20 +59,22 @@ class HomeScreen extends StatelessWidget {
               child: Text('Drawer Header'),
             ),
             ListTile(
-              title: const Text('Item 1'),
+              title: const Text('Profile'),
+              onTap: () {
+                // Update the state of the app.
+                // ...
+                Get.to(() => Profile());
+              },
+            ),
+            ListTile(
+              title: const Text('Add Medicines'),
               onTap: () {
                 // Update the state of the app.
                 // ...
                 Get.to(() => AddNewMedicine());
               },
             ),
-            ListTile(
-              title: const Text('Item 2'),
-              onTap: () {
-                // Update the state of the app.
-                // ...
-              },
-            ),
+    
           ],
         ),
       )),
@@ -79,7 +82,7 @@ class HomeScreen extends StatelessWidget {
 
           Container(
           height:  MediaQuery.of(context).size.height * 0.7,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [Colors.white, Color(0xFF008095)],
               begin: Alignment.topLeft,
@@ -146,10 +149,10 @@ class HomeScreen extends StatelessWidget {
                               ],
                             );
                           } else {
-                            return Center(child: CircularProgressIndicator(),);
+                            return const Center(child: CircularProgressIndicator( color: AppColors.customBackground,),);
                           }
                         } else {
-                          return Center(child: CircularProgressIndicator(),);
+                          return const Center(child: CircularProgressIndicator(color: AppColors.customBackground),);
                         }
                         // return Container();
                       },
@@ -217,6 +220,7 @@ class SquareModule extends StatelessWidget {
           Get.to(() => Patient_info());
         } else if (text == 'Rx History') {
           // Handle navigation to Rx History screen
+          Get.to(() => RxHistory());
         }
       },
       child: Container(

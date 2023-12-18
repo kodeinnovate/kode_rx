@@ -35,16 +35,16 @@ class PdfController extends GetxController {
   }
 
   Future<void> createAndDisplayPdf() async {
-    final patientName = userController.patientName.value;
-    final patientAge = userController.patientAge.value;
-    final pastHistory = userController.patientPastHistory.value;
-    final patientGender = userController.patientGender.value;
-    final patientPhoneNo = userController.patientPhoneNo.value;
-    print(
-        '$patientName, $patientAge, $pastHistory, $patientPhoneNo, $patientGender');
+    // final patientName = userController.patientName.value;
+    // final patientAge = userController.patientAge.value;
+    // final pastHistory = userController.patientPastHistory.value;
+    // final patientGender = userController.patientGender.value;
+    // final patientPhoneNo = userController.patientPhoneNo.value;
+    // print(
+    //     '$patientName, $patientAge, $pastHistory, $patientPhoneNo, $patientGender');
 
-    print('selected Medicine $selectedMedicines');
-    print('note $notes');
+    // print('selected Medicine $selectedMedicines');
+    // print('note $notes');
     if (selectedMedicines == null || selectedMedicines!.isEmpty) {
       Get.snackbar('No medicine Added', 'Error');
     } else {
@@ -119,17 +119,25 @@ class PdfController extends GetxController {
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: [
           pw.Text(
-            'Patient Name: ${userController.patientName.value}',
+            'Name: ${userController.patientName.value}',
             style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.normal),
           ),
+          pw.Row(children: [
           pw.Text(
-            'Patient Age: ${userController.patientAge.value}',
+            'Age: ${userController.patientAge.value}',
             style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.normal),
           ),
+          pw.SizedBox(width: 20.0),
+          pw.Text(
+            'Gender: ${userController.patientGender.value}',
+            style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.normal),
+          ),
+
+          ]),
           pw.Wrap(
             children: [
               pw.Text(
-                'Patient History: ${userController.patientPastHistory.value}',
+                'History: ${userController.patientPastHistory.value}',
                 style: pw.TextStyle(
                     fontSize: 16, fontWeight: pw.FontWeight.normal),
               ),
