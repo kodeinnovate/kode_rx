@@ -182,7 +182,11 @@ class HomeScreen extends StatelessWidget {
                       },
                     ),
                   ),
-                  SizedBox(height: 180.0),
+                  Padding(
+                  padding: EdgeInsets.fromLTRB(28, 28, 0, 0),
+                  child: Text("KodeRx",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 32)),
+                  ),
+                  SizedBox(height: 150.0),
               Container(
                 width: double.infinity, // Full width
                 height: 500.0,

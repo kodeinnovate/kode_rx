@@ -50,7 +50,7 @@ class LoginScreen extends StatelessWidget {
                             alignment: Alignment.centerLeft,
                             child: Padding(
                               padding: EdgeInsets.only(left: 10.0),
-                              child: Text('KodeRX',
+                              child: Text('KodeRx',
                                   style: TextStyle(
                                       fontSize: 44.0, color: Colors.white)),
                             ),
@@ -75,7 +75,7 @@ class LoginScreen extends StatelessWidget {
                       },
                     ),
                     // Add the login_image here
-                    Image.asset('assets/images/login_page_background_image.png',
+                    Image.asset('assets/images/ic_home_bg.png',
                         fit: BoxFit.cover),
                     Align(
                       alignment: Alignment.bottomCenter,

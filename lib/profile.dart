@@ -224,13 +224,13 @@ class Profile extends StatelessWidget {
                                                   128, // Set the desired height for the square image
                                               child: _signature != null
                                                   ? Image.memory(_signature!,
-                                                      fit: BoxFit.cover)
+                                                      fit: BoxFit.contain)
                                                   : userData.signature != '' 
                                                       ? Image.network(
                                                           userData.signature,
                                                           width: 50.0,
                                                           height: 50.0,
-                                                          fit: BoxFit.cover)
+                                                          fit: BoxFit.contain)
                                                       : Image.asset(
                                                           "assets/images/ic_signature.png",
                                                           width: 50.0,
