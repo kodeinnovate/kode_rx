@@ -20,6 +20,10 @@ class UserController extends GetxController {
   final RxString formatedDate = RxString('');
   final RxString userProfileUpdateUrl = RxString('');
   final RxString userSignitureUpdateUrl = RxString('');
+  final RxString signatureStore = RxString('');
+  // From the database
+   final Rx<Uint8List?> signatureStoreInBytes = Rx<Uint8List?>(null);
+  final RxString currentLoggedInUserName = RxString('');
 }
 
 final RxString loginPhoneNumber = RxString('');

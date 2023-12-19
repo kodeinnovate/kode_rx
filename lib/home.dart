@@ -1,20 +1,26 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kode_rx/Controllers/profile_controller.dart';
 import 'package:kode_rx/Pages/add_medicine_screen.dart';
 import 'package:kode_rx/Pages/patient_info.dart';
 import 'package:kode_rx/Pages/rx_history.dart';
+import 'package:kode_rx/data_state_store.dart';
 import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/profile.dart';
+import 'package:http/http.dart' as http;
 
 import 'app_colors.dart';
 import 'device_helper.dart';
 
 class HomeScreen extends StatelessWidget {
   static HomeScreen get instance => Get.find();
+  
 
   @override
   Widget build(BuildContext context) {
+    print('hit');
     Future<bool> showExitPopup() async {
       return await showDialog(
             context: Get.overlayContext!,
@@ -38,6 +44,14 @@ class HomeScreen extends StatelessWidget {
 
     final isTablet = DeviceHelper.getDeviceType() == DeviceType.tablet;
     final controller = Get.put(ProfileController());
+    UserController userController = Get.put(UserController());
+
+     Future<Uint8List> getImageBytes(String imageUrl) async {
+  var response = await http.get(Uri.parse(imageUrl));
+  userController.signatureStoreInBytes.value = response.bodyBytes;
+  return response.bodyBytes;
+}
+
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return WillPopScope(
       onWillPop: showExitPopup,
@@ -59,11 +73,16 @@ class HomeScreen extends StatelessWidget {
               child: Text('Drawer Header'),
             ),
             ListTile(
-              title: const Text('Profile'),
+              title: Text('Profile'),
               onTap: () {
                 // Update the state of the app.
                 // ...
+            // onDrawerItemClick(context, 'Profile');
+                //  () => Navigator.of(context).pop();
+                Navigator.pop(context);
+                
                 Get.to(() => Profile());
+                // Navigator.of(context).pop();
               },
             ),
             ListTile(
@@ -71,6 +90,7 @@ class HomeScreen extends StatelessWidget {
               onTap: () {
                 // Update the state of the app.
                 // ...
+                Navigator.pop(context);
                 Get.to(() => AddNewMedicine());
               },
             ),
@@ -108,9 +128,13 @@ class HomeScreen extends StatelessWidget {
                     child: FutureBuilder(
                       future: controller.getUserData(),
                       builder: (context, snapshot) {
+                        print('working');
                         if (snapshot.connectionState == ConnectionState.done) {
                           if (snapshot.hasData) {
                             UserModel userData = snapshot.data as UserModel;
+                            userController.signatureStore.value = userData.signature;
+                            userController.currentLoggedInUserName.value = userData.fullname;
+                            getImageBytes(userData.signature);
                             return Row(
                               children: [
                                 userData.profileImage != ''

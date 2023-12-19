@@ -432,6 +432,17 @@ print(userController.patientName.value);
 
 // !Important Data transfer to Generate PDF
   Future<void> pdfDataSubmit()  async {
+    if (selectedMedicines.isEmpty) {
+      Get.snackbar('No medicine Added', "please add medicines");
+    } else {
+      final notes = noteController.text.toString().trim();
+      // Get.to(() => PDFGenerator(
+      //       selectedMedicines: selectedMedicines,
+      //       notes: noteController.text.toString().trim(),
+      //     ))
+    PdfController pdfController = PdfController(selectedMedicines: selectedMedicines, notes: notes, );
+      pdfController.createAndDisplayPdf();
+    }
     DateTime currentDate = DateTime.now();
     String formattedDate = DateFormat.yMMMMd().add_jm().format(currentDate);
     final patientData = PatientModel(
@@ -442,20 +453,9 @@ print(userController.patientName.value);
       phoneNumber: userController.patientPhoneNo.value,
       date: formattedDate
     );
+    await userRepository.addPatientDetails(userController.userId.value, patientData);
     print('Data here ${userController.patientName.value}, ${userController.patientAge.value}');
        
-    if (selectedMedicines.isEmpty) {
-      Get.snackbar('No medicine Added', "please add medicines");
-    } else {
-      final notes = noteController.text.toString().trim();
-      // Get.to(() => PDFGenerator(
-      //       selectedMedicines: selectedMedicines,
-      //       notes: noteController.text.toString().trim(),
-      //     ))
-    await userRepository.addPatientDetails(userController.userId.value, patientData);
-    PdfController pdfController = PdfController(selectedMedicines: selectedMedicines, notes: notes, );
-      pdfController.createAndDisplayPdf();
-    }
 
     // for (var med in selectedMedicines) {
     //   final pdfPrint = ('${med.name}, Time to take: ${med.timesToTake.join(', ')} Meal: ${med.beforeMeal ? 'Before Meal' : 'After Meal'}');

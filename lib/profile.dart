@@ -46,14 +46,15 @@ class Profile extends StatelessWidget {
   void changeSignatureImage() async {
     Uint8List img = await pickImage(ImageSource.gallery);
     _signature = img;
-     Get.find<UserController>().update();
+    Get.find<UserController>().update();
   }
 
   Future<void> updateProfileImage(Uint8List img) async {
-   String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
     // Reference to the Firebase Storage bucket
-    firebase_storage.Reference reference = firebase_storage.FirebaseStorage.instance
+    firebase_storage.Reference reference = firebase_storage
+        .FirebaseStorage.instance
         .ref('profile_images/$fileName.jpg');
 
     // Upload the image to Firebase Storage
@@ -65,10 +66,11 @@ class Profile extends StatelessWidget {
   }
 
   Future<void> updateSignitureUpdate(Uint8List img) async {
-   String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
     // Reference to the Firebase Storage bucket
-    firebase_storage.Reference reference = firebase_storage.FirebaseStorage.instance
+    firebase_storage.Reference reference = firebase_storage
+        .FirebaseStorage.instance
         .ref('profile_images/$fileName.jpg');
 
     // Upload the image to Firebase Storage
@@ -83,214 +85,268 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DeviceHelper.deviceAppBar(title: 'Profile'),
-      body: SingleChildScrollView(
-        child: FutureBuilder(
-          future: controller.getUserData(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasData) {
-                UserModel userData = snapshot.data as UserModel;
-                final username = TextEditingController(text: userData.fullname);
-                final email = TextEditingController(text: userData.email);
-                final phone = TextEditingController(text: userData.phoneNo);
-                final speciality = TextEditingController(text: userData.specialist);
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    GetBuilder<UserController>(
-                      builder: (_) {
-                        return Stack(
+      body: Obx(
+        () => UserRepo.instance.isLoading.value
+            ? const Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.customBackground,
+                ),
+              )
+            : SingleChildScrollView(
+                child: FutureBuilder(
+                  future: controller.getUserData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasData) {
+                        UserModel userData = snapshot.data as UserModel;
+                        final username =
+                            TextEditingController(text: userData.fullname);
+                        final email =
+                            TextEditingController(text: userData.email);
+                        final phone =
+                            TextEditingController(text: userData.phoneNo);
+                        final speciality =
+                            TextEditingController(text: userData.specialist);
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            _profileImage != null
-                                ? CircleAvatar(
-                                    radius: 64,
-                                    backgroundImage:
-                                        MemoryImage(_profileImage!),
-                                  )
-                                : CircleAvatar(
-                                    radius: 64,
-                                    backgroundImage: NetworkImage(userData.profileImage == '' ?
-                                        'https://cdn-icons-png.flaticon.com/128/8815/8815112.png' : userData.profileImage),
+                            const SizedBox(
+                              height: 50,
+                            ),
+                            GetBuilder<UserController>(
+                              builder: (_) {
+                                return Stack(
+                                  children: [
+                                    _profileImage != null
+                                        ? CircleAvatar(
+                                            radius: 64,
+                                            backgroundImage:
+                                                MemoryImage(_profileImage!),
+                                          )
+                                        : CircleAvatar(
+                                            radius: 64,
+                                            backgroundImage: NetworkImage(userData
+                                                        .profileImage ==
+                                                    ''
+                                                ? 'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'
+                                                : userData.profileImage),
+                                          ),
+                                    Positioned(
+                                      bottom: -10,
+                                      right: -10,
+                                      child: IconButton(
+                                        icon: const Icon(Icons.add_a_photo),
+                                        onPressed: changeProfileImage,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                            const SizedBox(
+                              height: 50,
+                            ),
+                            const Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 25.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Profile",
+                                    style: TextStyle(
+                                        fontSize: 42,
+                                        color: AppColors.customBackground),
                                   ),
-                            Positioned(
-                              bottom: -10,
-                              right: -10,
-                              child: IconButton(
-                                icon: const Icon(Icons.add_a_photo),
-                                onPressed: changeProfileImage,
+                                ],
                               ),
+                            ),
+                            const SizedBox(
+                              height: 25,
+                            ),
+                            CustomTextfield(
+                              controller: username,
+                              hintText: 'Enter your full name',
+                              obsecureText: false,
+                              keyboardType: TextInputType.name,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            CustomTextfield(
+                              controller: email,
+                              hintText: 'Enter your email',
+                              obsecureText: false,
+                              keyboardType: TextInputType.emailAddress,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            CustomTextfield(
+                              controller: phone,
+                              hintText: 'Enter your phone number',
+                              obsecureText: false,
+                              keyboardType: TextInputType.phone,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            CustomTextfield(
+                                controller: speciality,
+                                hintText: 'Speciality',
+                                obsecureText: false,
+                                keyboardType: TextInputType.text),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(40.0),
+                              child: Row(
+                                children: [
+                                  const Expanded(
+                                      child: Text(
+                                    'Add your Signature',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  )),
+                                  GetBuilder<UserController>(
+                                    builder: (_) {
+                                      return Stack(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                16), // Adjust the radius as needed
+                                            child: SizedBox(
+                                              width:
+                                                  128, // Set the desired width for the square image
+                                              height:
+                                                  128, // Set the desired height for the square image
+                                              child: _signature != null
+                                                  ? Image.memory(_signature!,
+                                                      fit: BoxFit.cover)
+                                                  : userData.signature != '' 
+                                                      ? Image.network(
+                                                          userData.signature,
+                                                          width: 50.0,
+                                                          height: 50.0,
+                                                          fit: BoxFit.cover)
+                                                      : Image.asset(
+                                                          "assets/images/ic_signature.png",
+                                                          width: 50.0,
+                                                          height: 50.0,
+                                                          fit: BoxFit.cover),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            bottom: -10,
+                                            right: -10,
+                                            child: IconButton(
+                                              icon:
+                                                  const Icon(Icons.add_a_photo, color: Colors.white,),
+                                              onPressed: changeSignatureImage,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  )
+                                ],
+                              ),
+                            ),
+                            CustomButtom(
+                              buttonText: 'Update ',
+                              onTap: () async {
+                                try {
+                                Get.dialog(Center(
+                                    child: CircularProgressIndicator(
+                                        color: AppColors.customBackground)));
+                                  if (_profileImage != null) {
+                                    await updateProfileImage(_profileImage!);
+                                  }
+
+                                  if (_signature != null) {
+                                    await updateSignitureUpdate(_signature!);
+                                  }
+                                  Get.back();
+                                  
+                                  final user = UserModel(
+                                      fullname: username.text.trim(),
+                                      email: email.text.trim(),
+                                      phoneNo: phone.text.trim(),
+                                      profileImage: userController
+                                                  .userProfileUpdateUrl
+                                                  .isEmpty ||
+                                              userController
+                                                      .userProfileUpdateUrl
+                                                      .value ==
+                                                  '' /// userController.userProfileUpdateUrl.value == userData.profileImage
+                                          ? userData.profileImage
+                                          : userController
+                                              .userProfileUpdateUrl.value,
+                                      signature: userController
+                                                  .userSignitureUpdateUrl
+                                                  .isEmpty ||
+                                              userController
+                                                      .userSignitureUpdateUrl
+                                                      .value ==
+                                                  ''
+                                          ? userData.signature
+                                          : userController
+                                              .userSignitureUpdateUrl.value,
+                                      specialist: speciality.text.trim());
+                                  await controller.updateRecord(user);
+                                      //  HomeScreen.instance.updateDataFromProfileScreen();
+                                  userController.userProfileImageUrl.value = '';
+                                  userController.userSignitureUpdateUrl.value =
+                                      '';
+                                  // Get.back();
+                                } catch (e) {
+                                  print('Error during update: $e');
+                                  // Close loader
+                                  // Get.back();
+                                }
+// Get.back();
+                                // Get.put(() => HomeScreen());
+                                // await controller.getUserData();
+                              },
+                            ),
+                            const SizedBox(
+                              height: 50,
+                            ),
+                            const Center(
+                              child: Text(
+                                'Logout',
+                                style: TextStyle(
+                                    color: AppColors.customBackground,
+                                    fontSize: 20),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 50,
                             ),
                           ],
                         );
-                      },
-                    ),
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    const Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Profile",
-                            style: TextStyle(
-                                fontSize: 42,
-                                color: AppColors.customBackground),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    CustomTextfield(
-                      controller: username,
-                      hintText: 'Enter your full name',
-                      obsecureText: false,
-                      keyboardType: TextInputType.name,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    CustomTextfield(
-                      controller: email,
-                      hintText: 'Enter your email',
-                      obsecureText: false,
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    CustomTextfield(
-                      controller: phone,
-                      hintText: 'Enter your phone number',
-                      obsecureText: false,
-                      keyboardType: TextInputType.phone,
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    CustomTextfield(
-                        controller: speciality,
-                        hintText: 'Speciality',
-                        obsecureText: false,
-                        keyboardType: TextInputType.text),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(40.0),
-                      child: Row(
-                        children: [
-                         const Expanded(
-                              child: Text(
-                            'Add your Signature',
-                            style: TextStyle(
-                              fontSize: 16,
-                            ),
-                          )),
-                          GetBuilder<UserController>(
-                            builder: (_) {
-                              return Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        16), // Adjust the radius as needed
-                                    child: SizedBox(
-                                      width:
-                                          128, // Set the desired width for the square image
-                                      height:
-                                          128, // Set the desired height for the square image
-                                      child: _signature != null
-                                          ? Image.memory(_signature!,
-                                              fit: BoxFit.cover)
-                                          : Image(
-                                              // image: AssetImage(userData.signature == '' ?
-                                              //     "assets/images/ic_signature.png" : userData.signature),
-                                              image: AssetImage(
-                                                  "assets/images/ic_signature.png"),
-                                              width: 50.0,
-                                              height: 50.0,
-                                            ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: -10,
-                                    right: -10,
-                                    child: IconButton(
-                                      icon: const Icon(Icons.add_a_photo),
-                                      onPressed: changeSignatureImage,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          )
-                        ],
-                      ),
-                    ),
-                    CustomButtom(
-                      buttonText: 'Update ',
-                      onTap: ()  async {
-                        if(_profileImage == null) {
-
-                        } else {
-                          print('Running updateProfileImage');
-                          updateProfileImage(_profileImage!);
-                        }
-                        if(_signature == null) {
-
-                        } else {
-                          updateSignitureUpdate(_signature!);
-                        }
-                        final user = UserModel(fullname: username.text.trim(), email: email.text.trim(), phoneNo: phone.text.trim(), profileImage: userController.userProfileUpdateUrl.isEmpty ? userData.profileImage : userController.userProfileUpdateUrl.value, signature: userController.userSignitureUpdateUrl.isEmpty ? userData.signature : userController.userSignitureUpdateUrl.value, specialist: speciality.text.trim());
-                        await controller.updateRecord(user);
-                        // Get.put(() => HomeScreen());
-                      },
-                    ),
-                    const SizedBox(
-                      height: 50,
-                    ),
-                    const Center(
-                      child: Text(
-                        'Logout',
-                        style: TextStyle(
-                            color: AppColors.customBackground, fontSize: 20),
-                      ),
-          
-                    ),
-                    const SizedBox(
-                      height: 50,
-                    ),
-                  ],
-                );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text(snapshot.error.toString()),
-                );
-              } else {
-                return const Center(
-                  child: Text('SomeThing went wrong'),
-                );
-              }
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(color: AppColors.customBackground,),
-              );
-            }
-          },
-        ),
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text(snapshot.error.toString()),
+                        );
+                      } else {
+                        return const Center(
+                          child: Text('SomeThing went wrong'),
+                        );
+                      }
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.customBackground,
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ),
       ),
     );
   }
-
-//Authentication Function, the data
-
-  // Future<void> dataStore(UserModel user) async {
-  //   await userRepository.createUser(user);
-  // }
 }

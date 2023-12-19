@@ -24,8 +24,8 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    await FirebaseAppCheck.instance
-        .activate(androidProvider: AndroidProvider.playIntegrity);
+    // await FirebaseAppCheck.instance
+    //     .activate(androidProvider: AndroidProvider.playIntegrity);
     Get.put(AuthenticationRepo());
   } catch (e) {
     print("Error initializing Firebase: $e");

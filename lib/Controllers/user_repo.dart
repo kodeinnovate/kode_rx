@@ -14,9 +14,8 @@ class UserRepo extends GetxController {
 // Firebase database Initialization
   final _db = FirebaseFirestore.instance;
 
-
   //Patient data to be saved in Doctor's profile
-   addPatientDetails(String userId, PatientModel patient) async {
+  addPatientDetails(String userId, PatientModel patient) async {
     // Create a reference to the user's document
     DocumentReference userRef = _db.collection("Users").doc(userId);
 
@@ -32,17 +31,17 @@ class UserRepo extends GetxController {
               colorText: Colors.green,
             ))
         .catchError((error, stackTrace) {
-          Get.snackbar(
-            'Error',
-            'Something went wrong. Try again',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.redAccent.withOpacity(0.1),
-            colorText: Colors.red,
-          );
-        });
+      Get.snackbar(
+        'Error',
+        'Something went wrong. Try again',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent.withOpacity(0.1),
+        colorText: Colors.red,
+      );
+    });
   }
 
-///Doctor Specific medicines Data store
+  ///Doctor Specific medicines Data store
   addMedicineForUser(String userId, UserMedicineModel medicine) async {
     // Create a reference to the user's document
     DocumentReference userRef = _db.collection("Users").doc(userId);
@@ -59,16 +58,15 @@ class UserRepo extends GetxController {
               colorText: Colors.green,
             ))
         .catchError((error, stackTrace) {
-          Get.snackbar(
-            'Error',
-            'Something went wrong. Try again',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.redAccent.withOpacity(0.1),
-            colorText: Colors.red,
-          );
-        });
+      Get.snackbar(
+        'Error',
+        'Something went wrong. Try again',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent.withOpacity(0.1),
+        colorText: Colors.red,
+      );
+    });
   }
-
 
 // User Registeration
   createUser(UserModel user) async {
@@ -114,7 +112,6 @@ class UserRepo extends GetxController {
 //   return userId;
 // }
 
-
 // Adding new Medicine into the database
   addMedicine(MedicineModel medicine) async {
     await _db
@@ -141,20 +138,23 @@ class UserRepo extends GetxController {
     return medicineData;
   }
 
-//Doctor Specific medicine List 
+//Doctor Specific medicine List
   Future<List<UserMedicineModel>> getUserMedicines(String userId) async {
-    final snapshot = await _db.collection('Users').doc(userId).collection('Medicines').get();
-    final medicineData = snapshot.docs.map((e) => UserMedicineModel.fromSnapshot(e)).toList();
+    final snapshot =
+        await _db.collection('Users').doc(userId).collection('Medicines').get();
+    final medicineData =
+        snapshot.docs.map((e) => UserMedicineModel.fromSnapshot(e)).toList();
     return medicineData;
   }
 
-  //Doctor Specific patient List 
-Future<List<PatientModel>> getUserPatients(String userId) async {
-    final snapshot = await _db.collection('Users').doc(userId).collection('Patients').get();
-    final patientData = snapshot.docs.map((e) => PatientModel.fromSnapshot(e)).toList();
+  //Doctor Specific patient List
+  Future<List<PatientModel>> getUserPatients(String userId) async {
+    final snapshot =
+        await _db.collection('Users').doc(userId).collection('Patients').get();
+    final patientData =
+        snapshot.docs.map((e) => PatientModel.fromSnapshot(e)).toList();
     return patientData;
   }
-
 
 // For Login Authentication and to check if the user Exists in the db
   Future<UserModel?> getUserDetails(String phoneNo) async {
@@ -182,9 +182,20 @@ Future<List<PatientModel>> getUserPatients(String userId) async {
     }
   }
 
+final RxBool isLoading = false.obs;
 // For updating the data of the current user
   Future<void> updateUserRecords(UserModel user) async {
-    final userId = userController.userId.value;
-    await _db.collection('Users').doc(userId).update(user.toJson());
+    try {
+      isLoading.value = true;
+      final userId = userController.userId.value;
+      await _db.collection('Users').doc(userId).update(user.toJson());
+      Get.snackbar('Success', 'Profile updated Successfully', backgroundColor: Colors.white, colorText: Colors.black );
+      print('User records updated successfully!');
+    } catch (e) {
+      print('Error updating user records: $e');
+      Get.snackbar('Something went wrong', 'Please try again later');
+    } finally {
+      isLoading.value = false; // Set loading to false when the update completes (success or failure)
+    }
   }
 }
