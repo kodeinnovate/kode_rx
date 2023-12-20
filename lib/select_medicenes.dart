@@ -112,7 +112,13 @@ print(userController.patientName.value);
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.7,
                 child: MedicationListView(
+                  displayedMedicines: displayedMedicines,
+  selectedMedicines: selectedMedicines,
                   onSelect: (selectedMedicine) {
+                    // if (options.isEmpty) {
+    //   // Navigator.of(context).pop();
+    //   showMedicineTimeDialog(medicine!);
+    // }
                     showSingleChoiceListDialog(selectedMedicine);
                     //showMedicineTimeDialog(selectedMedicine);
                   },
@@ -209,6 +215,8 @@ print(userController.patientName.value);
       context: context,
       builder: (context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),),
           title: Text(
             medicine.name,
             style: const TextStyle(fontSize: 30),
@@ -275,6 +283,19 @@ print(userController.patientName.value);
             },
           ),
           actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: TextButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  shadowColor: Colors.grey,
+                  elevation: 2),
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
             ElevatedButton(
               onPressed: () {
                 if (timeDialogKey.currentState!.validate()) {
@@ -283,7 +304,7 @@ print(userController.patientName.value);
                 }
               },
               style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: AppColors.customBackground,
                   shadowColor: Colors.grey,
                   elevation: 2),
               child: Text(
@@ -292,19 +313,7 @@ print(userController.patientName.value);
               ),
             ),
             // SizedBox(width: 4,),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              style: TextButton.styleFrom(
-                  backgroundColor: Colors.orange,
-                  shadowColor: Colors.grey,
-                  elevation: 2),
-              child: Text(
-                'Cancel',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+            
           ],
         );
       },
@@ -327,9 +336,14 @@ print(userController.patientName.value);
 
 // Usage in your showSingleChoiceListDialog function
   void showSingleChoiceListDialog(Medicine medicine) {
-    List<String> options = ["10Mg", "20Mg", "30Mg", "40Mg"];
+    print(medicine.name);
+    final list = medicine.mgList;
+    List<String> options = list.map((dynamic item) => item.toString()).toList();
     String? selectedValue;
-
+    if (options.isEmpty) {
+      // Navigator.of(context).pop();
+      showMedicineTimeDialog(medicine!);
+    } else {
     showDialog(
       context: context,
       builder: (context) {
@@ -337,16 +351,20 @@ print(userController.patientName.value);
           options: options,
           onSelected: (value) {
             selectedValue = value;
+            medicine.mg = value;
           },
           onOkPressed: () {
             // Call the showMedicineTimeDialog function with the selected value
-            if (selectedValue != null) {
+            // if (selectedValue != null) {
               showMedicineTimeDialog(medicine!);
-            }
+              print(medicine.mg);
+            // }
           },
         );
       },
     );
+    }
+    // medicine.mg = selectedValue;
   }
 
 
@@ -361,6 +379,8 @@ print(userController.patientName.value);
       context: context,
       builder: (context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),),
           title: Text('Meal Information'),
           content: StatefulBuilder(
             builder: (context, setState) {
@@ -371,6 +391,7 @@ print(userController.patientName.value);
                   children: <Widget>[
                     Text('Select when to take before or after meal:'),
                     RadioListTile(
+                      activeColor: AppColors.customBackground,
                       title: Text('Before Meal'),
                       value: 'before',
                       groupValue: mealType,
@@ -381,6 +402,7 @@ print(userController.patientName.value);
                       },
                     ),
                     RadioListTile(
+                      activeColor: AppColors.customBackground,
                       title: Text('After Meal'),
                       value: 'after',
                       groupValue: mealType,
@@ -396,6 +418,16 @@ print(userController.patientName.value);
             },
           ),
           actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: TextButton.styleFrom(backgroundColor: Colors.red),
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
             ElevatedButton(
               onPressed: () {
                 if (mealDialogKey.currentState!.validate()) {
@@ -407,22 +439,13 @@ print(userController.patientName.value);
                   Navigator.of(context).pop();
                 }
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+              style: ElevatedButton.styleFrom(backgroundColor: AppColors.customBackground),
               child: Text(
                 'Add',
                 style: TextStyle(color: Colors.white),
               ),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              style: TextButton.styleFrom(backgroundColor: Colors.orange),
-              child: Text(
-                'Discard',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
+            
           ],
         );
       },
@@ -484,11 +507,14 @@ class _SingleChoiceDialogState extends State<SingleChoiceDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Select Value'),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),),      
+        title: const Text('Select Mg'),
       content: SingleChildScrollView(
         child: ListBody(
           children: widget.options.map((option) {
             return RadioListTile<String>(
+              activeColor: AppColors.customBackground,
               title: Text(option),
               value: option,
               groupValue: selectedValue,
@@ -503,6 +529,7 @@ class _SingleChoiceDialogState extends State<SingleChoiceDialog> {
       ),
       actions: <Widget>[
         ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: AppColors.customBackground),
           onPressed: () {
             widget.onSelected(selectedValue);
             Navigator.of(context).pop();
@@ -512,7 +539,7 @@ class _SingleChoiceDialogState extends State<SingleChoiceDialog> {
               widget.onOkPressed!();
             }
           },
-          child: Text('OK'),
+          child: const Text('OK', style: TextStyle(color: Colors.white),),
         ),
       ],
     );
@@ -577,16 +604,19 @@ class Medicine {
   final String id;
   final String name;
   final String details;
+  final List mgList;
+  String? mg;
   List<String> timesToTake = [];
   bool beforeMeal = false;
 
-  Medicine(this.name, this.id, this.details);
+  Medicine(this.name, this.id, this.details, this.mgList);
 
   factory Medicine.fromMedicineModel(UserMedicineModel medicineModel) {
     return Medicine(
       medicineModel.medicineName,
       medicineModel.id!,
       medicineModel.medicineContent,
+      medicineModel.medicineMgList
     );
   }
 }
@@ -598,9 +628,12 @@ class GlobalMedicineList {
 List<Medicine> displayedMedicines = [];
 
 class MedicationListView extends StatelessWidget {
+  final List<Medicine> displayedMedicines;
+  final List<Medicine> selectedMedicines;
   final Function(Medicine) onSelect;
 
-  MedicationListView({required this.onSelect});
+  MedicationListView({required this.onSelect, required this.displayedMedicines,
+    required this.selectedMedicines,});
 
   @override
   Widget build(BuildContext context) {
@@ -641,7 +674,21 @@ class MedicationListView extends StatelessWidget {
               ),
               focusColor: Colors.greenAccent,
               onTap: () {
+                // onSelect(displayedMedicines[index]);
+                bool isAlreadySelected =
+                  selectedMedicines.any((selectedMed) =>
+                      selectedMed.id == medicine.id &&
+                      selectedMed.timesToTake.toString() ==
+                          medicine.timesToTake.toString() &&
+                      selectedMed.beforeMeal == medicine.beforeMeal);
+
+              if (isAlreadySelected) {
+                // Show a dialog indicating that the medicine is already selected
+                showDuplicateMedicineDialog(context);
+              } else {
+                // Medicine is not already selected, call the onSelect function
                 onSelect(displayedMedicines[index]);
+              }
               },
             ),
           ),
@@ -650,6 +697,27 @@ class MedicationListView extends StatelessWidget {
     );
   }
 }
+
+//Duplicate Medicine Dialog
+void showDuplicateMedicineDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Duplicate Medicine'),
+          content: Text('This medicine is already selected.'),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
 //Selected medicine tile
 class SelectedMedicationsList extends StatelessWidget {
@@ -722,6 +790,7 @@ void _showEditDialog(BuildContext context, Medicine medicine) {
                 medicine.name,
                 medicine.id,
                 medicine.details,
+                medicine.mgList
               );
               editedMedicine.timesToTake = editedTimesToTake;
               editedMedicine.beforeMeal = editedBeforeMeal;
@@ -803,13 +872,13 @@ void _showEditDialog(BuildContext context, Medicine medicine) {
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   tileColor: Colors.grey.shade200,
                   title: Text(
-                    medicine.name,
+                    '${medicine.name} ${medicine.mg == null ? '' : '- ${medicine.mg}'}',
                     style: const TextStyle(
                         fontSize: 20, color: AppColors.customBackground),
                   ),
                   subtitle: Text(
                     'Time to take: ${medicine.timesToTake.isNotEmpty ? medicine.timesToTake.join(', ') : 'No specific time'} | Meal: ${medicine.beforeMeal ? 'Before Meal' : 'After Meal'}',
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                   ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,

@@ -12,7 +12,7 @@ class UserController extends GetxController {
   final RxString userSpecialty = RxString('');
   final Rx<Uint8List?> profileImage = Rx<Uint8List?>(null);
   final RxString patientName = RxString('');
-  final RxString patientAge= RxString('');
+  final RxString patientAge = RxString('');
   final RxString patientPhoneNo = RxString('');
   final RxString patientGender = RxString('');
   final RxString patientPastHistory = RxString('');
@@ -22,8 +22,10 @@ class UserController extends GetxController {
   final RxString userSignitureUpdateUrl = RxString('');
   final RxString signatureStore = RxString('');
   // From the database
-   final Rx<Uint8List?> signatureStoreInBytes = Rx<Uint8List?>(null);
+  final Rx<Uint8List?> signatureStoreInBytes = Rx<Uint8List?>(null);
   final RxString currentLoggedInUserName = RxString('');
+  // Storing Medicine Mg Array
+  final RxList<String> mgList = <String>[].obs; // Reactive
 }
 
 final RxString loginPhoneNumber = RxString('');

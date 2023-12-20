@@ -5,14 +5,14 @@ class UserMedicineModel {
   final String medicineName;
   final String medicineContent;
   final String medicineType;
-  final String medicineMg;
+  final List<String> medicineMgList;
   final String status;
 
   const UserMedicineModel(
       {this.id,
       required this.medicineName,
       required this.medicineContent,
-      required this.medicineMg,
+      required this.medicineMgList,
       required this.medicineType,
       required this.status});
 
@@ -21,7 +21,7 @@ class UserMedicineModel {
       'MedicineContent': medicineContent,
       'MedicineName': medicineName,
       'MedicineType': medicineType,
-      'MedicineMg': medicineMg,
+      'MedicineMgList': medicineMgList,
       'Status': status
     };
   }
@@ -33,7 +33,7 @@ class UserMedicineModel {
       id: document.id,
       medicineName: data['MedicineName'],
       medicineContent: data['MedicineContent'],
-      medicineMg: data['MedicineMg'],
+      medicineMgList: List<String>.from(data['MedicineMgList']),
       medicineType: data['MedicineType'],
       status: data['Status'],
     );

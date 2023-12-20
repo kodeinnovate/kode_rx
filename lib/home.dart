@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kode_rx/Controllers/profile_controller.dart';
 import 'package:kode_rx/Pages/add_medicine_screen.dart';
+import 'package:kode_rx/Pages/add_new_medicine.dart';
 import 'package:kode_rx/Pages/patient_info.dart';
 import 'package:kode_rx/Pages/rx_history.dart';
 import 'package:kode_rx/data_state_store.dart';
@@ -66,11 +67,11 @@ class HomeScreen extends StatelessWidget {
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
+            DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: AppColors.customBackground,
               ),
-              child: Text('Drawer Header'),
+              child: Text('Hello, Dr. ${userController.currentLoggedInUserName.value}', style: TextStyle(color: Colors.white, fontSize: 24),),
             ),
             ListTile(
               title: Text('Profile'),

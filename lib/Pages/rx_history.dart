@@ -71,7 +71,7 @@ class _RxHistoryState extends State<RxHistory> {
       appBar: DeviceHelper.deviceAppBar(title: 'Rx History'),
       body: isLoading
           ? const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: AppColors.customBackground,),
             )
           : isError
               ? const Center(
