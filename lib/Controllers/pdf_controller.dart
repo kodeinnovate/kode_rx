@@ -103,7 +103,8 @@ class PdfController extends GetxController {
               mainAxisAlignment: pw.MainAxisAlignment.end,
               // crossAxisAlignment: pw.CrossAxisAlignment.end,
               children: [
-                signature(context),
+                
+                if (signature(context) != null) signature(context)!,
               ]),
 
           // pw.SizedBox(height: 40),
@@ -231,20 +232,45 @@ class PdfController extends GetxController {
         ],
       );
 
-  pw.Widget signature(pw.Context context) => pw.Column(children: [
-        pw.Image(
-          pw.MemoryImage(userController.signatureStoreInBytes.value!),
-          width: 100,
-          height: 100,
-        ),
-        pw.SizedBox(height: 16.0),
-        pw.Row(children: [
-          pw.Text('Prescribed By: DR. ',
-              style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-          pw.Text(userController.currentLoggedInUserName.value,
-              style: pw.TextStyle(fontWeight: pw.FontWeight.bold))
-        ])
-      ]);
+  // pw.Widget signature(pw.Context context) => pw.Column(children: [
+  //       pw.Image(
+  //         pw.MemoryImage(userController.signatureStoreInBytes.value!),
+  //         width: 100,
+  //         height: 100,
+  //       ),
+  //       pw.SizedBox(height: 16.0),
+  //       pw.Row(children: [
+  //         pw.Text('Prescribed By: DR. ',
+  //             style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+  //         pw.Text(userController.currentLoggedInUserName.value,
+  //             style: pw.TextStyle(fontWeight: pw.FontWeight.bold))
+  //       ])
+  //     ]);
+
+  pw.Widget? signature(pw.Context context) {
+  final signatureBytes = userController.signatureStoreInBytes.value;
+
+  // Check if signatureBytes is null, and return null if true
+  if (signatureBytes == null) {
+    return null;
+  }
+
+  return pw.Column(children: [
+    pw.Image(
+      pw.MemoryImage(signatureBytes),
+      width: 100,
+      height: 100,
+    ),
+    pw.SizedBox(height: 16.0),
+    pw.Row(children: [
+      pw.Text('Prescribed By: DR. ',
+          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+      pw.Text(userController.currentLoggedInUserName.value,
+          style: pw.TextStyle(fontWeight: pw.FontWeight.bold))
+    ])
+  ]);
+}
+
 
 
 }

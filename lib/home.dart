@@ -133,9 +133,11 @@ class HomeScreen extends StatelessWidget {
                         if (snapshot.connectionState == ConnectionState.done) {
                           if (snapshot.hasData) {
                             UserModel userData = snapshot.data as UserModel;
+                            if(userData.signature != '') {
                             userController.signatureStore.value = userData.signature;
-                            userController.currentLoggedInUserName.value = userData.fullname;
                             getImageBytes(userData.signature);
+                            }
+                            userController.currentLoggedInUserName.value = userData.fullname;
                             return Row(
                               children: [
                                 userData.profileImage != ''
