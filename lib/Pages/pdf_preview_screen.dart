@@ -13,6 +13,7 @@ class PreviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
     return Scaffold(
       appBar: DeviceHelper.deviceAppBar(title: 'Preview'),
       body: PdfPreview(
@@ -21,7 +22,7 @@ class PreviewScreen extends StatelessWidget {
         allowPrinting: true,
         allowSharing: true,
         initialPageFormat: PdfPageFormat.a4,
-        pdfFileName: 'test.pdf',
+        pdfFileName: '$fileName.pdf',
         canChangeOrientation: false,
         canDebug: false,
       

@@ -465,17 +465,6 @@ print(userController.patientName.value);
       //     ))
     PdfController pdfController = PdfController(selectedMedicines: selectedMedicines, notes: notes, );
       pdfController.createAndDisplayPdf();
-    DateTime currentDate = DateTime.now();
-    String formattedDate = DateFormat.yMMMMd().add_jm().format(currentDate);
-    final patientData = PatientModel(
-      patientName: userController.patientName.value,
-      patientAge: userController.patientAge.value,
-      patientGender: userController.patientGender.value,
-      pastHistory: userController.patientPastHistory.value,
-      phoneNumber: userController.patientPhoneNo.value,
-      date: formattedDate
-    );
-    await userRepository.addPatientDetails(userController.userId.value, patientData);
     print('Data here ${userController.patientName.value}, ${userController.patientAge.value}');
     }
        

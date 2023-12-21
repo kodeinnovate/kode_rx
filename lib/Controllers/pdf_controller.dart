@@ -1,15 +1,16 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:kode_rx/Pages/pdf_preview_screen.dart';
 import 'package:kode_rx/data_state_store.dart';
+import 'package:kode_rx/database/patient_data.dart';
 import 'package:kode_rx/select_medicenes.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class PdfController extends GetxController {
   static PdfController get instance => Get.find();
@@ -24,17 +25,6 @@ class PdfController extends GetxController {
     selectedMedicines?.addAll(medicine);
   }
 
-// getImage(imageUrl) async {
-//   var response = await http.get(Uri.parse(imageUrl));
-// var data = response.bodyBytes;
-//   return data;
-// }
-
-// Future<Uint8List> getImageBytes(String imageUrl) async {
-//   var response = await http.get(Uri.parse(imageUrl));
-//   print('aaaaa imageByte >  + ${response.bodyBytes.toString()}');
-//   return response.bodyBytes;
-// }
 
   DateTime currentDate = DateTime.now();
 
@@ -67,15 +57,46 @@ class PdfController extends GetxController {
       final doc = pw.Document();
       pdfCreate(doc); // PDF Layout creation Function
       Get.to(() => PreviewScreen(doc: doc));
+
+      await Future.delayed(const Duration(seconds: 6));
+      final pdfBytes = await doc.save();
+      final pdfReference = await _uploadPdfToStorage(pdfBytes);
+
+      // Save PDF URL to Firebase Database or any other storage
+      // This is just an example, you need to implement your own logic
+      await _savePdfUrlToDatabase(pdfReference);
     }
   }
 
-  void pdfCreate(pw.Document doc) async {
-    //   final imageUrl = userController.signatureStore.value;
+  Future<String> _uploadPdfToStorage(Uint8List pdfBytes) async {
+    final fileName = 'prescription_${userController.currentLoggedInUserName.value}_${userController.patientName.value}_${DateTime.now().millisecondsSinceEpoch}.pdf';
+    final storageReference =
+        firebase_storage.FirebaseStorage.instance.ref().child('pdf_file/$fileName');
 
-    // final imageBytes = await getImageBytes(imageUrl);
-    //   final image = pw.MemoryImage(imageBytes);
-    // print('aaaaa image> + $imageBytes');
+    final uploadTask = storageReference.putData(pdfBytes);
+    await uploadTask.whenComplete(() => print('PDF uploaded'));
+
+    return await storageReference.getDownloadURL();
+  }
+
+  Future<void> _savePdfUrlToDatabase(String pdfUrl) async {
+    // Save the URL to Firebase Database or any other storage
+    // This is just an example, you need to implement your own logic
+    print('PDF URL: $pdfUrl');
+     DateTime currentDate = DateTime.now();
+    String formattedDate = DateFormat.yMMMMd().add_jm().format(currentDate);
+    final patientData = PatientModel(
+      patientName: userController.patientName.value,
+      patientAge: userController.patientAge.value,
+      patientGender: userController.patientGender.value,
+      pastHistory: userController.patientPastHistory.value,
+      phoneNumber: userController.patientPhoneNo.value,
+      date: formattedDate, pdfUrl: pdfUrl
+    );
+    await userRepository.addPatientDetails(userController.userId.value, patientData);
+  }
+
+  void pdfCreate(pw.Document doc) async {
     doc.addPage(
       pw.MultiPage(
         build: (context) => [
@@ -101,10 +122,14 @@ class PdfController extends GetxController {
           //  pw.Image(image),
           pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.end,
-              // crossAxisAlignment: pw.CrossAxisAlignment.end,
               children: [
                 
-                if (signature(context) != null) signature(context)!,
+                if (signature(context) != null) signature(context)! else pw.Row(children: [
+      pw.Text('Prescribed By: DR. ',
+          style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+      pw.Text(userController.currentLoggedInUserName.value,
+          style: pw.TextStyle(fontWeight: pw.FontWeight.bold))
+    ]),
               ]),
 
           // pw.SizedBox(height: 40),
