@@ -458,14 +458,13 @@ print(userController.patientName.value);
     if (selectedMedicines.isEmpty) {
       Get.snackbar('No medicine Added', "please add medicines");
     } else {
-      final notes = noteController.text.toString().trim();
-      // Get.to(() => PDFGenerator(
-      //       selectedMedicines: selectedMedicines,
-      //       notes: noteController.text.toString().trim(),
-      //     ))
-    PdfController pdfController = PdfController(selectedMedicines: selectedMedicines, notes: notes, );
-      pdfController.createAndDisplayPdf();
-    print('Data here ${userController.patientName.value}, ${userController.patientAge.value}');
+      var isSubmitData = await showAlertPopup();
+      if(isSubmitData) {
+        final notes = noteController.text.toString().trim();
+        PdfController pdfController = PdfController(
+          selectedMedicines: selectedMedicines, notes: notes,);
+        pdfController.createAndDisplayPdf();
+      }
     }
        
 
@@ -473,6 +472,27 @@ print(userController.patientName.value);
     //   final pdfPrint = ('${med.name}, Time to take: ${med.timesToTake.join(', ')} Meal: ${med.beforeMeal ? 'Before Meal' : 'After Meal'}');
     //   print(pdfPrint);
     // }
+  }
+
+  Future<bool> showAlertPopup() async {
+    return await showDialog(
+      context: Get.overlayContext!,
+      builder: (context) => AlertDialog(
+        title: Text('Confirm'),
+        content: Text('Sure you want to generate prescription?'),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text('No'),
+          ),
+          ElevatedButton(
+            onPressed:() => Navigator.of(context).pop(true),
+            child: Text('Yes'),
+          ),
+        ],
+      ),
+    ) ??
+        false;
   }
 }
 class SingleChoiceDialog extends StatefulWidget {

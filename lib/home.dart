@@ -21,7 +21,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('hit');
     Future<bool> showExitPopup() async {
       return await showDialog(
             context: Get.overlayContext!,

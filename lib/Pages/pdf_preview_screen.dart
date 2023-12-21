@@ -13,10 +13,36 @@ class PreviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    Future<bool> showExitPopup() async {
+      return await showDialog(
+        context: Get.overlayContext!,
+        builder: (context) => AlertDialog(
+          title: Text('Confirm'),
+          content: Text('Sure you want to go to the home screen?'),
+          actions: [
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text('No'),
+            ),
+            ElevatedButton(
+              onPressed:() =>
+               Navigator.of(context)
+                    .pushNamedAndRemoveUntil(
+                    '/home', (Route<dynamic> route) => false),
+              child: Text('Yes'),
+            ),
+          ],
+        ),
+      ) ??
+          false;
+    }
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
     return Scaffold(
       appBar: DeviceHelper.deviceAppBar(title: 'Preview'),
-      body: PdfPreview(
+    body: WillPopScope(
+    onWillPop:showExitPopup,
+      child: PdfPreview(
         padding: const EdgeInsets.only(top: 40.0),
         build: (format) => doc.save(),
         allowPrinting: true,
@@ -27,6 +53,9 @@ class PreviewScreen extends StatelessWidget {
         canDebug: false,
       
       ),
+    )
     );
+
   }
+
 }
