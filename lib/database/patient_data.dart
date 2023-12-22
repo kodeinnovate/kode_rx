@@ -8,7 +8,7 @@ class PatientModel {
   final String patientAge;
   final String patientGender;
   final String date;
-  final String pdfUrl;
+  final String? pdfUrl;
 
   const PatientModel(
       {this.id,
@@ -17,7 +17,7 @@ class PatientModel {
       required this.pastHistory,
       required this.patientAge,
       required this.patientGender,
-      required this.date, required this.pdfUrl});
+      required this.date, this.pdfUrl});
 
   toJson() {
     return {

@@ -31,9 +31,9 @@ final signatureImage = TextEditingController();
         Get.snackbar('Error', 'Something went wrong');
       }
     } else {
-      print('something went wrong in getUserData function');
+      print('something went wrong in getUserData function, this also triggers when the user logs out from the profile page');
       // Handle the case where firebaseUser is not yet initialize
-      Get.snackbar('Error', 'Firebase user not initialized');
+      // Get.snackbar('Error', 'Firebase user not initialized');
     }
   }
 

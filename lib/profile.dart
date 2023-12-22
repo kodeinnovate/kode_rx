@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kode_rx/Components/alert_dialogue.dart';
 import 'package:kode_rx/Components/custom_button.dart';
 import 'package:kode_rx/Components/custom_textfield.dart';
 import 'package:kode_rx/Controllers/profile_controller.dart';
@@ -225,7 +226,7 @@ class Profile extends StatelessWidget {
                                               child: _signature != null
                                                   ? Image.memory(_signature!,
                                                       fit: BoxFit.contain)
-                                                  : userData.signature != '' 
+                                                  : userData.signature != ''
                                                       ? Image.network(
                                                           userData.signature,
                                                           width: 50.0,
@@ -242,8 +243,10 @@ class Profile extends StatelessWidget {
                                             bottom: -10,
                                             right: -10,
                                             child: IconButton(
-                                              icon:
-                                                  const Icon(Icons.add_a_photo, color: Colors.white,),
+                                              icon: const Icon(
+                                                Icons.add_a_photo,
+                                                color: Colors.white,
+                                              ),
                                               onPressed: changeSignatureImage,
                                             ),
                                           ),
@@ -258,9 +261,9 @@ class Profile extends StatelessWidget {
                               buttonText: 'Update ',
                               onTap: () async {
                                 try {
-                                Get.dialog(Center(
-                                    child: CircularProgressIndicator(
-                                        color: AppColors.customBackground)));
+                                  Get.dialog(Center(
+                                      child: CircularProgressIndicator(
+                                          color: AppColors.customBackground)));
                                   if (_profileImage != null) {
                                     await updateProfileImage(_profileImage!);
                                   }
@@ -269,7 +272,7 @@ class Profile extends StatelessWidget {
                                     await updateSignitureUpdate(_signature!);
                                   }
                                   Get.back();
-                                  
+
                                   final user = UserModel(
                                       fullname: username.text.trim(),
                                       email: email.text.trim(),
@@ -280,7 +283,9 @@ class Profile extends StatelessWidget {
                                               userController
                                                       .userProfileUpdateUrl
                                                       .value ==
-                                                  '' /// userController.userProfileUpdateUrl.value == userData.profileImage
+                                                  ''
+
+                                          /// userController.userProfileUpdateUrl.value == userData.profileImage
                                           ? userData.profileImage
                                           : userController
                                               .userProfileUpdateUrl.value,
@@ -296,7 +301,7 @@ class Profile extends StatelessWidget {
                                               .userSignitureUpdateUrl.value,
                                       specialist: speciality.text.trim());
                                   await controller.updateRecord(user);
-                                      //  HomeScreen.instance.updateDataFromProfileScreen();
+                                  //  HomeScreen.instance.updateDataFromProfileScreen();
                                   userController.userProfileImageUrl.value = '';
                                   userController.userSignitureUpdateUrl.value =
                                       '';
@@ -314,12 +319,34 @@ class Profile extends StatelessWidget {
                             const SizedBox(
                               height: 50,
                             ),
-                            const Center(
-                              child: Text(
-                                'Logout',
-                                style: TextStyle(
-                                    color: AppColors.customBackground,
-                                    fontSize: 20),
+                            GestureDetector(
+                              onTap: () => {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return CustomDialog(
+                                      dialogTitle: 'Logout',
+                                      dialogMessage:
+                                          'Are you sure you want to logout?',
+                                      leftButtonText: 'Cancel',
+                                      rightButtonText: 'Logout',
+                                      onLeftButtonPressed: () =>
+                                          Navigator.of(context).pop(),
+                                          onRightButtonPressed: logout,
+                                    );
+                                  },
+                                )
+                              },
+                              child: Center(
+                                child: Container(
+                                  decoration: BoxDecoration(),
+                                  child: Text(
+                                    'Logout',
+                                    style: TextStyle(
+                                        color: AppColors.customBackground,
+                                        fontSize: 20),
+                                  ),
+                                ),
                               ),
                             ),
                             const SizedBox(
@@ -350,3 +377,49 @@ class Profile extends StatelessWidget {
     );
   }
 }
+
+void logout() {
+  AuthenticationRepo.instance.logout();
+  Get.snackbar('Logged Out!', 'Your are now logged out');
+}
+
+// class LogoutDialog extends StatelessWidget {
+//   const LogoutDialog({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return AlertDialog(
+//       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+//       title: const Text(
+//         'Logout',
+//       ),
+//       content: const Text('Are you sure you want to logout?'),
+//       actions: [
+//         TextButton(
+//           onPressed: () {
+//             // Perform the action when the "Return" button is pressed
+//             Navigator.of(context).pop(); // Close the dialog
+//           },
+//           child: const Text(
+//             'Cancel',
+//             style: TextStyle(color: AppColors.customBackground),
+//           ),
+//         ),
+//         TextButton(
+//           style:
+//               TextButton.styleFrom(backgroundColor: AppColors.customBackground),
+//           onPressed: () {
+//             AuthenticationRepo.instance.logout();
+//             Get.snackbar('Logged Out!', 'Your are now logged out');
+
+//             // Navigator.of(context).pop(); // Close the dialog
+//           },
+//           child: const Text(
+//             'Logout',
+//             style: TextStyle(color: Colors.white),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }

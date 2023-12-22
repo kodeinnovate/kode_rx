@@ -139,12 +139,24 @@ class UserRepo extends GetxController {
   }
 
 //Doctor Specific medicine List
+
+final RxBool medicineLoading = false.obs; //For Loader
+
   Future<List<UserMedicineModel>> getUserMedicines(String userId) async {
+    try {
+    medicineLoading.value = true;
     final snapshot =
         await _db.collection('Users').doc(userId).collection('Medicines').get();
     final medicineData =
         snapshot.docs.map((e) => UserMedicineModel.fromSnapshot(e)).toList();
     return medicineData;
+    } catch (e) {
+      print('Something went wrong $e');
+      Get.snackbar('Something Went Wrong', 'Error: $e');
+      throw Exception("Failed to fetch medicines");
+    } finally {
+      medicineLoading.value = false;
+    }
   }
 
   //Doctor Specific patient List

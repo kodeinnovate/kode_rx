@@ -80,4 +80,8 @@ class AuthenticationRepo extends GetxController {
             verificationId: verificationId.value, smsCode: otp));
     return credentials.user != null ? true : false;
   }
+
+  Future<void> logout() async => {
+    await _auth.signOut()
+  };
 }

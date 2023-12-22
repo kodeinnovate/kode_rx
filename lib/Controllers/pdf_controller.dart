@@ -41,16 +41,6 @@ class PdfController extends GetxController {
   }
 
   Future<void> createAndDisplayPdf() async {
-    // final patientName = userController.patientName.value;
-    // final patientAge = userController.patientAge.value;
-    // final pastHistory = userController.patientPastHistory.value;
-    // final patientGender = userController.patientGender.value;
-    // final patientPhoneNo = userController.patientPhoneNo.value;
-    // print(
-    //     '$patientName, $patientAge, $pastHistory, $patientPhoneNo, $patientGender');
-
-    // print('selected Medicine $selectedMedicines');
-    // print('note $notes');
     if (selectedMedicines == null || selectedMedicines!.isEmpty) {
       Get.snackbar('No medicine Added', 'Error');
     } else {
@@ -58,12 +48,11 @@ class PdfController extends GetxController {
       pdfCreate(doc); // PDF Layout creation Function
       Get.to(() => PreviewScreen(doc: doc));
 
-      await Future.delayed(const Duration(seconds: 6));
+      await Future.delayed(const Duration(seconds: 2));
       final pdfBytes = await doc.save();
       final pdfReference = await _uploadPdfToStorage(pdfBytes);
 
       // Save PDF URL to Firebase Database or any other storage
-      // This is just an example, you need to implement your own logic
       await _savePdfUrlToDatabase(pdfReference);
     }
   }
