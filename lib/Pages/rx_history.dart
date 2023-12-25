@@ -50,23 +50,45 @@ class _RxHistoryState extends State<RxHistory> {
     }
   }
 
+  // void filterSearchResults(String query) {
+  //   setState(() {
+  //     if (query.isNotEmpty) {
+  //       //Search Function
+  //       patientList = patientList
+  //           .where((patient) =>
+  //               patient.patientName
+  //                   .toLowerCase()
+  //                   .contains(query.toLowerCase()) ||
+  //               patient.phoneNumber.contains(query))
+  //           .toList();
+  //     } else {
+  //       // If the query is empty, display the original patient list
+  //       patientList = [..._originalPatientList];
+  //     }
+  //   });
+  // }
+
   void filterSearchResults(String query) {
-    setState(() {
-      if (query.isNotEmpty) {
-        //Search Function
-        patientList = patientList
-            .where((patient) =>
-                patient.patientName
-                    .toLowerCase()
-                    .contains(query.toLowerCase()) ||
-                patient.phoneNumber.contains(query))
-            .toList();
-      } else {
-        // If the query is empty, display the original patient list
-        patientList = [..._originalPatientList];
-      }
-    });
-  }
+  setState(() {
+    query = query.trim();
+    if (query.isNotEmpty) {
+      // Search Function
+      patientList = _originalPatientList
+          .where((patient) =>
+              patient.patientName
+                  .toLowerCase()
+                  .contains(query.toLowerCase()) ||
+              patient.phoneNumber.contains(query))
+          .toList();
+    } else {
+      // If the query is empty, display the original patient list
+      patientList = [..._originalPatientList];
+    }
+  });
+}
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +135,7 @@ class _RxHistoryState extends State<RxHistory> {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        Expanded(
+                      patientList.isEmpty ? const Center(child: Text('No past History Found', style: TextStyle(fontSize: 16),),)  :    Expanded(
                           child: ListView.separated(
                             itemBuilder: (context, index) {
                               PatientModel patient = patientList[index];

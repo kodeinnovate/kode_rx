@@ -46,6 +46,7 @@ class AuthenticationRepo extends GetxController {
     }
   }
 
+//Phone Number Authentication function !Important
   Future<void> phoneAuthentication(String number) async {
     try {
       // firebaseUser.value == null ? Get.offAll(() => Signup()) : Get.offAll(() => HomeScreen());
@@ -63,25 +64,45 @@ class AuthenticationRepo extends GetxController {
           verificationFailed: (e) {
             if (e.code == 'invalid-phone-number') {
               Get.snackbar('Error', 'The provided phone number is not valid.');
-            } else {
+              Get.back();
+            }
+            else {
               Get.snackbar('Error', 'Something went wrong. Try again.');
             }
           },
           timeout: const Duration(seconds: 120));
     } catch (e) {
       print('Error during phone authentication: $e');
+
       Get.snackbar('Error', 'Something went wrong. Try again.');
     }
   }
 
+// OTP verfication
   Future<bool> verifyOTP(String otp) async {
-    var credentials = await _auth.signInWithCredential(
-        PhoneAuthProvider.credential(
-            verificationId: verificationId.value, smsCode: otp));
-    return credentials.user != null ? true : false;
+    try {
+      var credentials = await _auth.signInWithCredential(
+          PhoneAuthProvider.credential(
+              verificationId: verificationId.value, smsCode: otp));
+      return credentials.user != null ? true : false;
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        if (e.code == 'invalid-verification-code') {
+          Get.snackbar('The verification code from SMS/TOTP is invalid',
+              'Please check and enter the correct verification code again');
+          print('Invalid OTP');
+        } else {
+          print('FirebaseAuthException: ${e.message}');
+          Get.snackbar('Error', 'FirebaseAuthException: ${e.message}');
+        }
+      } else {
+        print('Unexpected error: $e');
+        Get.snackbar('Error', 'Unexpected error: $e');
+      }
+      rethrow;
+    }
   }
 
-  Future<void> logout() async => {
-    await _auth.signOut()
-  };
+// Logout function
+  Future<void> logout() async => {await _auth.signOut()};
 }

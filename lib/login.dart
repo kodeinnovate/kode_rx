@@ -63,7 +63,7 @@ class LoginScreen extends StatelessWidget {
                         double spacing;
                         if (constraints.maxWidth < 600) {
                           // Mobile mode
-                          spacing = 133.0;
+                          spacing = 279.0;
                         } else {
                           // Tablet mode or larger
                           spacing = 315.0;
@@ -118,6 +118,8 @@ class LoginScreen extends StatelessWidget {
                                 ),
                               ),
                               child: TextField(
+                                maxLength: 10,
+                                
                                 controller: phoneNumberController,
                                 keyboardType: TextInputType.number,
                                 onSubmitted: (String value) async {
@@ -129,6 +131,7 @@ class LoginScreen extends StatelessWidget {
                                   labelText: 'Enter your phone number',
                                   border: InputBorder.none,
                                   contentPadding: EdgeInsets.all(10.0),
+                                  counterText: ''
                                 ),
                               ),
                             ),

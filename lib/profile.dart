@@ -380,7 +380,7 @@ class Profile extends StatelessWidget {
 
 void logout() {
   AuthenticationRepo.instance.logout();
-  Get.snackbar('Logged Out!', 'Your are now logged out');
+  Get.snackbar('Logged Out!', 'You are are now logged out');
 }
 
 // class LogoutDialog extends StatelessWidget {

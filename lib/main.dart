@@ -14,9 +14,9 @@ import 'package:kode_rx/register.dart';
 import 'package:kode_rx/select_medicenes.dart';
 import 'home.dart';
 import 'login.dart'; // Import the login screen
-
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,13 +24,15 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    Get.put(AuthenticationRepo());
+    await FirebaseAppCheck.instance.activate(androidProvider: AndroidProvider.playIntegrity);
     // await FirebaseAppCheck.instance
     //     .activate(androidProvider: AndroidProvider.playIntegrity);
-    Get.put(AuthenticationRepo());
   } catch (e) {
     print("Error initializing Firebase: $e");
   }
   runApp(const MyApp());
+  await SmsAutoFill().listenForCode();
   Get.put(Signup());
   Get.put(HomeScreen());
   Get.put(SplashScreen());

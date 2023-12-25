@@ -772,7 +772,7 @@ class SelectedMedicationsList extends StatelessWidget {
   final List<Medicine> selectedMedicines;
   final Function(Medicine) onDelete;
   final Function(Medicine) onEdit;
-
+var dataMg = ''.obs;
   SelectedMedicationsList(
       {super.key,
       required this.selectedMedicines,
@@ -786,12 +786,30 @@ class SelectedMedicationsList extends StatelessWidget {
       context: context,
       builder: (context) {
         // Create controllers for editing times and meal preference
+
+
+
         List<String> options =
             medicine.mgList.map((dynamic item) => item.toString()).toList();
         List<String> editedTimesToTake = List.from(medicine.timesToTake);
         bool editedBeforeMeal = medicine.beforeMeal;
         String? editedMg = medicine.mg;
+        void saveEdited(medicine) {
+          print(editedMg);
+          editedMg = dataMg.value;
+          print(editedMg);
+                Medicine editedMedicine = Medicine(medicine.name, medicine.id,
+                    medicine.details, medicine.mgList);
+                editedMedicine.timesToTake = editedTimesToTake;
+                editedMedicine.beforeMeal = editedBeforeMeal;
+                editedMedicine.mg = editedMg;
 
+                // Call the onEdit function with the edited medicine
+                onEdit(editedMedicine);
+                // _showTimesToTakeDialog(context, editedTimesToTake);
+                Navigator.of(context).pop(); 
+
+  }
         return AlertDialog(
           title: Text('Edit Medicine'),
           content: StatefulBuilder(
@@ -799,12 +817,6 @@ class SelectedMedicationsList extends StatelessWidget {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  // Display the current times to take
-                  Text(
-                      'Current times to take: ${editedTimesToTake.join(', ')}'),
-
-                  // Add form fields for editing times and meal preference
-                  // (You may want to include additional fields as needed)
                   Row(
                     children: [
                       Radio(
@@ -842,16 +854,17 @@ class SelectedMedicationsList extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // Perform the edit operation and update the medicine
-                Medicine editedMedicine = Medicine(medicine.name, medicine.id,
-                    medicine.details, medicine.mgList);
-                editedMedicine.timesToTake = editedTimesToTake;
-                editedMedicine.beforeMeal = editedBeforeMeal;
-                editedMedicine.mg = editedMg;
-
-                // Call the onEdit function with the edited medicine
-                onEdit(editedMedicine);
-                // _showTimesToTakeDialog(context, editedTimesToTake);
-                Navigator.of(context).pop(); // Close the dialog
+                // Medicine editedMedicine = Medicine(medicine.name, medicine.id,
+                //     medicine.details, medicine.mgList);
+                // editedMedicine.timesToTake = editedTimesToTake;
+                // editedMedicine.beforeMeal = editedBeforeMeal;
+                // editedMedicine.mg = editedMg;
+saveEdited(medicine);
+                // // Call the onEdit function with the edited medicine
+                // onEdit(editedMedicine);
+                // // _showTimesToTakeDialog(context, editedTimesToTake);
+                // Navigator.of(context).pop(); // Close the dialog
+                // Navigator.of(context).pop(); 
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
               child: const Text(
@@ -861,11 +874,17 @@ class SelectedMedicationsList extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                if(options.isNotEmpty) {
+                _showMgListDialog(context, editedMg!, options, editedTimesToTake);
+
+                } else {
+                  _showTimesToTakeDialog(context, editedTimesToTake);
+                }
+                // Navigator.of(context).pop();
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
               child: const Text(
-                'Cancel',
+                'Next',
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -875,146 +894,154 @@ class SelectedMedicationsList extends StatelessWidget {
     );
   }
 
-  // void _showMgListDialog(
-  //     BuildContext context, String currentMgSelection, List<String> mgOptions) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return AlertDialog(
-  //         title: Text('Edit Mg List'),
-  //         content: StatefulBuilder(
-  //           builder: (context, setState) {
-  //             return Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: <Widget>[
-  //                 // Generate radio buttons dynamically based on mgOptions
-  //                 for (String option in mgOptions)
-  //                   Row(
-  //                     children: [
-  //                       Radio(
-  //                         value: option,
-  //                         groupValue: currentMgSelection,
-  //                         onChanged: (value) {
-  //                           setState(() {
-  //                             print(currentMgSelection);
-  //                             print(value);
-  //                             currentMgSelection = value as String;
-  //                           });
-  //                         },
-  //                       ),
-  //                       Text(option),
-  //                     ],
-  //                   ),
-  //               ],
-  //             );
-  //           },
-  //         ),
-  //         actions: <Widget>[
-  //           ElevatedButton(
-  //             onPressed: () {
-  //               Navigator.of(context).pop(); // Close the dialog
-  //             },
-  //             style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-  //             child: const Text(
-  //               'Save',
-  //               style: TextStyle(color: Colors.white),
-  //             ),
-  //           ),
-  //           TextButton(
-  //             onPressed: () {
-  //               Navigator.of(context).pop(); // Close the dialog
-  //             },
-  //             child: const Text(
-  //               'Cancel',
-  //               style: TextStyle(color: Colors.black),
-  //             ),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
+  // Perform the edit operation and update the medicine
+  
 
-  // void _showTimesToTakeDialog(BuildContext context, List<String> timesToTake) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return AlertDialog(
-  //         title: Text('Edit Times to Take'),
-  //         content: StatefulBuilder(
-  //           builder: (context, setState) {
-  //             return Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: <Widget>[
-  //                 // Add form fields for editing times to take using checkboxes
-  //                 CheckboxListTile(
-  //                   title: Text('Morning'),
-  //                   value: timesToTake.contains('Morning'),
-  //                   onChanged: (value) {
-  //                     setState(() {
-  //                       if (value!) {
-  //                         timesToTake.add('Morning');
-  //                       } else {
-  //                         timesToTake.remove('Morning');
-  //                       }
-  //                     });
-  //                   },
-  //                 ),
-  //                 CheckboxListTile(
-  //                   title: Text('Afternoon'),
-  //                   value: timesToTake.contains('Afternoon'),
-  //                   onChanged: (value) {
-  //                     setState(() {
-  //                       if (value!) {
-  //                         timesToTake.add('Afternoon');
-  //                       } else {
-  //                         timesToTake.remove('Afternoon');
-  //                       }
-  //                     });
-  //                   },
-  //                 ),
-  //                 CheckboxListTile(
-  //                   title: Text('Evening'),
-  //                   value: timesToTake.contains('Evening'),
-  //                   onChanged: (value) {
-  //                     setState(() {
-  //                       if (value!) {
-  //                         timesToTake.add('Evening');
-  //                       } else {
-  //                         timesToTake.remove('Evening');
-  //                       }
-  //                     });
-  //                   },
-  //                 ),
-  //               ],
-  //             );
-  //           },
-  //         ),
-  //         actions: <Widget>[
-  //           ElevatedButton(
-  //             onPressed: () {
-  //               Navigator.of(context).pop(); // Close the dialog
-  //             },
-  //             style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
-  //             child: const Text(
-  //               'Save',
-  //               style: TextStyle(color: Colors.white),
-  //             ),
-  //           ),
-  //           TextButton(
-  //             onPressed: () {
-  //               Navigator.of(context).pop(); // Close the dialog
-  //             },
-  //             child: const Text(
-  //               'Cancel',
-  //               style: TextStyle(color: Colors.black),
-  //             ),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
+  void _showMgListDialog(
+      BuildContext context, String currentMgSelection, List<String> mgOptions, List<String> editedTimesToTake) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Edit Mg List'),
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  // Generate radio buttons dynamically based on mgOptions
+                  for (String option in mgOptions)
+                    Row(
+                      children: [
+                        Radio<String>(
+                          value: option,
+                          groupValue: currentMgSelection,
+                          onChanged: (value) {
+                            setState(() {
+                              print(currentMgSelection);
+                              print(value);
+                              currentMgSelection = value!;
+                              dataMg.value = value;
+                              // currentMgSelection = value as String;
+                              print(currentMgSelection);
+                            });
+                          },
+                        ),
+                        Text(option),
+                      ],
+                    ),
+                ],
+              );
+            },
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                // Get.off(context);
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+              child: const Text(
+                'Save',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                _showTimesToTakeDialog(context, editedTimesToTake);
+                // Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text(
+                'Next',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showTimesToTakeDialog(BuildContext context, List<String> timesToTake) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Edit Times to Take'),
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  // Add form fields for editing times to take using checkboxes
+                  CheckboxListTile(
+                    title: Text('Morning'),
+                    value: timesToTake.contains('Morning'),
+                    onChanged: (value) {
+                      setState(() {
+                        if (value!) {
+                          timesToTake.add('Morning');
+                        } else {
+                          timesToTake.remove('Morning');
+                        }
+                      });
+                    },
+                  ),
+                  CheckboxListTile(
+                    title: Text('Afternoon'),
+                    value: timesToTake.contains('Afternoon'),
+                    onChanged: (value) {
+                      setState(() {
+                        if (value!) {
+                          timesToTake.add('Afternoon');
+                        } else {
+                          timesToTake.remove('Afternoon');
+                        }
+                      });
+                    },
+                  ),
+                  CheckboxListTile(
+                    title: Text('Evening'),
+                    value: timesToTake.contains('Evening'),
+                    onChanged: (value) {
+                      setState(() {
+                        if (value!) {
+                          timesToTake.add('Evening');
+                        } else {
+                          timesToTake.remove('Evening');
+                        }
+                      });
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+              child: const Text(
+                'Save',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
 // Delete function
   Future<void> _showDeleteConfirmationDialog(
@@ -1031,26 +1058,6 @@ class SelectedMedicationsList extends StatelessWidget {
             Navigator.of(context).pop(), // Close the dialog
           },
         );
-
-        // AlertDialog(
-        //   title: Text('Delete Medicine'),
-        //   content: Text('Are you sure you want to delete ${medicine.name}?'),
-        //   actions: <Widget>[
-        //     TextButton(
-        //       onPressed: () {
-        //         Navigator.of(context).pop(); // Close the dialog
-        //       },
-        //       child: Text('Cancel'),
-        //     ),
-        //     TextButton(
-        //       onPressed: () {
-        //         onDelete(medicine); // Call the onDelete function
-        //         Navigator.of(context).pop(); // Close the dialog
-        //       },
-        //       child: Text('Delete'),
-        //     ),
-        //   ],
-        // );
       },
     );
   }

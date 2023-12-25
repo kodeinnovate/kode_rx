@@ -16,8 +16,11 @@ import 'package:http/http.dart' as http;
 import 'app_colors.dart';
 import 'device_helper.dart';
 
+var username = ''.obs;
+
 class HomeScreen extends StatelessWidget {
   static HomeScreen get instance => Get.find();
+
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +66,7 @@ class HomeScreen extends StatelessWidget {
                     color: AppColors.customBackground,
                   ),
                   child: Text(
-                    'Hello, Dr. ${userController.currentLoggedInUserName.value}',
+                    'Hello, Dr. ${username.value}',
                     style: TextStyle(color: Colors.white, fontSize: 24),
                   ),
                 ),
@@ -135,6 +138,7 @@ class HomeScreen extends StatelessWidget {
                                 }
                                 userController.currentLoggedInUserName.value =
                                     userData.fullname;
+                                    username.value = userData.fullname;
                                 return Row(
                                   children: [
                                     userData.profileImage != ''
