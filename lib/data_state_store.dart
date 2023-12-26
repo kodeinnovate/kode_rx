@@ -18,14 +18,19 @@ class UserController extends GetxController {
   final RxString patientPastHistory = RxString('');
   final RxString userId = RxString('');
   final RxString formatedDate = RxString('');
+  // Images //
   final RxString userProfileUpdateUrl = RxString('');
   final RxString userSignitureUpdateUrl = RxString('');
   final RxString signatureStore = RxString('');
+  // // /// ////////////////////////////////////////
   // From the database
   final Rx<Uint8List?> signatureStoreInBytes = Rx<Uint8List?>(null);
   final RxString currentLoggedInUserName = RxString('');
   // Storing Medicine Mg Array
   final RxList<String> mgList = <String>[].obs; // Reactive
+  //Devices SignatureID
+  final RxString signatureId =  RxString('');
+
 }
 
 final RxString loginPhoneNumber = RxString('');

@@ -154,7 +154,7 @@ class PdfController extends GetxController {
     final headers = ['Medicine', 'Routine', 'Before or after meal'];
     final data = selectedMedicines?.map((medicine) {
       return [
-        '${medicine.name} ${medicine.mg == null ? '' : ' - ${medicine.mg}'}',
+        '${medicine.name} ${medicine.mg == null || medicine.mg == '' ? '' : ' - ${medicine.mg}'}',
         medicine.timesToTake.isEmpty ? 'N/A' : medicine.timesToTake.join(', '),
         medicine.beforeMeal ? 'Before Meal' : 'After Meal',
       ];

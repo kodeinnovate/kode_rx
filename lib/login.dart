@@ -6,6 +6,7 @@ import 'package:kode_rx/data_state_store.dart';
 import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/otp_screen.dart';
 import 'package:kode_rx/register.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 import 'app_colors.dart';
 
@@ -14,8 +15,14 @@ class LoginScreen extends StatelessWidget {
 
   static LoginScreen get instance => Get.find();
   UserController userController = Get.put(UserController());
-
   final _userRepo = Get.put(UserRepo());
+
+  void signatureId() async {
+    var signatureId = await SmsAutoFill().getAppSignature;
+    userController.signatureId.value = signatureId;
+    print('SignatureId store: ${userController.signatureId.value}');
+  }
+
   final countryCode = '+91';
 
   final phoneNumberController = TextEditingController();
@@ -119,20 +126,18 @@ class LoginScreen extends StatelessWidget {
                               ),
                               child: TextField(
                                 maxLength: 10,
-                                
                                 controller: phoneNumberController,
                                 keyboardType: TextInputType.number,
                                 onSubmitted: (String value) async {
                                   _handlePhoneNumberCheck();
                                 },
                                 decoration: const InputDecoration(
-                                  labelStyle: TextStyle(
-                                      color: AppColors.customBackground),
-                                  labelText: 'Enter your phone number',
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.all(10.0),
-                                  counterText: ''
-                                ),
+                                    labelStyle: TextStyle(
+                                        color: AppColors.customBackground),
+                                    labelText: 'Enter your phone number',
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.all(10.0),
+                                    counterText: ''),
                               ),
                             ),
                           ],
@@ -146,7 +151,9 @@ class LoginScreen extends StatelessWidget {
                     child: Container(
                       color: Colors.white.withOpacity(0.6),
                       child: const Center(
-                        child: CircularProgressIndicator(color: AppColors.customBackground,),
+                        child: CircularProgressIndicator(
+                          color: AppColors.customBackground,
+                        ),
                       ),
                     ),
                   ),
@@ -159,18 +166,17 @@ class LoginScreen extends StatelessWidget {
   }
 
   Future<void> _handlePhoneNumberCheck() async {
+    signatureId();
     if (phoneNumberController.text.toString().isNotEmpty) {
       isCheckingPhoneNumber = true;
       // Trigger a rebuild
       Get.forceAppUpdate();
 
-      String enteredPhoneNumber =
-          phoneNumberController.text.toString().trim();
+      String enteredPhoneNumber = phoneNumberController.text.toString().trim();
       UserModel? user =
           await _userRepo.getUserDetails('$countryCode$enteredPhoneNumber');
 
-      if (user != null &&
-          user.phoneNo == '$countryCode$enteredPhoneNumber') {
+      if (user != null && user.phoneNo == '$countryCode$enteredPhoneNumber') {
         loginPhoneNumber.value = '$countryCode$enteredPhoneNumber';
         AuthOperation.signIn;
         AuthenticationRepo.instance
