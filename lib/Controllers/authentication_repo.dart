@@ -49,14 +49,18 @@ class AuthenticationRepo extends GetxController {
 //Phone Number Authentication function !Important
   Future<void> phoneAuthentication(String number) async {
     try {
-      // firebaseUser.value == null ? Get.offAll(() => Signup()) : Get.offAll(() => HomeScreen());
       await _auth.verifyPhoneNumber(
           phoneNumber: number,
           verificationCompleted: (credential) async {
+            print('credential.smsCode: $credential.smsCode');
+            print('credential $credential');
+            print('verificationCompleted');
             await _auth.signInWithCredential(credential);
+            print('verificationCompleted End');
           },
           codeSent: (verificationId, resendToken) {
             this.verificationId.value = verificationId;
+            Get.snackbar('OTP Sent', "We Have Send OTP On $number");
           },
           codeAutoRetrievalTimeout: (verificationId) {
             this.verificationId.value = verificationId;
@@ -70,6 +74,7 @@ class AuthenticationRepo extends GetxController {
               Get.snackbar('Error', 'Something went wrong. Try again.');
             }
           },
+          
           timeout: const Duration(seconds: 120));
     } catch (e) {
       print('Error during phone authentication: $e');

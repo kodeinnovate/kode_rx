@@ -892,17 +892,6 @@ class SelectedMedicationsList extends StatelessWidget {
           actions: <Widget>[
             ElevatedButton(
               onPressed: () {
-                // Perform the edit operation and update the medicine
-                // Medicine editedMedicine = Medicine(medicine.name, medicine.id,
-                //     medicine.details, medicine.mgList);
-                // editedMedicine.timesToTake = editedTimesToTake;
-                // editedMedicine.beforeMeal = editedBeforeMeal;
-                // editedMedicine.mg = editedMg;
-                // // Call the onEdit function with the edited medicine
-                // onEdit(editedMedicine);
-                // // _showTimesToTakeDialog(context, editedTimesToTake);
-                // Navigator.of(context).pop(); // Close the dialog
-                // saveEdited(_editingMedicine);
                 Navigator.of(context).pop();
               },
               style:

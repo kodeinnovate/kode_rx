@@ -11,7 +11,6 @@ class UserModel {
   final String profileImage;
   final String specialist;
   final String signature;
-  // final List<MedicineModel> medicines;
 
   const UserModel(
       {this.id,

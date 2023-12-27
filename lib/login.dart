@@ -10,8 +10,9 @@ import 'package:sms_autofill/sms_autofill.dart';
 
 import 'app_colors.dart';
 
+// ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {
-  LoginScreen({Key? key});
+  LoginScreen({super.key});
 
   static LoginScreen get instance => Get.find();
   UserController userController = Get.put(UserController());
@@ -120,7 +121,7 @@ class LoginScreen extends StatelessWidget {
                                   Radius.circular(15.0),
                                 ),
                                 border: Border.all(
-                                  color: Colors.black38, // Border color
+                                  color: Colors.grey.shade500, // Border color
                                   width: 1.0, // Border width
                                 ),
                               ),
@@ -129,9 +130,10 @@ class LoginScreen extends StatelessWidget {
                                 controller: phoneNumberController,
                                 keyboardType: TextInputType.number,
                                 onSubmitted: (String value) async {
-                                  _handlePhoneNumberCheck();
+                                  handlePhoneNumberCheck();
                                 },
                                 decoration: const InputDecoration(
+                                  prefixText: '+91',
                                     labelStyle: TextStyle(
                                         color: AppColors.customBackground),
                                     labelText: 'Enter your phone number',
@@ -165,7 +167,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _handlePhoneNumberCheck() async {
+  Future<void> handlePhoneNumberCheck() async {
     signatureId();
     if (phoneNumberController.text.toString().isNotEmpty) {
       isCheckingPhoneNumber = true;

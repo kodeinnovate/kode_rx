@@ -25,14 +25,11 @@ void main() async {
       options: DefaultFirebaseOptions.currentPlatform,
     );
     Get.put(AuthenticationRepo());
-    await FirebaseAppCheck.instance.activate(androidProvider: AndroidProvider.playIntegrity);
-    // await FirebaseAppCheck.instance
-    //     .activate(androidProvider: AndroidProvider.playIntegrity);
+    // await FirebaseAppCheck.instance.activate(androidProvider: AndroidProvider.playIntegrity);
   } catch (e) {
     print("Error initializing Firebase: $e");
   }
   runApp(const MyApp());
-  await SmsAutoFill().listenForCode();
   Get.put(Signup());
   Get.put(HomeScreen());
   Get.put(SplashScreen());
@@ -46,7 +43,7 @@ class MyApp extends StatelessWidget {
 
     return GetMaterialApp(
 
-      theme: ThemeData(primaryColor: AppColors.customBackground,backgroundColor: Colors.white),
+      theme: ThemeData(primaryColor: AppColors.customBackground,backgroundColor: Colors.white,),
       initialRoute: FirebaseAuth.instance.currentUser == null ? '/login' : '/home',
 
       routes: {

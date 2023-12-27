@@ -272,7 +272,7 @@ class Signup extends StatelessWidget {
     await userRepository.createUser(user);
   }
 
-  void otpOnSubmit(String otp, AuthOperation authOperation) async {
+  Future<void> otpOnSubmit(String otp, AuthOperation authOperation) async {
        
     final user = UserModel(
         fullname: userController.userName.value,

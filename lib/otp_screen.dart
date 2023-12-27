@@ -8,16 +8,36 @@ import 'package:kode_rx/device_helper.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 import 'register.dart';
 
-class OTPScreen extends StatelessWidget {
+class OTPScreen extends StatefulWidget {
   static OTPScreen get instance => Get.find();
+  final signupInitialize = Get.put(Signup());
   final AuthOperation authOperation;
 
   OTPScreen(this.authOperation, {super.key});
+
+  @override
+  State<OTPScreen> createState() => _OTPScreenState();
+}
+
+class _OTPScreenState extends State<OTPScreen> {
   UserController userController = Get.put(UserController());
   var otp;
- 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   listenOtp();
+  // }
+
+  // void listenOtp() async {
+  //   await SmsAutoFill().listenForCode();
+  //   print('listenOtp running');
+  // }
+
   @override
   Widget build(BuildContext context) {
+    final signitureId = userController.signatureId.value;
+    print(signitureId);
+    print(loginPhoneNumber);
     return Scaffold(
       appBar: DeviceHelper.deviceAppBar(title: 'OTP Verification'),
       body: SingleChildScrollView(
@@ -81,9 +101,27 @@ class OTPScreen extends StatelessWidget {
                 onSubmit: (code) {
                   otp = code;
                   Signup.instance
-                      .otpOnSubmit(otp ?? SmsAutoFill().code, authOperation);
+                      .otpOnSubmit(otp, widget.authOperation);
                 },
               ),
+              // PinFieldAutoFill(
+              //     currentCode: otp, // prefill with a code
+              //     onCodeSubmitted: (value) async => {
+              //           await Signup.instance
+              //               .otpOnSubmit(value, widget.authOperation)
+              //         }, //code submitted callback
+              //     onCodeChanged: (code) async => {
+              //           otp = code.toString(),
+              //           if (code!.length == 6)
+              //             {
+              //               FocusScope.of(context).requestFocus(FocusNode()),
+              //           // await Future.delayed(const Duration(seconds: 5)),
+              //               await Signup.instance
+              //                   .otpOnSubmit(code, widget.authOperation),
+              //             }
+              //         }, //code changed callback
+              //     codeLength: 6 //code length, default 6
+              //     ),
               const SizedBox(
                 height: 40.0,
               ),
@@ -91,7 +129,11 @@ class OTPScreen extends StatelessWidget {
                   buttonText: 'Submit',
                   onTap: () => {
                         if (otp != null)
-                          {Signup.instance.otpOnSubmit(otp ?? SmsAutoFill().code, authOperation)}
+                          {
+                            print(otp),
+                            Signup.instance
+                                .otpOnSubmit(otp, widget.authOperation)
+                          }
                         else
                           {
                             Get.snackbar('Empty Field',
