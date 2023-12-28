@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:kode_rx/Controllers/data_fetch_controller.dart';
 import 'package:kode_rx/Pages/rxhistory_pdf_preview.dart';
 import 'package:kode_rx/app_colors.dart';
@@ -31,9 +32,20 @@ class _RxHistoryState extends State<RxHistory> {
 
   final controller = Get.put(DataController());
 
+  DateTime parseDate(String dateStr) {
+    try {
+      return DateFormat.yMMMMd().add_jm().parse(dateStr);
+    } catch (e) {
+      print('Error parsing date: $e');
+      // Handle the error, possibly return a default date or rethrow the exception.
+      throw Exception('Error parsing date');
+    }
+  }
+
   Future<void> loadPatientData() async {
     try {
       List<PatientModel> patients = await controller.getUserPatientList();
+      patients.sort((a, b) => parseDate(b.date).compareTo(parseDate(a.date)));
       setState(() {
         patientList = patients;
         _originalPatientList = patients; // Store the original patient list
@@ -50,45 +62,24 @@ class _RxHistoryState extends State<RxHistory> {
     }
   }
 
-  // void filterSearchResults(String query) {
-  //   setState(() {
-  //     if (query.isNotEmpty) {
-  //       //Search Function
-  //       patientList = patientList
-  //           .where((patient) =>
-  //               patient.patientName
-  //                   .toLowerCase()
-  //                   .contains(query.toLowerCase()) ||
-  //               patient.phoneNumber.contains(query))
-  //           .toList();
-  //     } else {
-  //       // If the query is empty, display the original patient list
-  //       patientList = [..._originalPatientList];
-  //     }
-  //   });
-  // }
-
   void filterSearchResults(String query) {
-  setState(() {
-    query = query.trim();
-    if (query.isNotEmpty) {
-      // Search Function
-      patientList = _originalPatientList
-          .where((patient) =>
-              patient.patientName
-                  .toLowerCase()
-                  .contains(query.toLowerCase()) ||
-              patient.phoneNumber.contains(query))
-          .toList();
-    } else {
-      // If the query is empty, display the original patient list
-      patientList = [..._originalPatientList];
-    }
-  });
-}
-
-
-
+    setState(() {
+      query = query.trim();
+      if (query.isNotEmpty) {
+        // Search Function
+        patientList = _originalPatientList
+            .where((patient) =>
+                patient.patientName
+                    .toLowerCase()
+                    .contains(query.toLowerCase()) ||
+                patient.phoneNumber.contains(query))
+            .toList();
+      } else {
+        // If the query is empty, display the original patient list
+        patientList = [..._originalPatientList];
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,74 +111,84 @@ class _RxHistoryState extends State<RxHistory> {
                           child: TextField(
                             style: const TextStyle(fontSize: 20),
                             decoration: InputDecoration(
-                                enabledBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                focusedBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: AppColors.customBackground),
-                                ),
-                                fillColor: Colors.grey.shade200,
-                                filled: true,
-                                hintText: 'Search',
-                                hintStyle: TextStyle(color: Colors.grey[500])),
+                              suffixIcon: Icon(
+                                Icons.search,
+                                color: Colors.grey.shade500,
+                              ),
+                              hintText: 'Search',
+                              filled: true,
+                              hintStyle: TextStyle(color: Colors.grey.shade500),
+                              fillColor: Color.fromARGB(255, 238, 238, 238),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Colors.grey.shade500, width: 2.0),
+                                borderRadius: BorderRadius.circular(7.7),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: AppColors.customBackground,
+                                    width: 2.0),
+                                borderRadius: BorderRadius.circular(7.7),
+                              ),
+                            ),
                             onChanged: filterSearchResults,
                           ),
                         ),
                         const SizedBox(height: 20),
-                      patientList.isEmpty ? const Center(child: Text('No past History Found', style: TextStyle(fontSize: 16),),)  :    Expanded(
-                          child: ListView.separated(
-                            itemBuilder: (context, index) {
-                              PatientModel patient = patientList[index];
-
-                              return GestureDetector(
-                                onTap: () => patient.pdfUrl != null
-                                    ? _launchUrl(patient.pdfUrl!)
-                                    : Get.snackbar('No Pdf Available',
-                                        'No pdf available on old patient data'),
-                                child: Center(
-                                  child: Card(
-                                    surfaceTintColor: Colors.white60,
-                                    // color: Colors.white,
-                                    elevation: 10,
-                                    // shadowColor: Colors.grey,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: ListTile(
-                                        title: Text(
-                                          patient.patientName,
-                                          style: const TextStyle(
-                                              fontSize: 22,
-                                              color:
-                                                  AppColors.customBackground),
-                                        ),
-                                        subtitle: Text(
-                                          'Date: ${patient.date}',
-                                          style: TextStyle(fontSize: 18),
-                                        ),
-                                        // trailing: const CircleAvatar(
-                                        //   backgroundImage: AssetImage(
-                                        //     'assets/images/ic_rx_prescription_icon.png', // Replace with the actual path to your image
-                                        //   ),
-                                        //   radius: 30,
-                                        // ),
-                                        trailing: const Image(
-                                            image: AssetImage(
-                                                'assets/images/ic_rx_prescription_icon.png')),
-                                      ),
-                                    ),
-                                  ),
+                        patientList.isEmpty
+                            ? const Center(
+                                child: Text(
+                                  'No past History Found',
+                                  style: TextStyle(fontSize: 16),
                                 ),
-                              );
-                            },
-                            itemCount: patientList.length,
-                            separatorBuilder: (context, index) {
-                              return const SizedBox(
-                                height: 5.0,
-                              );
-                            },
-                          ),
-                        ),
+                              )
+                            : Expanded(
+                                child: ListView.separated(
+                                  itemBuilder: (context, index) {
+                                    PatientModel patient = patientList[index];
+
+                                    return GestureDetector(
+                                      onTap: () => patient.pdfUrl != null
+                                          ? _launchUrl(patient.pdfUrl!)
+                                          : Get.snackbar('No Pdf Available',
+                                              'No pdf available on old patient data'),
+                                      child: Center(
+                                        child: Card(
+                                          surfaceTintColor: Colors.white60,
+                                          // color: Colors.white,
+                                          elevation: 10,
+                                          // shadowColor: Colors.grey,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: ListTile(
+                                              title: Text(
+                                                patient.patientName,
+                                                style: const TextStyle(
+                                                    fontSize: 22,
+                                                    color: AppColors
+                                                        .customBackground),
+                                              ),
+                                              subtitle: Text(
+                                                'Date: ${patient.date}',
+                                                style: TextStyle(fontSize: 18),
+                                              ),
+                                              trailing: const Image(
+                                                  image: AssetImage(
+                                                      'assets/images/ic_rx_prescription_icon.png')),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  itemCount: patientList.length,
+                                  separatorBuilder: (context, index) {
+                                    return const SizedBox(
+                                      height: 5.0,
+                                    );
+                                  },
+                                ),
+                              ),
                       ],
                     ),
                   ),
@@ -213,7 +214,5 @@ class _RxHistoryState extends State<RxHistory> {
     if (!await launchUrl(_url)) {
       throw Exception('Could not launch $_url');
     }
-
-// You can also directly ask permission about its status.
   }
 }

@@ -21,7 +21,6 @@ var username = ''.obs;
 class HomeScreen extends StatelessWidget {
   static HomeScreen get instance => Get.find();
 
-
   @override
   Widget build(BuildContext context) {
     Future<bool> showExitPopup() async {
@@ -32,8 +31,7 @@ class HomeScreen extends StatelessWidget {
                     onLeftButtonPressed: () => Navigator.of(context).pop(false),
                     onRightButtonPressed: () => Get.back(result: true),
                     dialogMessage: 'Do you want to exit the app?',
-                  )
-              ) ??
+                  )) ??
           false;
     }
 
@@ -46,6 +44,10 @@ class HomeScreen extends StatelessWidget {
       userController.signatureStoreInBytes.value = response.bodyBytes;
       return response.bodyBytes;
     }
+
+    // Future<void> loadUser() async {
+    //   print(await controller.getUserData());
+    // }
 
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return WillPopScope(
@@ -111,18 +113,31 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(20, 40, 0, 0),
+                            child: IconButton(
+                              icon: Icon(Icons.menu,
+                                  color: AppColors.customBackground),
+                              onPressed: () {
+                                _scaffoldKey.currentState?.openDrawer();
+                              },
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(12, 40, 20, 0),
+                            child: Text("KodeRx",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 26,
+                                    color: AppColors.customBackground)),
+                          ),
+                        ],
+                      ),
                       Padding(
-                          padding: EdgeInsets.fromLTRB(20, 40, 0, 0),
-                          child: IconButton(
-                            icon: Icon(Icons.menu,
-                                color: AppColors.customBackground),
-                            onPressed: () {
-                              _scaffoldKey.currentState?.openDrawer();
-                            },
-                          )),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(
-                            20, 20, 0, 0), // Updated padding
+                        padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
                         child: FutureBuilder(
                           future: controller.getUserData(),
                           builder: (context, snapshot) {
@@ -138,7 +153,7 @@ class HomeScreen extends StatelessWidget {
                                 }
                                 userController.currentLoggedInUserName.value =
                                     userData.fullname;
-                                    username.value = userData.fullname;
+                                username.value = userData.fullname;
                                 return Row(
                                   children: [
                                     userData.profileImage != ''
@@ -186,21 +201,22 @@ class HomeScreen extends StatelessWidget {
                               }
                             } else {
                               return const Center(
-                                child: CircularProgressIndicator(
-                                    color: AppColors.customBackground),
+                                child: Text('SomeThing went wrong'),
                               );
                             }
                             // return Container();
                           },
                         ),
                       ),
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.fromLTRB(28, 28, 0, 0),
                         child: Text("KodeRx",
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 32)),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 32,
+                                color: AppColors.customBackground)),
                       ),
-                      SizedBox(height: 150.0),
+                      const SizedBox(height: 150.0),
                       Container(
                         width: double.infinity, // Full width
                         height: 500.0,

@@ -9,6 +9,7 @@ class PatientModel {
   final String patientGender;
   final String date;
   final String? pdfUrl;
+  final String? status;
 
   const PatientModel(
       {this.id,
@@ -17,7 +18,7 @@ class PatientModel {
       required this.pastHistory,
       required this.patientAge,
       required this.patientGender,
-      required this.date, this.pdfUrl});
+      required this.date, this.pdfUrl, this.status});
 
   toJson() {
     return {
@@ -27,7 +28,8 @@ class PatientModel {
       'PatientAge': patientAge,
       'PatientGender': patientGender,
       "Date": date,
-      'PdfUrl': pdfUrl
+      'PdfUrl': pdfUrl,
+      'Status': status
     };
   }
 
@@ -42,7 +44,7 @@ class PatientModel {
       pastHistory: data['PatientHistory'],
       patientAge: data['PatientAge'],
       patientGender: data['PatientGender'],
-      date: data['Date'], pdfUrl: data['PdfUrl']
+      date: data['Date'], pdfUrl: data['PdfUrl'], status: data['Status']
     );
   }
 }

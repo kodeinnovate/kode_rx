@@ -82,10 +82,6 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
         // Set displayedMedicines initially to show all medicines
         displayedMedicines = GlobalMedicineList.medicines;
         print(userController.patientName.value);
-        //   DateTime currentDate = DateTime.now();
-        //  String formattedDate = DateFormat.yMMMMd().add_jm().format(currentDate);
-        //  userController.formatedDate.value = formattedDate;
-        //  print('Formatted date $formattedDate');
       });
     });
   }
@@ -125,7 +121,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                 ),
               ),
               ExpansionTile(
-                title: Text(
+                title: const Text(
                   'Selected Medicines',
                   style: TextStyle(
                     fontSize: 20,
@@ -235,9 +231,8 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    // Text('Select times to take:'),
                     CheckboxListTile(
-                      title: Text(
+                      title: const Text(
                         'Morning',
                         style: TextStyle(fontSize: 18),
                       ),
@@ -255,7 +250,8 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                       },
                     ),
                     CheckboxListTile(
-                      title: Text('Afternoon', style: TextStyle(fontSize: 18)),
+                      title: const Text('Afternoon',
+                          style: TextStyle(fontSize: 18)),
                       value: isAfternoonSelected,
                       activeColor: AppColors.customBackground,
                       onChanged: (value) {
@@ -270,7 +266,8 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                       },
                     ),
                     CheckboxListTile(
-                      title: Text('Evening', style: TextStyle(fontSize: 18)),
+                      title:
+                          const Text('Evening', style: TextStyle(fontSize: 18)),
                       value: isEveningSelected,
                       activeColor: AppColors.customBackground,
                       onChanged: (value) {
@@ -298,7 +295,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                   backgroundColor: Colors.red,
                   shadowColor: Colors.grey,
                   elevation: 2),
-              child: Text(
+              child: const Text(
                 'Cancel',
                 style: TextStyle(color: Colors.white),
               ),
@@ -314,7 +311,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                   backgroundColor: AppColors.customBackground,
                   shadowColor: Colors.grey,
                   elevation: 2),
-              child: Text(
+              child: const Text(
                 'Next',
                 style: TextStyle(color: Colors.white),
               ),
@@ -342,13 +339,10 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
 
 // Usage in your showSingleChoiceListDialog function
   void showSingleChoiceListDialog(Medicine medicine) {
-    print(medicine.name);
     final list = medicine.mgList;
     List<String> options = list.map((dynamic item) => item.toString()).toList();
-    String? selectedValue;
     if (options.isEmpty) {
-      // Navigator.of(context).pop();
-      showMedicineTimeDialog(medicine!);
+      showMedicineTimeDialog(medicine);
     } else {
       showDialog(
         context: context,
@@ -357,15 +351,10 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
             medicineName: medicine.name,
             options: options,
             onSelected: (value) {
-              selectedValue = value;
               medicine.mg = value;
             },
             onOkPressed: () {
-              // Call the showMedicineTimeDialog function with the selected value
-              // if (selectedValue != null) {
-              showMedicineTimeDialog(medicine!);
-              print(medicine.mg);
-              // }
+              showMedicineTimeDialog(medicine);
             },
           );
         },
@@ -576,6 +565,14 @@ class _SingleChoiceDialogState extends State<SingleChoiceDialog> {
       ),
       actions: <Widget>[
         ElevatedButton(
+          onPressed: () => Navigator.of(context).pop(),
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+          child: const Text(
+            'Cancel',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+        ElevatedButton(
           style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.customBackground),
           onPressed: () {
@@ -588,7 +585,7 @@ class _SingleChoiceDialogState extends State<SingleChoiceDialog> {
             }
           },
           child: const Text(
-            'OK',
+            'Next',
             style: TextStyle(color: Colors.white),
           ),
         ),
@@ -614,17 +611,16 @@ class SearchField extends StatelessWidget {
           child: Column(
             children: [
               TextField(
-                style: TextStyle(fontSize: 18),
-                // decoration: const InputDecoration(labelText: 'Search Medicine', contentPadding: EdgeInsets.symmetric(vertical: 25.0),),
+                style: const TextStyle(fontSize: 18),
                 decoration: InputDecoration(
-                    // icon: Icon(Icons.search),
+                   suffixIcon: Icon(Icons.search, color: Colors.grey.shade500,),
                     hintText: 'Search Medicine',
                     filled: true,
                     hintStyle: TextStyle(color: Colors.grey.shade500),
                     fillColor: Color.fromARGB(255, 238, 238, 238),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                          color: AppColors.customBackground, width: 2.0),
+                      borderSide:  BorderSide(
+                          color: Colors.grey.shade500, width: 2.0),
                       borderRadius: BorderRadius.circular(7.7),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -632,8 +628,9 @@ class SearchField extends StatelessWidget {
                           color: AppColors.customBackground, width: 2.0),
                       borderRadius: BorderRadius.circular(7.7),
                     ),
-                    focusColor: Colors.red),
+              ),
                 onChanged: (query) {
+                  query = query.trim();
                   final filteredMedicines = GlobalMedicineList.medicines
                       .where((medicine) => medicine.name
                           .toLowerCase()
@@ -642,7 +639,6 @@ class SearchField extends StatelessWidget {
                   onSearch(filteredMedicines);
                 },
               ),
-              //  const SizedBox(height: 20.0),
             ],
           ),
         ),
@@ -692,6 +688,8 @@ class MedicationListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    displayedMedicines
+        .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
     return Obx(
       () => UserRepo.instance.medicineLoading.value
           ? const Center(
@@ -784,11 +782,11 @@ void showDuplicateMedicineDialog(BuildContext context) {
 }
 
 //Selected medicine tile
+// ignore: must_be_immutable
 class SelectedMedicationsList extends StatelessWidget {
   final List<Medicine> selectedMedicines;
   final Function(Medicine) onDelete;
   final Function(Medicine) onEdit;
-  var dataMg = ''.obs;
   SelectedMedicationsList(
       {super.key,
       required this.selectedMedicines,
@@ -813,6 +811,7 @@ class SelectedMedicationsList extends StatelessWidget {
     onEdit(editedMedicine);
   }
 
+//Maid Edit Dialogue
   void _showEditDialog(BuildContext context, Medicine medicine) {
     //!Important
     _editingMedicine = medicine;
@@ -820,9 +819,15 @@ class SelectedMedicationsList extends StatelessWidget {
     editedTimesToTake = List.from(medicine.timesToTake);
     editedBeforeMeal = medicine.beforeMeal;
     editedMg = medicine.mg;
-    ///////////////////////////////////////
+    if (options!.isNotEmpty) {
+      _showMgListDialog(context, editedMg, options!, editedTimesToTake!);
+    } else {
+      _showTimesToTakeDialog(context, editedTimesToTake!);
+    }
+  }
 
-//After Meal, Before Meal Dialogue
+// Before MealAfterMeal Edit dialogue
+  void _beforeAfterMealDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {
@@ -831,7 +836,7 @@ class SelectedMedicationsList extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                medicine.name,
+                _editingMedicine!.name,
                 style: const TextStyle(
                   color: AppColors.customBackground,
                   fontSize: 20.0,
@@ -884,7 +889,6 @@ class SelectedMedicationsList extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // Add form fields for editing other times if needed
                 ],
               );
             },
@@ -904,17 +908,12 @@ class SelectedMedicationsList extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                if (options!.isNotEmpty) {
-                  _showMgListDialog(
-                      context, editedMg, options!, editedTimesToTake!);
-                } else {
-                  _showTimesToTakeDialog(context, editedTimesToTake!);
-                }
+                saveEdited(_editingMedicine);
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.customBackground),
               child: const Text(
-                'Next',
+                'Save',
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -924,8 +923,7 @@ class SelectedMedicationsList extends StatelessWidget {
     );
   }
 
-  // Perform the edit operation and update the medicine
-  // Perform the edit operation and update the medicine
+  // Edit Mg Dialog
   void _showMgListDialog(BuildContext context, String? currentMgSelection,
       List<String> mgOptions, List<String> editedTimesToTake) {
     showDialog(
@@ -961,12 +959,8 @@ class SelectedMedicationsList extends StatelessWidget {
                           groupValue: currentMgSelection,
                           onChanged: (value) {
                             setState(() {
-                              print(currentMgSelection);
-                              print(value);
                               currentMgSelection = value;
                               editedMg = value!;
-                              // currentMgSelection = value as String;
-                              print(currentMgSelection);
                             });
                           },
                         ),
@@ -1039,7 +1033,7 @@ class SelectedMedicationsList extends StatelessWidget {
                   // Add form fields for editing times to take using checkboxes
                   CheckboxListTile(
                     activeColor: AppColors.customBackground,
-                    title: Text(
+                    title: const Text(
                       'Morning',
                       style: TextStyle(fontSize: 18),
                     ),
@@ -1056,7 +1050,8 @@ class SelectedMedicationsList extends StatelessWidget {
                   ),
                   CheckboxListTile(
                     activeColor: AppColors.customBackground,
-                    title: Text('Afternoon', style: TextStyle(fontSize: 18)),
+                    title:
+                        const Text('Afternoon', style: TextStyle(fontSize: 18)),
                     value: timesToTake.contains('Afternoon'),
                     onChanged: (value) {
                       setState(() {
@@ -1070,7 +1065,8 @@ class SelectedMedicationsList extends StatelessWidget {
                   ),
                   CheckboxListTile(
                     activeColor: AppColors.customBackground,
-                    title: Text('Evening', style: TextStyle(fontSize: 18)),
+                    title:
+                        const Text('Evening', style: TextStyle(fontSize: 18)),
                     value: timesToTake.contains('Evening'),
                     onChanged: (value) {
                       setState(() {
@@ -1102,12 +1098,13 @@ class SelectedMedicationsList extends StatelessWidget {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                saveEdited(_editingMedicine);
+                _beforeAfterMealDialog(context);
+                // saveEdited(_editingMedicine);
               },
               style: TextButton.styleFrom(
                   backgroundColor: AppColors.customBackground),
               child: const Text(
-                'Save',
+                'Next',
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -1141,10 +1138,6 @@ class SelectedMedicationsList extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          //  const Text(
-          //     'Selected Medicines:',
-          //     style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-          //   ),
           for (var medicine in selectedMedicines)
             Padding(
               padding:
@@ -1197,7 +1190,4 @@ class SelectedMedicationsList extends StatelessWidget {
       ),
     );
   }
-  // void printStatement() {
-  //   print(Medicine);
-  // }
 }
