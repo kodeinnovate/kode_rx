@@ -46,6 +46,15 @@ class _RxHistoryState extends State<RxHistory> {
     try {
       List<PatientModel> patients = await controller.getUserPatientList();
       patients.sort((a, b) => parseDate(b.date).compareTo(parseDate(a.date)));
+      patients = patients.where((patients) {
+        if (patients.status == '0') {
+          return false;
+        } else if (patients.status == '1') {
+          return true;
+        } else {
+          return true;
+        }
+      }).toList();
       setState(() {
         patientList = patients;
         _originalPatientList = patients; // Store the original patient list

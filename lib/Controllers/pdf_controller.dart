@@ -82,7 +82,8 @@ class PdfController extends GetxController {
         pastHistory: userController.patientPastHistory.value,
         phoneNumber: userController.patientPhoneNo.value,
         date: formattedDate,
-        pdfUrl: pdfUrl);
+        pdfUrl: pdfUrl,
+        status: '1');
     await userRepository.addPatientDetails(
         userController.userId.value, patientData);
   }

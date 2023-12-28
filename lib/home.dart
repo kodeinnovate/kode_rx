@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import 'app_colors.dart';
 import 'device_helper.dart';
 
 var username = ''.obs;
+var userStatus = ''.obs;
 
 class HomeScreen extends StatelessWidget {
   static HomeScreen get instance => Get.find();
@@ -68,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                     color: AppColors.customBackground,
                   ),
                   child: Text(
-                    'Hello, Dr. ${username.value}',
+                    'Hello, Dr. ${userController.currentLoggedInUserName.value}',
                     style: TextStyle(color: Colors.white, fontSize: 24),
                   ),
                 ),
@@ -141,19 +143,20 @@ class HomeScreen extends StatelessWidget {
                         child: FutureBuilder(
                           future: controller.getUserData(),
                           builder: (context, snapshot) {
-                            print('working');
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
                               if (snapshot.hasData) {
                                 UserModel userData = snapshot.data as UserModel;
+                                userStatus.value = userData.status!;
+                                userController.currentLoggedInUserName.value =
+                                    userData.fullname;
+                                username.value = userData.fullname;
+                                userStatus.value = userData.status!;
                                 if (userData.signature != '') {
                                   userController.signatureStore.value =
                                       userData.signature;
                                   getImageBytes(userData.signature);
                                 }
-                                userController.currentLoggedInUserName.value =
-                                    userData.fullname;
-                                username.value = userData.fullname;
                                 return Row(
                                   children: [
                                     userData.profileImage != ''
@@ -201,20 +204,14 @@ class HomeScreen extends StatelessWidget {
                               }
                             } else {
                               return const Center(
-                                child: Text('SomeThing went wrong'),
+                                child: CircularProgressIndicator(
+                                    color: AppColors.customBackground,
+                                  ),
                               );
                             }
                             // return Container();
                           },
                         ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(28, 28, 0, 0),
-                        child: Text("KodeRx",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 32,
-                                color: AppColors.customBackground)),
                       ),
                       const SizedBox(height: 150.0),
                       Container(
@@ -260,7 +257,7 @@ class SquareModule extends StatelessWidget {
   final String text;
   final bool isTablet;
 
-  SquareModule({
+  const SquareModule({super.key, 
     required this.icon,
     required this.text,
     required this.isTablet,
@@ -270,11 +267,21 @@ class SquareModule extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+      // var snack = Get.snackbar('Subscription Expired', 'Your subcription has expired', colorText: Colors.redAccent);
         if (text == 'Make Rx') {
+          if(userStatus.value == '1') {
           Get.to(() => Patient_info());
+          } else if (userStatus.value == '0') {
+            Get.snackbar('Subscription Expired', '',titleText: Text('Please contact the Administrator', style: TextStyle(fontSize: 24, color: Colors.redAccent),),  colorText: Colors.redAccent, backgroundColor: Colors.white, icon: Icon(Icons.dangerous, color: Colors.redAccent,));
+          } 
         } else if (text == 'Rx History') {
           // Handle navigation to Rx History screen
+          if(userStatus.value == '1') {
           Get.to(() => RxHistory());
+
+          } else if (userStatus.value == '0') {
+            Get.snackbar('Subscription Expired', '',titleText: Text('Please contact the Administrator', style: TextStyle(fontSize: 24, color: Colors.redAccent),),  colorText: Colors.redAccent, backgroundColor: Colors.white, icon: Icon(Icons.dangerous, color: Colors.redAccent,));
+          }
         }
       },
       child: Container(

@@ -29,12 +29,6 @@ class MedicationListScreen extends StatefulWidget {
   _MedicationListScreenState createState() => _MedicationListScreenState();
 }
 
-// class MedicineList {
-//   String? medicine;
-//   String? medicineDescription;
-
-//   MedicineList({this.medicine, this.medicineDescription}); // Constructor
-// }
 final userRepository = Get.put(UserRepo());
 final controller = Get.put(DataController());
 final PDFGenerator pdfGenerator = Get.find<PDFGenerator>();
@@ -81,6 +75,15 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
 
         // Set displayedMedicines initially to show all medicines
         displayedMedicines = GlobalMedicineList.medicines;
+        displayedMedicines = displayedMedicines.where((medicine) {
+          if(medicine.status == '0') {
+           return false;
+          } else if (medicine.status == '1') {
+            return true;
+          } else {
+            return true;
+          }
+        }).toList();
         print(userController.patientName.value);
       });
     });
@@ -652,6 +655,7 @@ class Medicine {
   final String name;
   final String details;
   final List mgList;
+  final String status;
   String? mg;
   List<String> timesToTake = [];
   bool beforeMeal = false;
@@ -661,11 +665,12 @@ class Medicine {
     this.id,
     this.details,
     this.mgList,
+    this.status
   );
 
   factory Medicine.fromMedicineModel(UserMedicineModel medicineModel) {
     return Medicine(medicineModel.medicineName, medicineModel.id!,
-        medicineModel.medicineContent, medicineModel.medicineMgList);
+        medicineModel.medicineContent, medicineModel.medicineMgList, medicineModel.status);
   }
 }
 
@@ -732,7 +737,7 @@ class MedicationListView extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      focusColor: Colors.greenAccent,
+                      focusColor: AppColors.customBackground,
                       onTap: () {
                         // onSelect(displayedMedicines[index]);
                         bool isAlreadySelected = selectedMedicines.any(
@@ -803,7 +808,7 @@ class SelectedMedicationsList extends StatelessWidget {
   ///Main Edit fuction, the data goes here
   void saveEdited(medicine) {
     Medicine editedMedicine =
-        Medicine(medicine.name, medicine.id, medicine.details, medicine.mgList);
+        Medicine(medicine.name, medicine.id, medicine.details, medicine.mgList, medicine.status);
     editedMedicine.timesToTake = editedTimesToTake!;
     editedMedicine.beforeMeal = editedBeforeMeal!;
     editedMedicine.mg = editedMg;

@@ -280,7 +280,7 @@ class Signup extends StatelessWidget {
         phoneNo: userController.userPhoneNumber.value,
         profileImage: userController.userProfileImageUrl.value,
         specialist: userController.userSpecialty.value,
-        signature: '');
+        signature: '', status: '1');
     var isVerified = await AuthenticationRepo.instance.verifyOTP(otp);
     if (isVerified) {
       if (authOperation == AuthOperation.signUp) {
