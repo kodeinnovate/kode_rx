@@ -93,6 +93,7 @@ class HomeScreen extends StatelessWidget {
                     // Update the state of the app.
                     // ...
                     Navigator.pop(context);
+                    userController.isMedicineSelected.value = false;
                     Get.to(() => AddNewMedicine());
                   },
                 ),

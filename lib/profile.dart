@@ -72,7 +72,7 @@ class Profile extends StatelessWidget {
     // Reference to the Firebase Storage bucket
     firebase_storage.Reference reference = firebase_storage
         .FirebaseStorage.instance
-        .ref('profile_images/$fileName.jpg');
+        .ref('signature_images/$fileName.jpg');
 
     // Upload the image to Firebase Storage
     await reference.putData(img);
@@ -332,22 +332,79 @@ class Profile extends StatelessWidget {
                                       rightButtonText: 'Logout',
                                       onLeftButtonPressed: () =>
                                           Navigator.of(context).pop(),
-                                          onRightButtonPressed: logout,
+                                      onRightButtonPressed: logout,
                                     );
                                   },
                                 )
                               },
-                              child: Center(
-                                child: Container(
-                                  decoration: BoxDecoration(),
-                                  child: Text(
-                                    'Logout',
-                                    style: TextStyle(
-                                        color: AppColors.customBackground,
-                                        fontSize: 20),
-                                  ),
+                              child: const Center(
+                                child: Text(
+                                  'Logout',
+                                  style: TextStyle(
+                                      color: AppColors.customBackground,
+                                      fontSize: 20),
                                 ),
                               ),
+                            ),
+                            const SizedBox(
+                              height: 50,
+                            ),
+                            GestureDetector(
+                              onTap: () => {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return CustomDialog(
+                                        dialogTitle: 'Deactivation/Deletion',
+                                        dialogMessage: 'Deactivation:\nDeactivating your account means a temporary suspension. You can reactivate your account at any time by logging in. Your data will be securely stored during this period.\n\nDeletion:\nDeleting your account is a permanent action that cannot be undone. All associated data will permanently deleted',
+                                        leftButtonText: 'Delete',
+                                        rightButtonText: 'Deactivate',
+                                        onRightButtonPressed: () => {
+                                          Navigator.of(context).pop(),
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return CustomDialog(
+                                                  dialogTitle:
+                                                      'Account Deactivation',
+                                                      dialogMessage: 'WARNING: You are about to DEACTIVATE this account',
+                                                  leftButtonText: 'Deactivate',
+                                                  rightButtonText: 'Cancel',
+                                                  onLeftButtonPressed: () =>
+                                                      print(
+                                                          'Account Deactivated'),
+                                                  onRightButtonPressed: () =>
+                                                      Navigator.pop(context),
+                                                );
+                                              })
+                                        },
+                                        onLeftButtonPressed: () {
+                                          Navigator.of(context).pop();
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return CustomDialog(
+                                                  dialogTitle:
+                                                      'Account Deletion ⚠',
+                                                      dialogMessage: 'WARNING: By Deleting your account, all of the data will be deleted',
+                                                  leftButtonText: 'Delete',
+                                                  rightButtonText: 'Cancel',
+                                                  onRightButtonPressed: () =>
+                                                      Navigator.of(context)
+                                                          .pop(),
+                                                  onLeftButtonPressed: () => print(
+                                                      'Your Account has been Deactivated'),
+                                                );
+                                              });
+                                        },
+                                      );
+                                    })
+                              },
+                              child: const Center(
+                                  child: Text(
+                                'Deactivate or Delete Account',
+                                style: TextStyle(color: Colors.redAccent),
+                              )),
                             ),
                             const SizedBox(
                               height: 50,

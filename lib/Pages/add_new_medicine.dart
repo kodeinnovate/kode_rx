@@ -6,6 +6,7 @@ import 'package:kode_rx/Controllers/user_repo.dart';
 import 'package:kode_rx/data_state_store.dart';
 import 'package:kode_rx/database/doctor_medicine_data.dart';
 import 'package:kode_rx/device_helper.dart';
+import 'package:kode_rx/select_medicenes.dart';
 
 class AddNewMedicine extends StatefulWidget {
   AddNewMedicine({Key? key});
@@ -30,6 +31,8 @@ class _AddNewMedicineState extends State<AddNewMedicine> {
   ];
 
   String? selectedMedicineType;
+
+  void after() {}
 
   @override
   Widget build(BuildContext context) {
@@ -155,6 +158,8 @@ class _AddNewMedicineState extends State<AddNewMedicine> {
     );
   }
 
+
+
   Future<void> medicineDataStore() async {
     try {
       final medName = medicineNameController.text.toString().trim();
@@ -163,21 +168,32 @@ class _AddNewMedicineState extends State<AddNewMedicine> {
       final medType = medicineTypeController.text.toString().trim();
       print('$medName, $medContent, $medmg, $medType');
       final userId = userController.userId.value;
- if(medName == '' || medName.isEmpty) {
-  Get.snackbar('Add Medicine Name', 'Medicine name is required to be saved into the database');
- } else {
-      final medicine = UserMedicineModel(
-        medicineName: medName,
-        medicineContent: medContent,
-        medicineMgList: medmg,
-        medicineType: medType,
-        status: '1',
-      );
-      await userRepository.addMedicineForUser(userId, medicine);
- }
+      if (medName == '' || medName.isEmpty) {
+        Get.snackbar('Add Medicine Name',
+            'Medicine name is required to be saved into the database');
+      } else {
+        // if (sourceScreen == 'MedicationReminderAppScreen') {
+          if(userController.isMedicineSelected.value) {
+          Get.back();
+          }
+        // }
+        final medicine = UserMedicineModel(
+          medicineName: medName,
+          medicineContent: medContent,
+          medicineMgList: medmg,
+          medicineType: medType,
+          status: '1',
+        );
+        await userRepository.addMedicineForUser(userId, medicine);
+        // Get.put(() => MedicationReminderApp());
+      }
     } catch (e) {
       print('SomeThing Went wrong $e');
       Get.snackbar('Error', 'Something went wrong, $e');
+    } finally {
+      //  await Future.delayed(const Duration(seconds: 6));
+      await userRepository.refreshMedicines();
+      // await userRepository.getUserMedicines(userController.userId.value);
     }
   }
 }

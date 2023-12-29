@@ -29,8 +29,9 @@ class UserController extends GetxController {
   // Storing Medicine Mg Array
   final RxList<String> mgList = <String>[].obs; // Reactive
   //Devices SignatureID
-  final RxString signatureId =  RxString('');
-
+  final RxString signatureId = RxString('');
+  //Screen Swap
+  final RxBool isMedicineSelected = RxBool(false);
 }
 
 final RxString loginPhoneNumber = RxString('');

@@ -6,6 +6,7 @@ import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/database/doctor_medicine_data.dart';
 import 'package:kode_rx/database/medicine_data_fetch.dart';
 import 'package:kode_rx/database/patient_data.dart';
+import 'package:kode_rx/select_medicenes.dart';
 
 class UserRepo extends GetxController {
   static UserRepo get instance => Get.find();
@@ -51,18 +52,19 @@ class UserRepo extends GetxController {
         .collection("Medicines")
         .add(medicine.toJson())
         .whenComplete(() => Get.snackbar(
-              'Success',
+              'Medicine Successfull Added',
               'Medicine details have been added for the user.',
               snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.green.withOpacity(0.1),
+              backgroundColor: Colors.white,
               colorText: Colors.green,
+              icon: const Icon(Icons.check)
             ))
         .catchError((error, stackTrace) {
       Get.snackbar(
         'Error',
         'Something went wrong. Try again',
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.redAccent.withOpacity(0.1),
+        backgroundColor: Colors.white,
         colorText: Colors.red,
       );
     });
@@ -158,6 +160,47 @@ final RxBool medicineLoading = false.obs; //For Loader
       medicineLoading.value = false;
     }
   }
+
+Future<void> refreshMedicines({String searchQuery = ''}) async {
+    try {
+      medicineLoading.value = true;
+      final userId = userController.userId.value;
+      final snapshot =
+          await _db.collection('Users').doc(userId).collection('Medicines').get();
+      final medicineData =
+          snapshot.docs.map((e) => UserMedicineModel.fromSnapshot(e)).toList();
+
+      // Use assignAll to update the RxList
+      GlobalMedicineList.medicines.assignAll(
+        medicineData.map((medicineModel) => Medicine.fromMedicineModel(medicineModel)).toList(),
+      );
+     GlobalMedicineList.medicines.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+
+
+      update(); // Manually trigger a rebuild
+      // displayedMedicines = GlobalMedicineList.medicines
+      //     .where((medicine) {
+      //       if (medicine.status == '0') {
+      //         return false;
+      //       } else if (medicine.status == '1') {
+      //         return true;
+      //       } else {
+      //         return true;
+      //       }
+      //     })
+      //     .toList();
+          // .where((medicine) =>
+          //     medicine.name.toLowerCase().contains(searchQuery.toLowerCase()))
+          // .toList();
+
+    } catch (e) {
+      Get.snackbar('Something Went Wrong', 'Error: $e');
+    } finally {
+      medicineLoading.value = false;
+    }
+  }
+
+
 
   //Doctor Specific patient List
   Future<List<PatientModel>> getUserPatients(String userId) async {

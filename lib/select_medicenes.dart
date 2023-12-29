@@ -6,6 +6,7 @@ import 'package:kode_rx/Components/alert_dialogue.dart';
 import 'package:kode_rx/Controllers/data_fetch_controller.dart';
 import 'package:kode_rx/Controllers/pdf_controller.dart';
 import 'package:kode_rx/Controllers/user_repo.dart';
+import 'package:kode_rx/Pages/add_new_medicine.dart';
 import 'package:kode_rx/Pages/pdf_genarater.dart';
 import 'package:kode_rx/Pages/pdf_preview_screen.dart';
 import 'package:kode_rx/app_colors.dart';
@@ -64,7 +65,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
   @override
   void initState() {
     super.initState();
-
+// medicineDataStore();
 // final userId = userController.userId.value;
     // Fetch all medicines from the database and set them initially
     controller.getUserMedicines().then((medicineData) {
@@ -75,16 +76,15 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
 
         // Set displayedMedicines initially to show all medicines
         displayedMedicines = GlobalMedicineList.medicines;
-        displayedMedicines = displayedMedicines.where((medicine) {
-          if(medicine.status == '0') {
-           return false;
-          } else if (medicine.status == '1') {
-            return true;
-          } else {
-            return true;
-          }
-        }).toList();
-        print(userController.patientName.value);
+        // displayedMedicines = displayedMedicines.where((medicine) {
+        //   if(medicine.status == '0') {
+        //    return false;
+        //   } else if (medicine.status == '1') {
+        //     return true;
+        //   } else {
+        //     return true;
+        //   }
+        // }).toList();
       });
     });
   }
@@ -93,6 +93,10 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DeviceHelper.deviceAppBar(title: 'Select Medicine'),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 100, right: 6),
+        child: FloatingActionButton(onPressed: () {Get.to(() => AddNewMedicine()); userController.isMedicineSelected.value = true;}, backgroundColor: AppColors.customBackground, child: const Icon(Icons.add, color: Colors.white,),),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -123,6 +127,10 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                   },
                 ),
               ),
+              // Padding(
+              //   padding: const EdgeInsets.only(right: 20),
+              //   child: Align(alignment: Alignment.bottomRight, child: FloatingActionButton(onPressed: () {Get.to(() => AddNewMedicine());}, child: Icon(Icons.add),)),
+              // ),
               ExpansionTile(
                 title: const Text(
                   'Selected Medicines',
