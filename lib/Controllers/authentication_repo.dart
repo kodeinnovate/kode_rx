@@ -36,8 +36,12 @@ class AuthenticationRepo extends GetxController {
       if (userDetails != null) {
         String userId = userDetails.id!;
         userController.userId.value = userId;
+        print(user.uid);
+        print(user.displayName);
+        print(userDetails.id);
+        print(userDetails.fullname);
         // Navigate to the HomeScreen and pass the userId as an argument
-        Get.offAll(() => HomeScreen());
+        Get.offAll(() => HomeScreen(currentUser: userDetails,));
       } else {
         print('User details not found in Firestore');
       }

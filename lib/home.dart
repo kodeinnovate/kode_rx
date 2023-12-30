@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kode_rx/Components/alert_dialogue.dart';
 import 'package:kode_rx/Controllers/profile_controller.dart';
+import 'package:kode_rx/Controllers/user_repo.dart';
 import 'package:kode_rx/Pages/add_medicine_screen.dart';
 import 'package:kode_rx/Pages/add_new_medicine.dart';
 import 'package:kode_rx/Pages/patient_info.dart';
@@ -21,6 +22,9 @@ var username = ''.obs;
 var userStatus = ''.obs;
 
 class HomeScreen extends StatelessWidget {
+  final UserModel? currentUser;
+  const HomeScreen({super.key, this.currentUser});
+
   static HomeScreen get instance => Get.find();
 
   @override
@@ -39,6 +43,8 @@ class HomeScreen extends StatelessWidget {
 
     final isTablet = DeviceHelper.getDeviceType() == DeviceType.tablet;
     final controller = Get.put(ProfileController());
+    final userRepository = Get.put(UserRepo());
+
     UserController userController = Get.put(UserController());
 
     Future<Uint8List> getImageBytes(String imageUrl) async {
@@ -50,7 +56,7 @@ class HomeScreen extends StatelessWidget {
     // Future<void> loadUser() async {
     //   print(await controller.getUserData());
     // }
-
+    
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return WillPopScope(
         onWillPop: showExitPopup,
@@ -70,7 +76,7 @@ class HomeScreen extends StatelessWidget {
                     color: AppColors.customBackground,
                   ),
                   child: Text(
-                    'Hello, Dr. ${userController.currentLoggedInUserName.value}',
+                    'Hello, Dr. ${currentUser?.fullname ?? userController.currentLoggedInUserName.value}',
                     style: TextStyle(color: Colors.white, fontSize: 24),
                   ),
                 ),
@@ -148,11 +154,13 @@ class HomeScreen extends StatelessWidget {
                                 ConnectionState.done) {
                               if (snapshot.hasData) {
                                 UserModel userData = snapshot.data as UserModel;
+                                if(userData.accountStatus != 'active') {
+                                  userRepository.disableAccount('active');
+                                }
                                 userStatus.value = userData.status!;
                                 userController.currentLoggedInUserName.value =
                                     userData.fullname;
                                 username.value = userData.fullname;
-                                userStatus.value = userData.status!;
                                 if (userData.signature != '') {
                                   userController.signatureStore.value =
                                       userData.signature;
@@ -206,8 +214,8 @@ class HomeScreen extends StatelessWidget {
                             } else {
                               return const Center(
                                 child: CircularProgressIndicator(
-                                    color: AppColors.customBackground,
-                                  ),
+                                  color: AppColors.customBackground,
+                                ),
                               );
                             }
                             // return Container();
@@ -258,7 +266,8 @@ class SquareModule extends StatelessWidget {
   final String text;
   final bool isTablet;
 
-  const SquareModule({super.key, 
+  const SquareModule({
+    super.key,
     required this.icon,
     required this.text,
     required this.isTablet,
@@ -268,20 +277,39 @@ class SquareModule extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-      // var snack = Get.snackbar('Subscription Expired', 'Your subcription has expired', colorText: Colors.redAccent);
+        // var snack = Get.snackbar('Subscription Expired', 'Your subcription has expired', colorText: Colors.redAccent);
         if (text == 'Make Rx') {
-          if(userStatus.value == '1') {
-          Get.to(() => Patient_info());
+          if (userStatus.value == '1') {
+            Get.to(() => Patient_info());
           } else if (userStatus.value == '0') {
-            Get.snackbar('Subscription Expired', '',titleText: Text('Please contact the Administrator', style: TextStyle(fontSize: 24, color: Colors.redAccent),),  colorText: Colors.redAccent, backgroundColor: Colors.white, icon: Icon(Icons.dangerous, color: Colors.redAccent,));
-          } 
+            Get.snackbar('Subscription Expired', '',
+                titleText: Text(
+                  'Please contact the Administrator',
+                  style: TextStyle(fontSize: 24, color: Colors.redAccent),
+                ),
+                colorText: Colors.redAccent,
+                backgroundColor: Colors.white,
+                icon: Icon(
+                  Icons.dangerous,
+                  color: Colors.redAccent,
+                ));
+          }
         } else if (text == 'Rx History') {
           // Handle navigation to Rx History screen
-          if(userStatus.value == '1') {
-          Get.to(() => RxHistory());
-
+          if (userStatus.value == '1') {
+            Get.to(() => RxHistory());
           } else if (userStatus.value == '0') {
-            Get.snackbar('Subscription Expired', '',titleText: Text('Please contact the Administrator', style: TextStyle(fontSize: 24, color: Colors.redAccent),),  colorText: Colors.redAccent, backgroundColor: Colors.white, icon: Icon(Icons.dangerous, color: Colors.redAccent,));
+            Get.snackbar('Subscription Expired', '',
+                titleText: Text(
+                  'Please contact the Administrator',
+                  style: TextStyle(fontSize: 24, color: Colors.redAccent),
+                ),
+                colorText: Colors.redAccent,
+                backgroundColor: Colors.white,
+                icon: Icon(
+                  Icons.dangerous,
+                  color: Colors.redAccent,
+                ));
           }
         }
       },

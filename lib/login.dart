@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kode_rx/Components/alert_dialogue.dart';
 import 'package:kode_rx/Controllers/authentication_repo.dart';
 import 'package:kode_rx/Controllers/user_repo.dart';
 import 'package:kode_rx/data_state_store.dart';
@@ -130,10 +131,10 @@ class LoginScreen extends StatelessWidget {
                                 controller: phoneNumberController,
                                 keyboardType: TextInputType.number,
                                 onSubmitted: (String value) async {
-                                  handlePhoneNumberCheck();
+                                  handlePhoneNumberCheck(context);
                                 },
                                 decoration: const InputDecoration(
-                                  prefixText: '+91',
+                                    prefixText: '+91',
                                     labelStyle: TextStyle(
                                         color: AppColors.customBackground),
                                     labelText: 'Enter your phone number',
@@ -167,7 +168,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Future<void> handlePhoneNumberCheck() async {
+  Future<void> handlePhoneNumberCheck(context) async {
     signatureId();
     if (phoneNumberController.text.toString().isNotEmpty) {
       isCheckingPhoneNumber = true;
@@ -179,11 +180,27 @@ class LoginScreen extends StatelessWidget {
           await _userRepo.getUserDetails('$countryCode$enteredPhoneNumber');
 
       if (user != null && user.phoneNo == '$countryCode$enteredPhoneNumber') {
-        loginPhoneNumber.value = '$countryCode$enteredPhoneNumber';
-        AuthOperation.signIn;
-        AuthenticationRepo.instance
-            .phoneAuthentication('$countryCode$enteredPhoneNumber');
-        Get.to(() => OTPScreen(AuthOperation.signIn));
+        if (user.accountStatus == 'delete') {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return CustomDialog(
+                  dialogTitle: 'Contact Administrator',
+                  dialogMessage:
+                      'Account has been set for deletion, you cannot loggin!',
+                  rightButtonText: 'Ok',
+                  leftButtonText: 'Cancel',
+                  onLeftButtonPressed: () => Navigator.pop(context),
+                  onRightButtonPressed: () => Navigator.pop(context),
+                );
+              });
+        } else {
+          loginPhoneNumber.value = '$countryCode$enteredPhoneNumber';
+          AuthOperation.signIn;
+          AuthenticationRepo.instance
+              .phoneAuthentication('$countryCode$enteredPhoneNumber');
+          Get.to(() => OTPScreen(AuthOperation.signIn));
+        }
       } else {
         loginPhoneNumber.value = '$countryCode$enteredPhoneNumber';
         Get.to(() => Signup());

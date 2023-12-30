@@ -70,6 +70,8 @@ class UserRepo extends GetxController {
     });
   }
 
+
+
 // User Registeration
   createUser(UserModel user) async {
     await _db
@@ -253,4 +255,39 @@ final RxBool isLoading = false.obs;
       isLoading.value = false; // Set loading to false when the update completes (success or failure)
     }
   }
+
+// Account delection or Disabling
+Future<void> disableAccount(String status) async {
+   final userId = userController.userId.value;
+  try {
+  await _db.collection('Users').doc(userId).update({
+        'AccountStatus': status, // Update to disabled
+      });
+      // if(status == 'deactivate') {
+      //   Get.snackbar('Account has been Suspended', 'Your account has been deactivated, you can reenable it by logging in');
+      // }     
+      // if (status == 'delete') {
+      //   Get.snackbar('Account has been been set to DELETE', 'Your account has been deactivated, you it your will be permanently deleted in 10 days');
+      // } 
+      // if (status == 'active') {
+      //   Get.snackbar('Account Reactivated', 'Your Account has been Reinstated');
+      // }
+  } catch (e) {
+          print('Error updating account status: $e');
+          Get.snackbar('Error updating account status:', '$e');
+
+  } finally {
+      if(status == 'deactivate') {
+        Get.snackbar('Account deactivated', 'Your Account Has been deactivated');
+      }
+      if(status == 'delete') {
+        Get.snackbar('Your Account Has been set to delete in 10 days', 'You can login to reactivate');
+      }
+      if (status == 'active') {
+        Get.snackbar('Account Reactivated', 'Your Account has been Reinstated');
+      }
+
+  }
 }
+}
+

@@ -299,12 +299,14 @@ class Profile extends StatelessWidget {
                                           ? userData.signature
                                           : userController
                                               .userSignitureUpdateUrl.value,
-                                      specialist: speciality.text.trim());
+                                      specialist: speciality.text.trim(),
+                                      status: userData.status,
+                                      accountStatus: 'active');
                                   await controller.updateRecord(user);
                                   //  HomeScreen.instance.updateDataFromProfileScreen();
-                                  userController.userProfileImageUrl.value = '';
-                                  userController.userSignitureUpdateUrl.value =
-                                      '';
+                                  // userController.userProfileImageUrl.value = '';
+                                  // userController.userSignitureUpdateUrl.value =
+                                  //     '';
                                   // Get.back();
                                 } catch (e) {
                                   print('Error during update: $e');
@@ -356,7 +358,8 @@ class Profile extends StatelessWidget {
                                     builder: (BuildContext context) {
                                       return CustomDialog(
                                         dialogTitle: 'Deactivation/Deletion',
-                                        dialogMessage: 'Deactivation:\nDeactivating your account means a temporary suspension. You can reactivate your account at any time by logging in. Your data will be securely stored during this period.\n\nDeletion:\nDeleting your account is a permanent action that cannot be undone. All associated data will permanently deleted',
+                                        dialogMessage:
+                                            'Deactivation:\nDeactivating your account means a temporary suspension. You can reactivate your account at any time by logging in. Your data will be securely stored during this period.\n\nDeletion:\nDeleting your account is a permanent action that cannot be undone. All associated data will permanently deleted',
                                         leftButtonText: 'Delete',
                                         rightButtonText: 'Deactivate',
                                         onRightButtonPressed: () => {
@@ -367,12 +370,25 @@ class Profile extends StatelessWidget {
                                                 return CustomDialog(
                                                   dialogTitle:
                                                       'Account Deactivation',
-                                                      dialogMessage: 'WARNING: You are about to DEACTIVATE this account',
+                                                  dialogMessage:
+                                                      'WARNING: You are about to DEACTIVATE this account',
                                                   leftButtonText: 'Deactivate',
                                                   rightButtonText: 'Cancel',
-                                                  onLeftButtonPressed: () =>
-                                                      print(
-                                                          'Account Deactivated'),
+                                                  onLeftButtonPressed:
+                                                      () async => {
+                                                    // Get.offAll(context),
+                                                    Navigator.of(context).pop(),
+                                                    print(
+                                                        'Account Deactivated'),
+                                                    userRepository
+                                                        .disableAccount(
+                                                            'deactivate'),
+                                                    await Future.delayed(
+                                                        const Duration(
+                                                            seconds: 2)),
+                                                    AuthenticationRepo.instance
+                                                        .logout(),
+                                                  },
                                                   onRightButtonPressed: () =>
                                                       Navigator.pop(context),
                                                 );
@@ -386,14 +402,27 @@ class Profile extends StatelessWidget {
                                                 return CustomDialog(
                                                   dialogTitle:
                                                       'Account Deletion ⚠',
-                                                      dialogMessage: 'WARNING: By Deleting your account, all of the data will be deleted',
+                                                  dialogMessage:
+                                                      'WARNING: By Deleting your account, all of the data will be deleted',
                                                   leftButtonText: 'Delete',
                                                   rightButtonText: 'Cancel',
                                                   onRightButtonPressed: () =>
                                                       Navigator.of(context)
                                                           .pop(),
-                                                  onLeftButtonPressed: () => print(
-                                                      'Your Account has been Deactivated'),
+                                                  onLeftButtonPressed:
+                                                      () async => {
+                                                    Navigator.of(context).pop(),
+                                                    print(
+                                                        'Your Account has will be completely deleted in 10 Days'),
+                                                    userRepository
+                                                        .disableAccount(
+                                                            'delete'),
+                                                    await Future.delayed(
+                                                        const Duration(
+                                                            seconds: 2)),
+                                                    AuthenticationRepo.instance
+                                                        .logout(),
+                                                  },
                                                 );
                                               });
                                         },

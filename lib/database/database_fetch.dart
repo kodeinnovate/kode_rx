@@ -12,6 +12,7 @@ class UserModel {
   final String specialist;
   final String signature;
   final String? status;
+  final String? accountStatus;
 
   const UserModel(
       {this.id,
@@ -19,7 +20,7 @@ class UserModel {
       required this.email,
       required this.phoneNo,
       required this.profileImage,
-      required this.signature, required this.specialist, this.status});
+      required this.signature, required this.specialist, this.status, this.accountStatus});
 
   toJson() {
     return {
@@ -30,6 +31,7 @@ class UserModel {
       'Specialist': specialist,
       'Signature': signature,
       'Status': status,
+      'AccountStatus': accountStatus
     };
   }
 
@@ -44,6 +46,6 @@ class UserModel {
         phoneNo: data['Phone'],
         profileImage: data['ProfileImage'],
         specialist: data['Specialist'],
-        signature: data['Signature'], status: data['Status']);
+        signature: data['Signature'], status: data['Status'], accountStatus: data['AccountStatus']);
   }
 }
