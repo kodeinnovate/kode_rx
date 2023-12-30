@@ -76,7 +76,7 @@ class HomeScreen extends StatelessWidget {
                     color: AppColors.customBackground,
                   ),
                   child: Text(
-                    'Hello, Dr. ${currentUser?.fullname ?? userController.currentLoggedInUserName.value}',
+                    'Hello, Dr. ${userController.currentLoggedInUserName.value}',
                     style: TextStyle(color: Colors.white, fontSize: 24),
                   ),
                 ),
@@ -158,8 +158,8 @@ class HomeScreen extends StatelessWidget {
                                   userRepository.disableAccount('active');
                                 }
                                 userStatus.value = userData.status!;
-                                userController.currentLoggedInUserName.value =
-                                    userData.fullname;
+                                // userController.currentLoggedInUserName.value =
+                                //     userData.fullname;
                                 username.value = userData.fullname;
                                 if (userData.signature != '') {
                                   userController.signatureStore.value =

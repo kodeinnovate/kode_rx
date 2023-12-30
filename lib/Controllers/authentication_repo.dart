@@ -36,6 +36,7 @@ class AuthenticationRepo extends GetxController {
       if (userDetails != null) {
         String userId = userDetails.id!;
         userController.userId.value = userId;
+        userController.currentLoggedInUserName.value = userDetails.fullname;
         print(user.uid);
         print(user.displayName);
         print(userDetails.id);
