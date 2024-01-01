@@ -19,6 +19,8 @@ class _TextFieldWithListState extends State<TextFieldWithList> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSmallTablet = MediaQuery.of(context).size.shortestSide < 600;
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -31,8 +33,7 @@ class _TextFieldWithListState extends State<TextFieldWithList> {
             children: [
               Row(
                 children: [
-                  SizedBox(
-                    width: 500,
+                  Expanded(
                     child: SizedBox(
                       width: double.infinity,
                       child: RawKeyboardListener(
@@ -40,15 +41,7 @@ class _TextFieldWithListState extends State<TextFieldWithList> {
                         onKey: (RawKeyEvent event) {
                           if (event is RawKeyDownEvent &&
                               event.logicalKey == LogicalKeyboardKey.enter) {
-                            final enteredText = _textController.text.trim();
-                            if (enteredText.isNotEmpty) {
-                              setState(() {
-                                _enteredTexts.add('$enteredText Mg');
-                                _textController.clear();
-                                userController.mgList.value = _enteredTexts;
-                                print(_enteredTexts);
-                              });
-                            }
+                            _handleEnteredText();
                           }
                         },
                         child: TextFormField(
@@ -68,21 +61,13 @@ class _TextFieldWithListState extends State<TextFieldWithList> {
                               hintText: 'Add mg',
                               hintStyle: TextStyle(color: Colors.grey[500])),
                           onFieldSubmitted: (String value) {
-                            final enteredText = _textController.text.trim();
-
-                            if (enteredText.isNotEmpty) {
-                              setState(() {
-                                _enteredTexts.add('$enteredText Mg');
-                                _textController.clear();
-                                userController.mgList.value = _enteredTexts;
-                              });
-                            }
+                            _handleEnteredText();
                           },
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 25),
+                  if (!isSmallTablet) const SizedBox(width: 25),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 21),
                     child: ElevatedButton(
@@ -91,16 +76,7 @@ class _TextFieldWithListState extends State<TextFieldWithList> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 15),
                       ),
-                      onPressed: () {
-                        final enteredText = _textController.text.trim();
-                        if (enteredText.isNotEmpty) {
-                          setState(() {
-                            _enteredTexts.add('$enteredText Mg');
-                            _textController.clear();
-                            userController.mgList.value = _enteredTexts;
-                          });
-                        }
-                      },
+                      onPressed: _handleEnteredText,
                       child: const Text(
                         'Add',
                         style: TextStyle(color: Colors.white),
@@ -118,12 +94,10 @@ class _TextFieldWithListState extends State<TextFieldWithList> {
                   final text = entry.value;
                   return GestureDetector(
                     onTap: () {
-                      setState(() {
-                        FocusScope.of(context).unfocus();
-                      });
+                      FocusScope.of(context).unfocus();
                     },
                     child: Container(
-                      width: 120, // Adjust the width of the tile as needed
+                      width: isSmallTablet ? 60 : 120,
                       padding: const EdgeInsets.all(5.0),
                       decoration: BoxDecoration(
                         border: Border.all(),
@@ -137,10 +111,7 @@ class _TextFieldWithListState extends State<TextFieldWithList> {
                             child: IconButton(
                               icon: const Icon(Icons.close),
                               onPressed: () {
-                                setState(() {
-                                  _enteredTexts.removeAt(index);
-                                  userController.mgList.value = _enteredTexts;
-                                });
+                                _handleRemoveText(index);
                               },
                             ),
                           ),
@@ -165,5 +136,23 @@ class _TextFieldWithListState extends State<TextFieldWithList> {
         ),
       ),
     );
+  }
+
+  void _handleEnteredText() {
+    final enteredText = _textController.text.trim();
+    if (enteredText.isNotEmpty) {
+      setState(() {
+        _enteredTexts.add('$enteredText Mg');
+        _textController.clear();
+        userController.mgList.value = _enteredTexts;
+      });
+    }
+  }
+
+  void _handleRemoveText(int index) {
+    setState(() {
+      _enteredTexts.removeAt(index);
+      userController.mgList.value = _enteredTexts;
+    });
   }
 }

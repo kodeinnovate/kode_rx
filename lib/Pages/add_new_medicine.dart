@@ -90,7 +90,7 @@ class _AddNewMedicineState extends State<AddNewMedicine> {
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.2,
+              height: MediaQuery.of(context).size.height * 0.3,
               child: const TextFieldWithList(),
             ),
             Column(
@@ -127,13 +127,12 @@ class _AddNewMedicineState extends State<AddNewMedicine> {
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         value: selectedMedicineType,
-                        iconSize: 30,
-                        itemHeight: 50,
-                        isExpanded: true,
+                        iconSize: 20,
+                        itemHeight: 48,
                         items: medicineTypes.map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value),
+                            child: Text(value,style: TextStyle(fontSize: 16),),
                           );
                         }).toList(),
                         onChanged: (String? newValue) {

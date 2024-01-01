@@ -85,23 +85,21 @@ class _Patient_infoState extends State<Patient_info> {
                           height: 10,
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Container(
                               child: Text(
                                 'Select your gender',
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
                               ),
                               padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
                             ),
-                            const SizedBox(width: 10),
                             Expanded(
                               child: RadioListTile(
-                                title: const Text('Male'),
+                                title: const Text('Male',style:TextStyle(fontSize: 12)),
                                 value: 'male',
                                 groupValue: patientGender,
                                 onChanged: _handleRadioValueChange,
@@ -109,7 +107,7 @@ class _Patient_infoState extends State<Patient_info> {
                             ),
                             Expanded(
                               child: RadioListTile(
-                                title: const Text('Female'),
+                                title: const Text('Female',style:TextStyle(fontSize: 12)),
                                 value: 'female',
                                 groupValue: patientGender,
                                 onChanged: _handleRadioValueChange,
@@ -117,7 +115,7 @@ class _Patient_infoState extends State<Patient_info> {
                             ),
                             Expanded(
                               child: RadioListTile(
-                                title: const Text('Other'),
+                                title: const Text('Other',style:TextStyle(fontSize: 12)),
                                 value: 'other',
                                 groupValue: patientGender,
                                 onChanged: _handleRadioValueChange,
