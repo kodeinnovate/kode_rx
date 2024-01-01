@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,6 +15,7 @@ import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/home.dart';
 import 'package:kode_rx/otp_screen.dart';
 import 'package:kode_rx/data_state_store.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'Controllers/authentication_repo.dart';
 
 enum AuthOperation { signUp, signIn }
@@ -33,7 +35,15 @@ class Signup extends StatelessWidget {
   final specialtyController = TextEditingController();
   final doctorRegisterationNo = TextEditingController();
   final privacyPolicyTermOfCondition = false;
+  final Uri _url = Uri.parse(
+      'https://app.termly.io/dashboard/website/c9e29775-2ae1-4d6a-88ef-dfceff9150e7/terms-of-service');
   bool isChecked = false;
+
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
+  }
 
   void selectImage() async {
     Uint8List img = await pickImage(ImageSource.gallery);
@@ -150,7 +160,7 @@ class Signup extends StatelessWidget {
                     height: 50,
                   ),
                   const Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    padding: EdgeInsets.symmetric(horizontal: 25.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -166,7 +176,7 @@ class Signup extends StatelessWidget {
                     height: 10,
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 25.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -224,38 +234,51 @@ class Signup extends StatelessWidget {
                       obsecureText: false,
                       keyboardType: TextInputType.text),
                   const SizedBox(
-                    height: 10,
+                    height: 16,
                   ),
 
-                  Container(        
-                    child: Row(children: [
-                      MyCheckbox(),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                  'I am a Registered Medical practitioner and I agree to the '),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  
+                      child: Row(
+                        children: [
+                          MyCheckbox(),
+                          Expanded(
+                            child: RichText(
+                              maxLines: 3,
+                              softWrap: true,
+                              text: TextSpan(
+                                children: <TextSpan>[
+                                 const TextSpan(
+                                    text:
+                                        'I am a Registered Medical practitioner and I agree to the ',
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 16),
+                                  ),
+                                  TextSpan(
+                                      text: 'terms & conditions',
+                                      style: const TextStyle(
+                                          color: AppColors.customBackground,
+                                          fontSize: 16),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () => _launchUrl()),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      )
-                    ]),
-                  ),
-
-                            Text(
-                              'terms & conditions',
-                              style: TextStyle(color: AppColors.customBackground),
-                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                
                   const SizedBox(
-                    height: 50,
+                    height: 16,
                   ),
                   CustomButtom(
                     buttonText: 'SIGN UP',
                     onTap: signUserUp,
                   ),
                   const SizedBox(
-                    height: 50,
+                    height: 24,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -310,7 +333,7 @@ class Signup extends StatelessWidget {
       }
       Get.to(() => OTPScreen(AuthOperation.signUp));
     } else {
-      Get.snackbar('Field Empty!', 'Please fill all the inputs',
+      Get.snackbar('Field Empty!', 'Please fill all the inputs and accept the terms and condition to procced if havn\'t already',
           barBlur: 10,
           backgroundColor: Colors.white.withOpacity(0.6),
           icon: const Icon(Icons.warning_amber_outlined),
@@ -367,9 +390,10 @@ class _MyCheckboxState extends State<MyCheckbox> {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Checkbox(
+            activeColor: AppColors.customBackground,
             value: checkBoxValue.isChecked.value,
             onChanged: (bool? value) {
               setState(() {

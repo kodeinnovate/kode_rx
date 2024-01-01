@@ -77,17 +77,17 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 flutter_native_splash:
-   image: assets/images/ic-rx-logo_wgU1aCu4.png
+   image: assets/images/KodeRx_Logo.png
    color: "#ffffff"
    color_dark: "#121212"
-   image_dark: assets/images/ic-rx-logo_wgU1aCu4.png
+   image_dark: assets/images/KodeRx_Logo.png
    android_gravity: center
 
    android_12:
     image: assets/images/ic-rx-logo_wgU1aCu4.png
     icon_background_color: "#ffffff"
-    image_dark: assets/images/ic-rx-logo_wgU1aCu4.png
-    icon_background_color_dark: "#121212"
+    image_dark: assets/images/KodeRx_Logo.png
+    icon_background_color_dark: "#ffffff"
     android_gravity: center
 
 
@@ -117,6 +117,7 @@ flutter:
     - assets/images/ic_rx_dark_mode_logo.png
     - assets/images/ic-rx-logo_wgU1aCu4.png
     - assets/images/ic_rx_prescription_icon.png
+    - assets/images/KodeRx_Logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

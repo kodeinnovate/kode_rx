@@ -57,7 +57,7 @@ class HomeScreen extends StatelessWidget {
     // Future<void> loadUser() async {
     //   print(await controller.getUserData());
     // }
-    
+
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return WillPopScope(
         onWillPop: showExitPopup,
@@ -104,15 +104,6 @@ class HomeScreen extends StatelessWidget {
                     Get.to(() => AddNewMedicine());
                   },
                 ),
-                ListTile(
-                  title: const Text('Privacy Policy'),
-                  onTap: () {
-                    // Update the state of the app.
-                    // ...
-                    Navigator.pop(context);
-                    Get.to(() => PrivacyPolicy());
-                  },
-                ),
               ],
             ),
           )),
@@ -133,25 +124,35 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(20, 40, 0, 0),
-                            child: IconButton(
-                              icon: Icon(Icons.menu,
-                                  color: AppColors.customBackground),
-                              onPressed: () {
-                                _scaffoldKey.currentState?.openDrawer();
-                              },
-                            ),
+                          Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(20, 40, 0, 0),
+                                child: IconButton(
+                                  icon: Icon(Icons.menu,
+                                      color: AppColors.customBackground),
+                                  onPressed: () {
+                                    _scaffoldKey.currentState?.openDrawer();
+                                  },
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.fromLTRB(12, 40, 20, 0),
+                                child: Text("KodeRx",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 26,
+                                        color: AppColors.customBackground)),
+                              ),
+                            ],
                           ),
-                          const Padding(
-                            padding: EdgeInsets.fromLTRB(12, 40, 20, 0),
-                            child: Text("KodeRx",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 26,
-                                    color: AppColors.customBackground)),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 32, 30, 0),
+                            child: Image.asset('assets/images/KodeRx_Logo.png',
+                                width: 50.0, height: 50.0),
                           ),
                         ],
                       ),
@@ -164,7 +165,7 @@ class HomeScreen extends StatelessWidget {
                                 ConnectionState.done) {
                               if (snapshot.hasData) {
                                 UserModel userData = snapshot.data as UserModel;
-                                if(userData.accountStatus != 'active') {
+                                if (userData.accountStatus != 'active') {
                                   userRepository.disableAccount('active');
                                 }
                                 userStatus.value = userData.status!;
