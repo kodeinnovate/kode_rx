@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:kode_rx/Components/alert_dialogue.dart';
 import 'package:kode_rx/Controllers/authentication_repo.dart';
 import 'package:kode_rx/Controllers/user_repo.dart';
+import 'package:kode_rx/Pages/privacy_policy_screen.dart';
 import 'package:kode_rx/data_state_store.dart';
 import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/otp_screen.dart';
@@ -203,7 +204,7 @@ class LoginScreen extends StatelessWidget {
         }
       } else {
         loginPhoneNumber.value = '$countryCode$enteredPhoneNumber';
-        Get.to(() => Signup());
+        Get.to(() => PrivacyPolicy());
         Get.snackbar(
           'Phone Number Not Registered!',
           'Please Create your account',

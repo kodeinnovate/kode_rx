@@ -8,6 +8,7 @@ import 'package:kode_rx/Components/custom_button.dart';
 import 'package:kode_rx/Components/custom_textfield.dart';
 import 'package:kode_rx/Controllers/user_repo.dart';
 import 'package:kode_rx/Controllers/utils.dart';
+import 'package:kode_rx/Pages/privacy_policy_screen.dart';
 import 'package:kode_rx/app_colors.dart';
 import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/home.dart';
@@ -21,6 +22,8 @@ class Signup extends StatelessWidget {
   Signup({super.key});
   static Signup get instance => Get.find();
   UserController userController = Get.put(UserController());
+  final CheckboxController checkBoxValue = Get.put(CheckboxController());
+
   final userRepository = Get.put(UserRepo());
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
@@ -28,6 +31,9 @@ class Signup extends StatelessWidget {
       TextEditingController(text: loginPhoneNumber.value);
   Uint8List? profileImage;
   final specialtyController = TextEditingController();
+  final doctorRegisterationNo = TextEditingController();
+  final privacyPolicyTermOfCondition = false;
+  bool isChecked = false;
 
   void selectImage() async {
     Uint8List img = await pickImage(ImageSource.gallery);
@@ -54,10 +60,11 @@ class Signup extends StatelessWidget {
   }
 
   Future<void> uploadImage(Uint8List img) async {
-   String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
     // Reference to the Firebase Storage bucket
-    firebase_storage.Reference reference = firebase_storage.FirebaseStorage.instance
+    firebase_storage.Reference reference = firebase_storage
+        .FirebaseStorage.instance
         .ref('profile_images/$fileName.jpg');
 
     // Upload the image to Firebase Storage
@@ -89,7 +96,7 @@ class Signup extends StatelessWidget {
                   //   size: 100,
                   //   color: AppColors.customBackground,
                   // ),
-                  
+
                   GetBuilder<UserController>(
                     builder: (_) {
                       return Stack(
@@ -116,7 +123,7 @@ class Signup extends StatelessWidget {
                       );
                     },
                   ),
-        
+
                   // Stack(
                   //   children: [
                   //     _profileImage != null ? CircleAvatar(
@@ -179,7 +186,8 @@ class Signup extends StatelessWidget {
                   CustomTextfield(
                     controller: usernameController,
                     hintText: 'Enter your full name',
-                    obsecureText: false, keyboardType: TextInputType.name,
+                    obsecureText: false,
+                    keyboardType: TextInputType.name,
                   ),
                   const SizedBox(
                     height: 10,
@@ -187,7 +195,8 @@ class Signup extends StatelessWidget {
                   CustomTextfield(
                     controller: emailController,
                     hintText: 'Enter your email',
-                    obsecureText: false, keyboardType: TextInputType.emailAddress,
+                    obsecureText: false,
+                    keyboardType: TextInputType.emailAddress,
                   ),
                   const SizedBox(
                     height: 10,
@@ -195,12 +204,49 @@ class Signup extends StatelessWidget {
                   CustomTextfield(
                     controller: phoneNumberController,
                     hintText: 'Enter your phone number',
-                    obsecureText: false, keyboardType: TextInputType.phone,
+                    obsecureText: false,
+                    keyboardType: TextInputType.phone,
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  CustomTextfield(controller: specialtyController, hintText: 'Speciality', obsecureText: false, keyboardType: TextInputType.text),
+                  CustomTextfield(
+                      controller: doctorRegisterationNo,
+                      hintText: 'Doctor Registeration No.',
+                      obsecureText: false,
+                      keyboardType: TextInputType.text),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  CustomTextfield(
+                      controller: specialtyController,
+                      hintText: 'Speciality',
+                      obsecureText: false,
+                      keyboardType: TextInputType.text),
+                  const SizedBox(
+                    height: 10,
+                  ),
+
+                  Container(        
+                    child: Row(children: [
+                      MyCheckbox(),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                  'I am a Registered Medical practitioner and I agree to the '),
+                            ),
+                          ],
+                        ),
+                      )
+                    ]),
+                  ),
+
+                            Text(
+                              'terms & conditions',
+                              style: TextStyle(color: AppColors.customBackground),
+                            ),
                   const SizedBox(
                     height: 50,
                   ),
@@ -216,8 +262,8 @@ class Signup extends StatelessWidget {
                     children: [
                       Text(
                         'Having trouble signing up?',
-                        style:
-                            TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                        style: TextStyle(
+                            fontSize: 16, color: Colors.grey.shade600),
                       ),
                       const SizedBox(
                         width: 4,
@@ -244,20 +290,24 @@ class Signup extends StatelessWidget {
     userController.userEmail.value = emailController.text.toString().trim();
     userController.userPhoneNumber.value =
         phoneNumberController.text.toString().trim();
-        userController.userSpecialty.value = specialtyController.text.toString().trim();
+    userController.userSpecialty.value =
+        specialtyController.text.toString().trim();
+    userController.doctorRegisterationNo.value =
+        doctorRegisterationNo.text.toString().trim();
 
     if (usernameController.text.toString().isNotEmpty &&
         emailController.text.toString().isNotEmpty &&
-        phoneNumberController.text.toString().isNotEmpty && specialtyController.text.toString().isNotEmpty) {
+        phoneNumberController.text.toString().isNotEmpty &&
+        specialtyController.text.toString().isNotEmpty &&
+        doctorRegisterationNo.text.toString().isNotEmpty &&
+        checkBoxValue.isChecked.value) {
       AuthOperation.signUp;
       AuthenticationRepo.instance
           .phoneAuthentication(phoneNumberController.text.toString());
-          if(userController.profileImage.value == null){
-
-          }
-          else{
-          uploadImage(userController.profileImage.value!);
-          }
+      if (userController.profileImage.value == null) {
+      } else {
+        uploadImage(userController.profileImage.value!);
+      }
       Get.to(() => OTPScreen(AuthOperation.signUp));
     } else {
       Get.snackbar('Field Empty!', 'Please fill all the inputs',
@@ -273,21 +323,23 @@ class Signup extends StatelessWidget {
   }
 
   Future<void> otpOnSubmit(String otp, AuthOperation authOperation) async {
-       
     final user = UserModel(
         fullname: userController.userName.value,
         email: userController.userEmail.value,
         phoneNo: userController.userPhoneNumber.value,
         profileImage: userController.userProfileImageUrl.value,
         specialist: userController.userSpecialty.value,
-        signature: '', status: '1', accountStatus: 'active');
+        signature: '',
+        doctorRegisterationNo: userController.doctorRegisterationNo.value,
+        status: '1',
+        accountStatus: 'active');
     var isVerified = await AuthenticationRepo.instance.verifyOTP(otp);
     if (isVerified) {
       if (authOperation == AuthOperation.signUp) {
         Get.to(() => HomeScreen());
         print(userController.profileImage.value);
         // await Future.delayed(const Duration(seconds: 2));
-       dataStore(user);
+        dataStore(user);
       } else if (authOperation == AuthOperation.signIn) {
         Get.to(() => HomeScreen());
         Get.snackbar('SIGNED IN', 'You have Successfull signed in!',
@@ -296,5 +348,37 @@ class Signup extends StatelessWidget {
     } else {
       Get.to(() => Signup());
     }
+  }
+}
+
+class CheckboxController extends GetxController {
+  RxBool isChecked = false.obs;
+}
+
+class MyCheckbox extends StatefulWidget {
+  @override
+  _MyCheckboxState createState() => _MyCheckboxState();
+}
+
+class _MyCheckboxState extends State<MyCheckbox> {
+  final CheckboxController checkBoxValue = Get.put(CheckboxController());
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Checkbox(
+            value: checkBoxValue.isChecked.value,
+            onChanged: (bool? value) {
+              setState(() {
+                checkBoxValue.isChecked.value = value ?? false;
+              });
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

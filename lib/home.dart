@@ -9,6 +9,7 @@ import 'package:kode_rx/Controllers/user_repo.dart';
 import 'package:kode_rx/Pages/add_medicine_screen.dart';
 import 'package:kode_rx/Pages/add_new_medicine.dart';
 import 'package:kode_rx/Pages/patient_info.dart';
+import 'package:kode_rx/Pages/privacy_policy_screen.dart';
 import 'package:kode_rx/Pages/rx_history.dart';
 import 'package:kode_rx/data_state_store.dart';
 import 'package:kode_rx/database/database_fetch.dart';
@@ -101,6 +102,15 @@ class HomeScreen extends StatelessWidget {
                     Navigator.pop(context);
                     userController.isMedicineSelected.value = false;
                     Get.to(() => AddNewMedicine());
+                  },
+                ),
+                ListTile(
+                  title: const Text('Privacy Policy'),
+                  onTap: () {
+                    // Update the state of the app.
+                    // ...
+                    Navigator.pop(context);
+                    Get.to(() => PrivacyPolicy());
                   },
                 ),
               ],
