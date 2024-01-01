@@ -113,7 +113,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                 },
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.7,
+                height: MediaQuery.of(context).size.height * 0.6,
                 child: MedicationListView(
                   displayedMedicines: displayedMedicines,
                   selectedMedicines: selectedMedicines,
@@ -715,7 +715,7 @@ class MedicationListView extends StatelessWidget {
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
                 childAspectRatio:
-                    3 / 2.3, // Adjust the aspect ratio based on your needs
+                    3 / 2.8, // Adjust the aspect ratio based on your needs
               ),
               itemCount: displayedMedicines.length,
               itemBuilder: (context, index) {
@@ -734,12 +734,14 @@ class MedicationListView extends StatelessWidget {
                       ),
                       title: Text(
                         medicine.name,
-                        style: const TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 18),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       subtitle: Text(
                         medicine.details,
-                        style: const TextStyle(fontSize: 16.0),
-                        maxLines: 4,
+                        style: const TextStyle(fontSize: 14.0),
+                        maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
                       shape: RoundedRectangleBorder(

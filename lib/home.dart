@@ -30,22 +30,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<bool> showExitPopup() async {
-      return await showDialog(
-              context: Get.overlayContext!,
-              builder: (context) => CustomDialog(
-                    dialogTitle: 'Exit App',
-                    onLeftButtonPressed: () => Navigator.of(context).pop(false),
-                    onRightButtonPressed: () => Get.back(result: true),
-                    dialogMessage: 'Do you want to exit the app?',
-                  )) ??
-          false;
-    }
-
-    final isTablet = DeviceHelper.getDeviceType() == DeviceType.tablet;
+    final isTablet = MediaQuery.of(context).size.shortestSide > 600;
     final controller = Get.put(ProfileController());
     final userRepository = Get.put(UserRepo());
-
     UserController userController = Get.put(UserController());
 
     Future<Uint8List> getImageBytes(String imageUrl) async {
@@ -54,22 +41,27 @@ class HomeScreen extends StatelessWidget {
       return response.bodyBytes;
     }
 
-    // Future<void> loadUser() async {
-    //   print(await controller.getUserData());
-    // }
-    
+    Future<bool> showExitPopup() async {
+      return await showDialog(
+          context: Get.overlayContext!,
+          builder: (context) => CustomDialog(
+            dialogTitle: 'Exit App',
+            onLeftButtonPressed: () => Navigator.of(context).pop(false),
+            onRightButtonPressed: () => Get.back(result: true),
+            dialogMessage: 'Do you want to exit the app?',
+          )) ??
+          false;
+    }
+
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
     return WillPopScope(
-        onWillPop: showExitPopup,
-        child: Scaffold(
-          key: _scaffoldKey,
-          drawer: Drawer(
-              child: Drawer(
-            // Add a ListView to the drawer. This ensures the user can scroll
-            // through the options in the drawer if there isn't enough vertical
-            // space to fit everything.
+      onWillPop: showExitPopup,
+      child: Scaffold(
+        key: _scaffoldKey,
+        drawer: Drawer(
+          child: Drawer(
             child: ListView(
-              // Important: Remove any padding from the ListView.
               padding: EdgeInsets.zero,
               children: [
                 DrawerHeader(
@@ -84,21 +76,13 @@ class HomeScreen extends StatelessWidget {
                 ListTile(
                   title: Text('Profile'),
                   onTap: () {
-                    // Update the state of the app.
-                    // ...
-                    // onDrawerItemClick(context, 'Profile');
-                    //  () => Navigator.of(context).pop();
                     Navigator.pop(context);
-
                     Get.to(() => Profile());
-                    // Navigator.of(context).pop();
                   },
                 ),
                 ListTile(
                   title: const Text('Add Medicines'),
                   onTap: () {
-                    // Update the state of the app.
-                    // ...
                     Navigator.pop(context);
                     userController.isMedicineSelected.value = false;
                     Get.to(() => AddNewMedicine());
@@ -107,18 +91,20 @@ class HomeScreen extends StatelessWidget {
                 ListTile(
                   title: const Text('Privacy Policy'),
                   onTap: () {
-                    // Update the state of the app.
-                    // ...
                     Navigator.pop(context);
                     Get.to(() => PrivacyPolicy());
                   },
                 ),
               ],
             ),
-          )),
-          body: Column(children: [
+          ),
+        ),
+        body: Column(
+          children: [
             Container(
-              height: MediaQuery.of(context).size.height * 0.7,
+              height: isTablet
+                  ? MediaQuery.of(context).size.height * 0.7
+                  : MediaQuery.of(context).size.height * 0.4,
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [Colors.white, Color(0xFF008095)],
@@ -133,10 +119,10 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding: EdgeInsets.fromLTRB(20, 40, 0, 0),
+                            padding: EdgeInsets.fromLTRB(
+                                20, isTablet ? 40 : 20, 0, 0),
                             child: IconButton(
                               icon: Icon(Icons.menu,
                                   color: AppColors.customBackground),
@@ -145,31 +131,32 @@ class HomeScreen extends StatelessWidget {
                               },
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsets.fromLTRB(12, 40, 20, 0),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(
+                                12, isTablet ? 40 : 20, 20, 0),
                             child: Text("KodeRx",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 26,
+                                    fontSize: isTablet ? 26 : 18,
                                     color: AppColors.customBackground)),
                           ),
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
+                        padding: EdgeInsets.fromLTRB(
+                            20, isTablet ? 20 : 10, 0, 0),
                         child: FutureBuilder(
                           future: controller.getUserData(),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
                               if (snapshot.hasData) {
-                                UserModel userData = snapshot.data as UserModel;
-                                if(userData.accountStatus != 'active') {
+                                UserModel userData =
+                                snapshot.data as UserModel;
+                                if (userData.accountStatus != 'active') {
                                   userRepository.disableAccount('active');
                                 }
                                 userStatus.value = userData.status!;
-                                // userController.currentLoggedInUserName.value =
-                                //     userData.fullname;
                                 username.value = userData.fullname;
                                 if (userData.signature != '') {
                                   userController.signatureStore.value =
@@ -180,25 +167,25 @@ class HomeScreen extends StatelessWidget {
                                   children: [
                                     userData.profileImage != ''
                                         ? CircleAvatar(
-                                            radius: 55.0,
-                                            backgroundImage: NetworkImage(
-                                              userData.profileImage,
-                                            ),
-                                          )
-                                        : const CircleAvatar(
-                                            radius: 55.0,
-                                            backgroundImage: NetworkImage(
-                                                'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
-                                          ),
+                                      radius: isTablet ? 44.0 : 22.0,
+                                      backgroundImage: NetworkImage(
+                                        userData.profileImage,
+                                      ),
+                                    )
+                                        :  CircleAvatar(
+                                      radius: isTablet ? 44.0 : 22.0,
+                                      backgroundImage: NetworkImage(
+                                          'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
+                                    ),
                                     SizedBox(width: 10.0),
                                     Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           'Hello, Dr. ${userData.fullname}',
                                           style: TextStyle(
-                                            fontSize: isTablet ? 28.0 : 18.0,
+                                            fontSize: isTablet ? 22.0 : 16.0,
                                             fontWeight: FontWeight.bold,
                                             color: AppColors.customBackground,
                                           ),
@@ -206,7 +193,7 @@ class HomeScreen extends StatelessWidget {
                                         Text(
                                           userData.specialist,
                                           style: TextStyle(
-                                            fontSize: isTablet ? 28.0 : 14.0,
+                                            fontSize: isTablet ? 22.0 : 16.0,
                                             color: AppColors.customBackground,
                                           ),
                                         ),
@@ -215,29 +202,30 @@ class HomeScreen extends StatelessWidget {
                                   ],
                                 );
                               } else {
-                                return const Center(
+                                return Center(
                                   child: CircularProgressIndicator(
                                     color: AppColors.customBackground,
                                   ),
                                 );
                               }
                             } else {
-                              return const Center(
+                              return Center(
                                 child: CircularProgressIndicator(
                                   color: AppColors.customBackground,
                                 ),
                               );
                             }
-                            // return Container();
                           },
                         ),
                       ),
-                      const SizedBox(height: 150.0),
+                      SizedBox(
+                        height: isTablet ? 40.0 : 20.0,
+                      ),
                       Container(
-                        width: double.infinity, // Full width
-                        height: 500.0,
+                        width: double.infinity,
+                        height: isTablet ? 400.0 : 200.0,
                         child: Image.asset(
-                          'assets/images/ic_home_bg.png', // Adjust the BoxFit as per your requirement
+                          'assets/images/ic_home_bg.png',
                         ),
                       ),
                     ],
@@ -245,11 +233,8 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
-              height: 50,
-            ),
             Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(isTablet ? 40.0 : 20.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -266,8 +251,10 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-          ]),
-        ));
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -287,7 +274,6 @@ class SquareModule extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // var snack = Get.snackbar('Subscription Expired', 'Your subcription has expired', colorText: Colors.redAccent);
         if (text == 'Make Rx') {
           if (userStatus.value == '1') {
             Get.to(() => Patient_info());
@@ -305,7 +291,6 @@ class SquareModule extends StatelessWidget {
                 ));
           }
         } else if (text == 'Rx History') {
-          // Handle navigation to Rx History screen
           if (userStatus.value == '1') {
             Get.to(() => RxHistory());
           } else if (userStatus.value == '0') {
@@ -324,8 +309,8 @@ class SquareModule extends StatelessWidget {
         }
       },
       child: Container(
-        width: isTablet ? 250.0 : 150.0,
-        height: isTablet ? 250.0 : 150.0,
+        width: isTablet ? 200.0 : 100.0,
+        height: isTablet ? 200.0 : 100.0,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFF008095), Color(0xFF008095)],

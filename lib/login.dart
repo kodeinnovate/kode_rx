@@ -73,10 +73,10 @@ class LoginScreen extends StatelessWidget {
                         double spacing;
                         if (constraints.maxWidth < 600) {
                           // Mobile mode
-                          spacing = 279.0;
+                          spacing = 100.0;
                         } else {
                           // Tablet mode or larger
-                          spacing = 315.0;
+                          spacing = 200.0;
                         }
 
                         return SizedBox(
