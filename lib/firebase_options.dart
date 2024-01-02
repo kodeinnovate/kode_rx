@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,39 +49,20 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyANmnKKi2nrQTxEliyA3biIoNeyoNUyi3c',
-    appId: '1:229890412339:web:6d1025aa5aaddb5a9cf846',
-    messagingSenderId: '229890412339',
-    projectId: 'kodeneo-4a446',
-    authDomain: 'kodeneo-4a446.firebaseapp.com',
-    storageBucket: 'kodeneo-4a446.appspot.com',
-    measurementId: 'G-6D9MMVMBNF',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAZA-BDfnmq9jwsGd7iRNWAJ1NxpIgtqIw',
-    appId: '1:229890412339:android:26d1bdc0379988889cf846',
-    messagingSenderId: '229890412339',
-    projectId: 'kodeneo-4a446',
-    storageBucket: 'kodeneo-4a446.appspot.com',
+    apiKey: 'AIzaSyBCOR2jBOWbTHKZv9jySmMUDwcHWjFUzM8',
+    appId: '1:392787632209:android:7731c57deb3d06def21870',
+    messagingSenderId: '392787632209',
+    projectId: 'dental-ad5ee',
+    storageBucket: 'dental-ad5ee.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDC8Q1glRlBb63pNn6qCS_jYFybC_HrySg',
-    appId: '1:229890412339:ios:c777b4414995e0f69cf846',
-    messagingSenderId: '229890412339',
-    projectId: 'kodeneo-4a446',
-    storageBucket: 'kodeneo-4a446.appspot.com',
+    apiKey: 'AIzaSyCjBv_yIdM7eCimdA3MPBpEp9h1SENki9g',
+    appId: '1:392787632209:ios:a47ee387c0a38e5ef21870',
+    messagingSenderId: '392787632209',
+    projectId: 'dental-ad5ee',
+    storageBucket: 'dental-ad5ee.appspot.com',
     iosBundleId: 'com.example.kodeRx',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDC8Q1glRlBb63pNn6qCS_jYFybC_HrySg',
-    appId: '1:229890412339:ios:0e14a3b9849f1cdf9cf846',
-    messagingSenderId: '229890412339',
-    projectId: 'kodeneo-4a446',
-    storageBucket: 'kodeneo-4a446.appspot.com',
-    iosBundleId: 'com.example.kodeRx.RunnerTests',
   );
 }

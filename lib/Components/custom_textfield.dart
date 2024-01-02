@@ -6,15 +6,17 @@ class CustomTextfield extends StatelessWidget {
   final TextInputType keyboardType;
   final String hintText;
   final bool obsecureText;
+  final bool? readOnly;
 
   const CustomTextfield(
-      {super.key,  this.controller, required this.hintText, required this.obsecureText, required this.keyboardType});
+      {super.key,  this.controller, required this.hintText, required this.obsecureText, required this.keyboardType, this.readOnly});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: TextFormField(
+        readOnly: readOnly ?? false,
         controller: controller,
         obscureText: obsecureText,
         keyboardType: keyboardType,

@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "229890412339",
-    "project_id": "kodeneo-4a446",
-    "storage_bucket": "kodeneo-4a446.appspot.com"
+    "project_number": "392787632209",
+    "project_id": "dental-ad5ee",
+    "storage_bucket": "dental-ad5ee.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:229890412339:android:26d1bdc0379988889cf846",
+        "mobilesdk_app_id": "1:392787632209:android:7731c57deb3d06def21870",
         "android_client_info": {
           "package_name": "com.example.kode_rx"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAZA-BDfnmq9jwsGd7iRNWAJ1NxpIgtqIw"
+          "current_key": "AIzaSyBCOR2jBOWbTHKZv9jySmMUDwcHWjFUzM8"
         }
       ],
       "services": {
