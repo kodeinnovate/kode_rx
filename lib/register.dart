@@ -35,8 +35,8 @@ class Signup extends StatelessWidget {
   final specialtyController = TextEditingController();
   final doctorRegisterationNo = TextEditingController();
   final privacyPolicyTermOfCondition = false;
-  final Uri _url = Uri.parse(
-      'https://app.termly.io/dashboard/website/c9e29775-2ae1-4d6a-88ef-dfceff9150e7/terms-of-service');
+  final Uri _url =
+      Uri.parse('https://kodeinnovate.github.io/KodeRx-Terms-and-condition/');
   bool isChecked = false;
 
   Future<void> _launchUrl() async {
@@ -239,37 +239,36 @@ class Signup extends StatelessWidget {
 
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  
-                      child: Row(
-                        children: [
-                          MyCheckbox(),
-                          Expanded(
-                            child: RichText(
-                              maxLines: 3,
-                              softWrap: true,
-                              text: TextSpan(
-                                children: <TextSpan>[
-                                 const TextSpan(
-                                    text:
-                                        'I am a Registered Medical practitioner and I agree to the ',
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 16),
-                                  ),
-                                  TextSpan(
-                                      text: 'terms & conditions',
-                                      style: const TextStyle(
-                                          color: AppColors.customBackground,
-                                          fontSize: 16),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () => _launchUrl()),
-                                ],
-                              ),
+                    child: Row(
+                      children: [
+                        MyCheckbox(),
+                        Expanded(
+                          child: RichText(
+                            maxLines: 3,
+                            softWrap: true,
+                            text: TextSpan(
+                              children: <TextSpan>[
+                                const TextSpan(
+                                  text:
+                                      'I am a Registered Medical practitioner and I agree to the ',
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
+                                TextSpan(
+                                    text: 'terms & conditions',
+                                    style: const TextStyle(
+                                        color: AppColors.customBackground,
+                                        fontSize: 16),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () => _launchUrl()),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                
+                  ),
+
                   const SizedBox(
                     height: 16,
                   ),
@@ -333,7 +332,8 @@ class Signup extends StatelessWidget {
       }
       Get.to(() => OTPScreen(AuthOperation.signUp));
     } else {
-      Get.snackbar('Field Empty!', 'Please fill all the inputs and accept the terms and condition to procced if havn\'t already',
+      Get.snackbar('Field Empty!',
+          'Please fill all the inputs and accept the terms and condition to procced if havn\'t already',
           barBlur: 10,
           backgroundColor: Colors.white.withOpacity(0.6),
           icon: const Icon(Icons.warning_amber_outlined),

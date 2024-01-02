@@ -499,10 +499,10 @@ class PrivacyPolicy extends StatelessWidget {
               ),
             )),
             Container(
-              height: 70,
+              height: 100,
               width: double.maxFinite,
               decoration: BoxDecoration(
-                  color: primaryColor,
+                  color: Colors.white,
                   borderRadius:
                       BorderRadius.vertical(top: Radius.circular(10.0))),
               child: Row(
@@ -510,12 +510,20 @@ class PrivacyPolicy extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, elevation: 3, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0))),
                       onPressed: () => {
                         Get.back()
-                        }, child: const Text('Decline')),
-                  ElevatedButton(
+                        }, child: const Padding(
+                          padding:  EdgeInsets.all(20.0),
+                          child:  Text('Decline', style: TextStyle(color: Colors.white, fontSize: 16),),
+                        )),
+                  ElevatedButton(            
+                    style: ElevatedButton.styleFrom(backgroundColor: primaryColor, elevation: 3, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0))),
                       onPressed: () => Get.to(() => Signup()),
-                      child: const Text('Accept'))
+                      child: const Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: Text('Accept', style: TextStyle(color: Colors.white, fontSize: 16),),
+                      ))
                 ],
               ),
             ),
