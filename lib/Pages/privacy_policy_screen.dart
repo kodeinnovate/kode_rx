@@ -512,7 +512,8 @@ class PrivacyPolicy extends StatelessWidget {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent, elevation: 3, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0))),
                       onPressed: () => {
-                        Get.back()
+                        Navigator.pop(context),
+                        Get.snackbar('Privacy Policy Rejected', 'You must accept the Privacy policy to register')
                         }, child: const Padding(
                           padding:  EdgeInsets.all(20.0),
                           child:  Text('Decline', style: TextStyle(color: Colors.white, fontSize: 16),),

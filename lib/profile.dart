@@ -349,7 +349,7 @@ class Profile extends StatelessWidget {
                                       rightButtonText: 'Logout',
                                       onLeftButtonPressed: () =>
                                           Navigator.of(context).pop(),
-                                      onRightButtonPressed: logout,
+                                      onRightButtonPressed: () => logout(signatureStoreInBytes: userController.signatureStoreInBytes),
                                     );
                                   },
                                 )
@@ -479,7 +479,8 @@ class Profile extends StatelessWidget {
   }
 }
 
-void logout() {
+void logout({Rx<Uint8List?>? signatureStoreInBytes }) {
+  signatureStoreInBytes?.value = null;
   AuthenticationRepo.instance.logout();
   Get.snackbar('Logged Out!', 'You are are now logged out');
 }

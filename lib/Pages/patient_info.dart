@@ -9,15 +9,15 @@ import 'package:kode_rx/database/patient_data.dart';
 import 'package:kode_rx/device_helper.dart';
 import 'package:kode_rx/select_medicenes.dart';
 
-class Patient_info extends StatefulWidget {
-  const Patient_info({super.key});
-  static Patient_info get instance => Get.find();
+class PatientInfo extends StatefulWidget {
+  const PatientInfo({super.key});
+  static PatientInfo get instance => Get.find();
 
   @override
-  State<Patient_info> createState() => _Patient_infoState();
+  State<PatientInfo> createState() => _PatientInfoState();
 }
 
-class _Patient_infoState extends State<Patient_info> {
+class _PatientInfoState extends State<PatientInfo> {
   final userRepository = Get.put(UserRepo());
   UserController userController = Get.put(UserController());
   final patientName = TextEditingController();
@@ -34,13 +34,7 @@ class _Patient_infoState extends State<Patient_info> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: GestureDetector(
-            onTap: () {
-              // Close the keyboard when tapped anywhere on the screen
-              FocusScope.of(context).unfocus();
-            },
-            child: Scaffold(
+    return Scaffold(
               appBar: DeviceHelper.deviceAppBar(title: 'Patient Information'),
               body: GestureDetector(
                 onTap: () {
@@ -87,7 +81,8 @@ class _Patient_infoState extends State<Patient_info> {
                         Row(
                           children: [
                             Container(
-                              child: Text(
+                              padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                              child: const  Text(
                                 'Select your gender',
                                 style: TextStyle(
                                   fontSize: 16,
@@ -95,7 +90,6 @@ class _Patient_infoState extends State<Patient_info> {
                                   color: Colors.black,
                                 ),
                               ),
-                              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
                             ),
                             Expanded(
                               child: RadioListTile(
@@ -159,7 +153,7 @@ class _Patient_infoState extends State<Patient_info> {
                   ),
                 ),
               ),
-            )));
+            );
   }
 
   Future<void> patientDataStore() async {

@@ -376,7 +376,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
 
 // Dialog no.2 // Meal Dialogue
   void showMealDialog(Medicine medicine, List<String> selectedTimesToTake) {
-    var mealType = 'before'; // Default value, can be 'before' or 'after'
+    var mealType = ''; // Default value, can be 'before' or 'after'
 
     final mealDialogKey = GlobalKey<FormState>();
 
@@ -458,7 +458,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
               onPressed: () {
                 if (mealDialogKey.currentState!.validate()) {
                   medicine.timesToTake = selectedTimesToTake;
-                  medicine.beforeMeal = mealType == 'before';
+                  medicine.beforeMeal = mealType;
                   setState(() {
                     selectedMedicines.add(medicine);
                   });
@@ -666,7 +666,7 @@ class Medicine {
   final String status;
   String? mg;
   List<String> timesToTake = [];
-  bool beforeMeal = false;
+  String beforeMeal = '';
 
   Medicine(
     this.name,
@@ -810,7 +810,7 @@ class SelectedMedicationsList extends StatelessWidget {
 
   // ...
   String? editedMg;
-  bool? editedBeforeMeal;
+  String? editedBeforeMeal;
   List<String>? editedTimesToTake;
   Medicine? _editingMedicine;
   List<String>? options;
@@ -872,11 +872,12 @@ class SelectedMedicationsList extends StatelessWidget {
                     children: [
                       Radio(
                         activeColor: AppColors.customBackground,
-                        value: true,
+                        value: 'before',
                         groupValue: editedBeforeMeal,
+        
                         onChanged: (value) {
                           setState(() {
-                            editedBeforeMeal = value as bool;
+                            editedBeforeMeal = value as String;
                           });
                         },
                       ),
@@ -890,11 +891,11 @@ class SelectedMedicationsList extends StatelessWidget {
                     children: [
                       Radio(
                         activeColor: AppColors.customBackground,
-                        value: false,
+                        value: 'after',
                         groupValue: editedBeforeMeal,
                         onChanged: (value) {
                           setState(() {
-                            editedBeforeMeal = value as bool;
+                            editedBeforeMeal = value as String;
                           });
                         },
                       ),
@@ -1148,6 +1149,8 @@ class SelectedMedicationsList extends StatelessWidget {
     );
   }
 
+ 
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -1170,7 +1173,7 @@ class SelectedMedicationsList extends StatelessWidget {
                         fontSize: 20, color: AppColors.customBackground),
                   ),
                   subtitle: Text(
-                    'Time to take: ${medicine.timesToTake.isNotEmpty ? medicine.timesToTake.join(', ') : 'No specific time'} | Meal: ${medicine.beforeMeal ? 'Before Meal' : 'After Meal'}',
+                    'Time to take: ${medicine.timesToTake.isNotEmpty ? medicine.timesToTake.join(', ') : 'No specific time'} | Meal: ${medicine.beforeMeal == '' ? '' :  medicine.beforeMeal == 'before' ? 'Before Meal' : 'After Meal'}',
                     style: const TextStyle(fontSize: 16),
                   ),
                   trailing: Row(

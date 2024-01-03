@@ -43,13 +43,13 @@ class HomeScreen extends StatelessWidget {
 
     Future<bool> showExitPopup() async {
       return await showDialog(
-          context: Get.overlayContext!,
-          builder: (context) => CustomDialog(
-            dialogTitle: 'Exit App',
-            onLeftButtonPressed: () => Navigator.of(context).pop(false),
-            onRightButtonPressed: () => Get.back(result: true),
-            dialogMessage: 'Do you want to exit the app?',
-          )) ??
+              context: Get.overlayContext!,
+              builder: (context) => CustomDialog(
+                    dialogTitle: 'Exit App',
+                    onLeftButtonPressed: () => Navigator.of(context).pop(false),
+                    onRightButtonPressed: () => Get.back(result: true),
+                    dialogMessage: 'Do you want to exit the app?',
+                  )) ??
           false;
     }
 
@@ -115,47 +115,61 @@ class HomeScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
-                                children: [
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(
-                                20, isTablet ? 40 : 20, 0, 0),
-                                child: IconButton(
-                                  icon: Icon(Icons.menu,
-                                      color: AppColors.customBackground),
-                                  onPressed: () {
-                                    _scaffoldKey.currentState?.openDrawer();
-                                  },
+                            children: [
+                              GestureDetector(
+                                onTap: () =>
+                                    _scaffoldKey.currentState?.openDrawer(),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 32, 10, 0),
+                                  child: Image.asset(
+                                      'assets/images/KodeRx_Logo.png',
+                                      width: 50.0,
+                                      height: 50.0),
                                 ),
                               ),
+                              // Padding(
+                              //   padding: EdgeInsets.fromLTRB(
+                              //       0, isTablet ? 40 : 20, 0, 0),
+                              //   child: IconButton(
+                              //     icon: Icon(Icons.menu,
+                              //         color: AppColors.customBackground),
+                              //     onPressed: () {
+                              //       _scaffoldKey.currentState?.openDrawer();
+                              //     },
+                              //   ),
+                              // ),
                               Padding(
                                 padding: EdgeInsets.fromLTRB(
-                                12, isTablet ? 40 : 20, 20, 0),
+                                    6, isTablet ? 40 : 20, 20, 0),
                                 child: Text("KodeRx",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: isTablet ? 26 : 18,
                                         color: AppColors.customBackground)),
                               ),
+                              
                             ],
                           ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 32, 30, 0),
-                            child: Image.asset('assets/images/KodeRx_Logo.png',
-                                width: 50.0, height: 50.0),
+                            padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
+                            child: Image.asset(
+                                'assets/images/ic_dental_logo.png',
+                                width: 220.0,
+                                height: 70.0),
                           ),
                         ],
                       ),
                       Padding(
-                        padding: EdgeInsets.fromLTRB(
-                            20, isTablet ? 20 : 10, 0, 0),
+                        padding:
+                            EdgeInsets.fromLTRB(20, isTablet ? 20 : 10, 0, 0),
                         child: FutureBuilder(
                           future: controller.getUserData(),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
                               if (snapshot.hasData) {
-                                UserModel userData =
-                                snapshot.data as UserModel;
+                                UserModel userData = snapshot.data as UserModel;
                                 if (userData.accountStatus != 'active') {
                                   userRepository.disableAccount('active');
                                 }
@@ -170,20 +184,20 @@ class HomeScreen extends StatelessWidget {
                                   children: [
                                     userData.profileImage != ''
                                         ? CircleAvatar(
-                                      radius: isTablet ? 44.0 : 22.0,
-                                      backgroundImage: NetworkImage(
-                                        userData.profileImage,
-                                      ),
-                                    )
-                                        :  CircleAvatar(
-                                      radius: isTablet ? 44.0 : 22.0,
-                                      backgroundImage: NetworkImage(
-                                          'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
-                                    ),
+                                            radius: isTablet ? 44.0 : 22.0,
+                                            backgroundImage: NetworkImage(
+                                              userData.profileImage,
+                                            ),
+                                          )
+                                        : CircleAvatar(
+                                            radius: isTablet ? 44.0 : 22.0,
+                                            backgroundImage: NetworkImage(
+                                                'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
+                                          ),
                                     SizedBox(width: 10.0),
                                     Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           'Hello, Dr. ${userData.fullname}',
@@ -204,15 +218,28 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                   ],
                                 );
-                              } else {
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                    color: AppColors.customBackground,
+                              } else if (snapshot.hasError) {
+                                return const Center(
+                                  child: Column(
+                                    children: [
+                                      CircularProgressIndicator(
+                                        color: AppColors.customBackground,
+                                      ),
+                                      Text(
+                                        'Please Wait...',
+                                        style: TextStyle(
+                                            color: AppColors.customBackground),
+                                      ),
+                                    ],
                                   ),
+                                );
+                              } else {
+                                return const Center(
+                                  child: Text('SomeThing went wrong'),
                                 );
                               }
                             } else {
-                              return Center(
+                              return const Center(
                                 child: CircularProgressIndicator(
                                   color: AppColors.customBackground,
                                 ),
@@ -279,7 +306,7 @@ class SquareModule extends StatelessWidget {
       onTap: () {
         if (text == 'Make Rx') {
           if (userStatus.value == '1') {
-            Get.to(() => Patient_info());
+            Get.to(() => PatientInfo());
           } else if (userStatus.value == '0') {
             Get.snackbar('Subscription Expired', '',
                 titleText: Text(

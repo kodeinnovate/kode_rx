@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),
         '/selectMedicenesScreen': (context) => MedicationReminderApp(),
-        '/Patient_info' : (context) => Patient_info(),
+        '/PatientInfo' : (context) => PatientInfo(),
         '/patientAppointmentScreen': (context) => PatientAppointmentsScreen(),
         '/register': (context) => Signup(),
         // '/otpPage': (context) => OTPScreen(),

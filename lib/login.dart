@@ -50,21 +50,32 @@ class LoginScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10.0, 40.0, 0.0, 0.0),
                       child: Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(left: 0),
-                            child: Image.asset('assets/images/KodeRx_Logo.png',
-                                width: 50.0, height: 50.0),
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(left: 0),
+                                child: Row(
+                                  children: [
+                                    Image.asset('assets/images/KodeRx_Logo.png',
+                                        width: 50.0, height: 50.0),
+                                  ],
+                                ),
+                              ),
+                              const Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 10.0),
+                                  child: Text('KodeRx',
+                                      style: TextStyle(
+                                          fontSize: 44.0, color: Colors.white)),
+                                ),
+                              ),
+                            ],
                           ),
-                          const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 10.0),
-                              child: Text('KodeRx',
-                                  style: TextStyle(
-                                      fontSize: 44.0, color: Colors.white)),
-                            ),
-                          ),
+                              Image.asset('assets/images/ic_dental_logo.png',
+                                        width: 220.0, height: 70.0),
                         ],
                       ),
                     ),
