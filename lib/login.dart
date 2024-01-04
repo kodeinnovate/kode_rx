@@ -74,8 +74,11 @@ class LoginScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                              Image.asset('assets/images/ic_dental_logo.png',
-                                        width: 220.0, height: 70.0),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Image.asset('assets/images/siraj_dental_logo.png',
+                                          width: 220.0, height: 70.0),
+                              ),
                         ],
                       ),
                     ),

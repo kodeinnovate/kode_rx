@@ -92,14 +92,14 @@ class PdfController extends GetxController {
     doc.addPage(
       pw.MultiPage(
         build: (context) => [
-          pw.SizedBox(height: 150.0),
+          pw.SizedBox(height: 160.0),
           // pw.Row(
           //   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
           //   children: [dateTime(context)],
           // ),
-          pw.SizedBox(height: 10.0),
+          // pw.SizedBox(height: 10.0),
           patientDetails(context),
-          pw.SizedBox(height: 10.0),
+          pw.SizedBox(height: 14.0),
           buildInvoice(context),
           pw.SizedBox(height: 10.0),
           pw.Divider(),
@@ -135,16 +135,15 @@ class PdfController extends GetxController {
         ],
         footer: (context) =>
             pw.Row(mainAxisAlignment: pw.MainAxisAlignment.end, children: [
+              pw.SizedBox(height: 20),
           if (signature(context) != null)
             signature(context)!
           else
             pw.Row(children: [
               pw.Text('Prescribed By: DR. ',
-                  style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold, fontSize: fontSize)),
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
               pw.Text(userController.currentLoggedInUserName.value,
-                  style: pw.TextStyle(
-                      fontWeight: pw.FontWeight.bold, fontSize: fontSize))
+                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold))
             ]),
         ]),
         // footer: (context) => pw.Container(
@@ -189,9 +188,8 @@ class PdfController extends GetxController {
       headers: headers,
       data: data!,
       border: null,
-      headerStyle:
-          pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: fontSize),
-      cellStyle: pw.TextStyle(fontSize: fontSize),
+      headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+      // cellStyle: pw.TextStyle(fontSize: fontSize),
       headerDecoration: const pw.BoxDecoration(
         color: PdfColors.grey300,
       ),
@@ -228,7 +226,7 @@ class PdfController extends GetxController {
 
                 // companyWaterMark(context)
               ]),
-          pw.SizedBox(height: 10),
+          pw.SizedBox(height: 14),
           pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
@@ -239,40 +237,42 @@ class PdfController extends GetxController {
                         pw.Text(
                           '           ${userController.patientAge.value}',
                           style: pw.TextStyle(
-                              fontSize: 14, fontWeight: pw.FontWeight.normal),
+                               fontWeight: pw.FontWeight.normal),
                         ),
                         pw.SizedBox(width: 20.0),
                         pw.Text(
                           'Gender: ${userController.patientGender.value}',
                           style: pw.TextStyle(
-                              fontSize: fontSize,
+                            
                               fontWeight: pw.FontWeight.normal),
                         ),
                       ]),
                     ]),
                 dateTime(context),
               ]),
-          pw.SizedBox(height: 10),
-          pw.Padding(padding: pw.EdgeInsets.only(left: 10),
-          child: pw.Wrap(
-            children: [
-              pw.RichText(
-                  text: pw.TextSpan(children: [
-                pw.TextSpan(
-                    text: 'History: ',
-                    style: pw.TextStyle(
-                        fontWeight: pw.FontWeight.bold, fontSize: fontSize)),
-                pw.TextSpan(
+          pw.SizedBox(height: 16),
+          pw.Padding(
+            padding: pw.EdgeInsets.only(left: 10),
+            child: pw.Wrap(
+              children: [
+                pw.RichText(
+                    text: pw.TextSpan(children: [
+                  pw.TextSpan(
+                      text: 'History: ',
+                      style: pw.TextStyle(
+                          fontWeight: pw.FontWeight.bold)),
+                  pw.TextSpan(
                     text: userController.patientPastHistory.value,
-                    style: pw.TextStyle(fontSize: fontSize)),
-              ])),
-              // pw.Text(
-              //   'History: ${userController.patientPastHistory.value}',
-              //   style: pw.TextStyle(
-              //       fontSize: fontSize, fontWeight: pw.FontWeight.normal),
-              // ),
-            ],
-          ),
+                    // style: pw.TextStyle(fontSize: fontSize),
+                  ),
+                ])),
+                // pw.Text(
+                //   'History: ${userController.patientPastHistory.value}',
+                //   style: pw.TextStyle(
+                //       fontSize: fontSize, fontWeight: pw.FontWeight.normal),
+                // ),
+              ],
+            ),
           ),
         ],
       );
@@ -287,8 +287,7 @@ class PdfController extends GetxController {
           // ),
           pw.Text(
             '    ${DateFormat.yMd().add_jm().format(currentDate)}',
-            style: pw.TextStyle(
-                fontSize: fontSize, fontWeight: pw.FontWeight.normal),
+            style: pw.TextStyle(fontWeight: pw.FontWeight.normal),
           ),
         ],
       );
@@ -316,12 +315,13 @@ class PdfController extends GetxController {
     }
 
     return pw.Column(children: [
+      pw.SizedBox(height: 20.0),
       pw.Image(
         pw.MemoryImage(signatureBytes),
         width: 100,
         height: 100,
       ),
-      pw.SizedBox(height: 8.0),
+      pw.SizedBox(height: 4.0),
       pw.Row(children: [
         pw.Text('Prescribed By: DR. ',
             style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),

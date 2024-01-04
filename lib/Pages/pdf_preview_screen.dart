@@ -35,11 +35,12 @@ class PreviewScreen extends StatelessWidget {
         body: WillPopScope(
           onWillPop: showExitPopup,
           child: PdfPreview(
+            pageFormats: const {'A5': PdfPageFormat.a5, 'A4': PdfPageFormat.a4, 'Letter':  PdfPageFormat.letter},
             padding: const EdgeInsets.only(top: 40.0),
             build: (format) => doc.save(),
             allowPrinting: true,
             allowSharing: true,
-            initialPageFormat: PdfPageFormat.a4,
+            initialPageFormat: PdfPageFormat.a5,
             pdfFileName: '$fileName.pdf',
             canChangeOrientation: false,
             canDebug: false,

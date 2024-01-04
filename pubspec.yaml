@@ -119,6 +119,8 @@ flutter:
     - assets/images/ic_rx_prescription_icon.png
     - assets/images/KodeRx_Logo.png
     - assets/images/ic_dental_logo.png
+    - assets/images/siraj_dental_logo.png
+    - assets/images/no_profile_image_default_profile_image_avatar.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

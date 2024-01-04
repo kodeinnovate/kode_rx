@@ -154,7 +154,7 @@ class HomeScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
                             child: Image.asset(
-                                'assets/images/ic_dental_logo.png',
+                                'assets/images/siraj_dental_logo.png',
                                 width: 220.0,
                                 height: 70.0),
                           ),
@@ -189,6 +189,11 @@ class HomeScreen extends StatelessWidget {
                                               userData.profileImage,
                                             ),
                                           )
+                                        // : CircleAvatar(
+                                        //     radius: isTablet ? 44.0 : 22.0,
+                                        //     backgroundImage: NetworkImage(
+                                        //         'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
+                                        //   ),
                                         : CircleAvatar(
                                             radius: isTablet ? 44.0 : 22.0,
                                             backgroundImage: NetworkImage(
