@@ -43,16 +43,17 @@ class UserRepo extends GetxController {
   }
 
   ///Doctor Specific medicines Data store
+  final RxBool addMedicineLoader = false.obs;
   addMedicineForUser(String userId, UserMedicineModel medicine) async {
     // Create a reference to the user's document
-    DocumentReference userRef = _db.collection("Users").doc(userId);
-
-    // Add medicine details to a subcollection named 'Medicines'
+    try {
+      addMedicineLoader.value = true;
+         DocumentReference userRef = _db.collection("Users").doc(userId);
     await userRef
         .collection("Medicines")
         .add(medicine.toJson())
         .whenComplete(() => Get.snackbar(
-              'Medicine Successfull Added',
+              'Medicine Successfully Added',
               'Medicine details have been added for the user.',
               snackPosition: SnackPosition.BOTTOM,
               backgroundColor: Colors.white,
@@ -68,6 +69,15 @@ class UserRepo extends GetxController {
         colorText: Colors.red,
       );
     });
+    } catch (e) {
+      print(e);
+      Get.snackbar('Error', "Something went wrong");
+    } finally {
+      addMedicineLoader.value = false;
+    }
+ 
+
+    // Add medicine details to a subcollection named 'Medicines'
   }
 
 
