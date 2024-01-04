@@ -161,7 +161,7 @@ class PdfController extends GetxController {
       return [
         '${medicine.name} ${medicine.mg == null || medicine.mg == '' ? '' : ' - ${medicine.mg}'}',
         medicine.timesToTake.isEmpty ? 'N/A' : medicine.timesToTake.join(', '),
-        medicine.beforeMeal ? 'Before Meal' : 'After Meal',
+        medicine.beforeMeal == '' ? '' : medicine.beforeMeal == 'before' ? 'Before Meal' : 'After Meal',
       ];
     }).toList();
 

@@ -122,7 +122,7 @@ class _PDFGeneratorState extends State<PDFGenerator> {
       return [
         medicine.name,
         medicine.timesToTake.isEmpty ? 'N/A' : medicine.timesToTake.join(', '),
-        medicine.beforeMeal ? 'Before Meal' : 'After Meal'
+        medicine.beforeMeal == '' ? '' : medicine.beforeMeal == 'before' ? 'Before Meal' : 'After Meal'
       ];
     }).toList();
     // Table Layout

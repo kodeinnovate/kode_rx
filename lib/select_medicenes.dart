@@ -1,3 +1,4 @@
+//Select Medicines
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
@@ -113,7 +114,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                 },
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.7,
+                height: MediaQuery.of(context).size.height * 0.6,
                 child: MedicationListView(
                   displayedMedicines: displayedMedicines,
                   selectedMedicines: selectedMedicines,
@@ -376,7 +377,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
 
 // Dialog no.2 // Meal Dialogue
   void showMealDialog(Medicine medicine, List<String> selectedTimesToTake) {
-    var mealType = 'before'; // Default value, can be 'before' or 'after'
+    var mealType = ''; // Default value, can be 'before' or 'after'
 
     final mealDialogKey = GlobalKey<FormState>();
 
@@ -458,7 +459,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
               onPressed: () {
                 if (mealDialogKey.currentState!.validate()) {
                   medicine.timesToTake = selectedTimesToTake;
-                  medicine.beforeMeal = mealType == 'before';
+                  medicine.beforeMeal = mealType;
                   setState(() {
                     selectedMedicines.add(medicine);
                   });
@@ -666,7 +667,7 @@ class Medicine {
   final String status;
   String? mg;
   List<String> timesToTake = [];
-  bool beforeMeal = false;
+  String beforeMeal = '';
 
   Medicine(
     this.name,
@@ -715,7 +716,7 @@ class MedicationListView extends StatelessWidget {
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
                 childAspectRatio:
-                    3 / 2.3, // Adjust the aspect ratio based on your needs
+                    3 / 2.8, // Adjust the aspect ratio based on your needs
               ),
               itemCount: displayedMedicines.length,
               itemBuilder: (context, index) {
@@ -734,12 +735,14 @@ class MedicationListView extends StatelessWidget {
                       ),
                       title: Text(
                         medicine.name,
-                        style: const TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 18),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       subtitle: Text(
                         medicine.details,
-                        style: const TextStyle(fontSize: 16.0),
-                        maxLines: 4,
+                        style: const TextStyle(fontSize: 14.0),
+                        maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
                       shape: RoundedRectangleBorder(
@@ -808,7 +811,7 @@ class SelectedMedicationsList extends StatelessWidget {
 
   // ...
   String? editedMg;
-  bool? editedBeforeMeal;
+  String? editedBeforeMeal;
   List<String>? editedTimesToTake;
   Medicine? _editingMedicine;
   List<String>? options;
@@ -870,11 +873,12 @@ class SelectedMedicationsList extends StatelessWidget {
                     children: [
                       Radio(
                         activeColor: AppColors.customBackground,
-                        value: true,
+                        value: 'before',
                         groupValue: editedBeforeMeal,
+        
                         onChanged: (value) {
                           setState(() {
-                            editedBeforeMeal = value as bool;
+                            editedBeforeMeal = value as String;
                           });
                         },
                       ),
@@ -888,11 +892,11 @@ class SelectedMedicationsList extends StatelessWidget {
                     children: [
                       Radio(
                         activeColor: AppColors.customBackground,
-                        value: false,
+                        value: 'after',
                         groupValue: editedBeforeMeal,
                         onChanged: (value) {
                           setState(() {
-                            editedBeforeMeal = value as bool;
+                            editedBeforeMeal = value as String;
                           });
                         },
                       ),
@@ -1146,6 +1150,8 @@ class SelectedMedicationsList extends StatelessWidget {
     );
   }
 
+ 
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -1168,7 +1174,7 @@ class SelectedMedicationsList extends StatelessWidget {
                         fontSize: 20, color: AppColors.customBackground),
                   ),
                   subtitle: Text(
-                    'Time to take: ${medicine.timesToTake.isNotEmpty ? medicine.timesToTake.join(', ') : 'No specific time'} | Meal: ${medicine.beforeMeal ? 'Before Meal' : 'After Meal'}',
+                    'Time to take: ${medicine.timesToTake.isNotEmpty ? medicine.timesToTake.join(', ') : 'No specific time'} | Meal: ${medicine.beforeMeal == '' ? '' :  medicine.beforeMeal == 'before' ? 'Before Meal' : 'After Meal'}',
                     style: const TextStyle(fontSize: 16),
                   ),
                   trailing: Row(

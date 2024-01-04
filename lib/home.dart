@@ -204,11 +204,24 @@ class HomeScreen extends StatelessWidget {
                                     ),
                                   ],
                                 );
+                              } else if (snapshot.hasError) {
+                                return const Center(
+                                  child: Column(
+                                    children: [
+                                      CircularProgressIndicator(
+                                        color: AppColors.customBackground,
+                                      ),
+                                      Text(
+                                        'Please Wait...',
+                                        style: TextStyle(
+                                            color: AppColors.customBackground),
+                                      ),
+                                    ],
+                                  ),
+                                );
                               } else {
                                 return const Center(
-                                  child: CircularProgressIndicator(
-                                    color: AppColors.customBackground,
-                                  ),
+                                  child: Text('SomeThing went wrong'),
                                 );
                               }
                             } else {
@@ -218,7 +231,6 @@ class HomeScreen extends StatelessWidget {
                                 ),
                               );
                             }
-                            // return Container();
                           },
                         ),
                       ),
