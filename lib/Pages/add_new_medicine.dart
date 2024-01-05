@@ -43,124 +43,127 @@ class _AddNewMedicineState extends State<AddNewMedicine> {
                 child: CircularProgressIndicator(
                   color: AppColors.customBackground,
                 ),
-              )  :  Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView(
-          children: [
-            Column(
-              children: [
-                const ListTile(
-                  title: Text(
-                    'Medicine Name',
-                    style: TextStyle(fontSize: 18),
+              )  :  GestureDetector(
+                onTap: () => FocusScope.of(context).unfocus(),
+                child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListView(
+                          children: [
+                            Column(
+                children: [
+                  const ListTile(
+                    title: Text(
+                      'Medicine Name',
+                      style: TextStyle(fontSize: 18),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: TextField(
-                    controller: medicineNameController,
-                    decoration: InputDecoration(
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                            // borderSide: BorderSide(color: AppColors.customBackground),
-                            ),
-                        fillColor: Colors.grey.shade200,
-                        filled: true,
-                        hintText: 'Enter Medicine Name',
-                        hintStyle: TextStyle(color: Colors.grey[500])),
-                  ),
-                ),
-                const ListTile(
-                  title:
-                      Text('Medicine Details', style: TextStyle(fontSize: 18)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: TextField(
-                    controller: medicineContentController,
-                    decoration: InputDecoration(
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                            // borderSide: BorderSide(color: AppColors.customBackground),
-                            ),
-                        fillColor: Colors.grey.shade200,
-                        filled: true,
-                        hintText: 'Enter Medicine details',
-                        hintStyle: TextStyle(color: Colors.grey[500])),
-                  ),
-                ),
-                const ListTile(
-                  title: Text('Medicine Type', style: TextStyle(fontSize: 18)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 70,
-                    child: InputDecorator(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: TextField(
+                      controller: medicineNameController,
                       decoration: InputDecoration(
-                        fillColor: Colors.grey.shade200,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey.shade200),
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: const OutlineInputBorder(
+                              // borderSide: BorderSide(color: AppColors.customBackground),
+                              ),
+                          fillColor: Colors.grey.shade200,
+                          filled: true,
+                          hintText: 'Enter Medicine Name',
+                          hintStyle: TextStyle(color: Colors.grey[500])),
+                    ),
+                  ),
+                  const ListTile(
+                    title:
+                        Text('Medicine Details', style: TextStyle(fontSize: 18)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: TextField(
+                      controller: medicineContentController,
+                      decoration: InputDecoration(
+                          enabledBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey),
+                          ),
+                          focusedBorder: const OutlineInputBorder(
+                              // borderSide: BorderSide(color: AppColors.customBackground),
+                              ),
+                          fillColor: Colors.grey.shade200,
+                          filled: true,
+                          hintText: 'Enter Medicine details',
+                          hintStyle: TextStyle(color: Colors.grey[500])),
+                    ),
+                  ),
+                  const ListTile(
+                    title: Text('Medicine Type', style: TextStyle(fontSize: 18)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 70,
+                      child: InputDecorator(
+                        decoration: InputDecoration(
+                          fillColor: Colors.grey.shade200,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey.shade200),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: AppColors.customBackground),
+                          ),
+                          //     fillColor: Colors.grey.shade200,
+                          filled: true,
+                          hintText: 'Enter Medicine details',
+                          hintStyle: TextStyle(color: Colors.grey.shade200),
+                          border: OutlineInputBorder(),
                         ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppColors.customBackground),
-                        ),
-                        //     fillColor: Colors.grey.shade200,
-                        filled: true,
-                        hintText: 'Enter Medicine details',
-                        hintStyle: TextStyle(color: Colors.grey.shade200),
-                        border: OutlineInputBorder(),
-                      ),
-                      child: Container(
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            value: selectedMedicineType,
-                            hint: Text(
-                              'Select Type',
-                              style: TextStyle(color: Colors.black),
+                        child: Container(
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: selectedMedicineType,
+                              hint: Text(
+                                'Select Type',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              iconSize: 20,
+                              itemHeight: 48,
+                              items: ['Cream','Ointement','Tablet',].map((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(
+                                    value,
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (String? newValue) {
+                                setState(() {
+                
+                                  selectedMedicineType = newValue;
+                                  // if (newValue != null) {
+                                  //   medicineTypeController.text = newValue;
+                                  // }
+                                });
+                              },
                             ),
-                            iconSize: 20,
-                            itemHeight: 48,
-                            items: ['Cream','Ointement','Tablet',].map((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(
-                                  value,
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (String? newValue) {
-                              setState(() {
-
-                                selectedMedicineType = newValue;
-                                // if (newValue != null) {
-                                //   medicineTypeController.text = newValue;
-                                // }
-                              });
-                            },
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  child: const TextFieldWithList(),
-                ),
-                const SizedBox(height: 20),
-                CustomButtom(buttonText: 'Submit', onTap: medicineDataStore),
-              ],
-            ),
-          ],
-        ),
-      ),)
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    child: const TextFieldWithList(),
+                  ),
+                  const SizedBox(height: 20),
+                  CustomButtom(buttonText: 'Submit', onTap: medicineDataStore),
+                ],
+                            ),
+                          ],
+                        ),
+                      ),
+              ),)
     );
   }
 

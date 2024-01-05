@@ -22,11 +22,21 @@ import 'device_helper.dart';
 var username = ''.obs;
 var userStatus = ''.obs;
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final UserModel? currentUser;
   const HomeScreen({super.key, this.currentUser});
 
   static HomeScreen get instance => Get.find();
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +53,13 @@ class HomeScreen extends StatelessWidget {
 
     Future<bool> showExitPopup() async {
       return await showDialog(
-          context: Get.overlayContext!,
-          builder: (context) => CustomDialog(
-            dialogTitle: 'Exit App',
-            onLeftButtonPressed: () => Navigator.of(context).pop(false),
-            onRightButtonPressed: () => Get.back(result: true),
-            dialogMessage: 'Do you want to exit the app?',
-          )) ??
+              context: Get.overlayContext!,
+              builder: (context) => CustomDialog(
+                    dialogTitle: 'Exit App',
+                    onLeftButtonPressed: () => Navigator.of(context).pop(false),
+                    onRightButtonPressed: () => Get.back(result: true),
+                    dialogMessage: 'Do you want to exit the app?',
+                  )) ??
           false;
     }
 
@@ -115,10 +125,10 @@ class HomeScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
-                                children: [
+                            children: [
                               Padding(
                                 padding: EdgeInsets.fromLTRB(
-                                20, isTablet ? 40 : 20, 0, 0),
+                                    20, isTablet ? 40 : 20, 0, 0),
                                 child: IconButton(
                                   icon: Icon(Icons.menu,
                                       color: AppColors.customBackground),
@@ -129,7 +139,7 @@ class HomeScreen extends StatelessWidget {
                               ),
                               Padding(
                                 padding: EdgeInsets.fromLTRB(
-                                12, isTablet ? 40 : 20, 20, 0),
+                                    12, isTablet ? 40 : 20, 20, 0),
                                 child: Text("KodeRx",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
@@ -146,16 +156,16 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                       Padding(
-                        padding: EdgeInsets.fromLTRB(
-                            20, isTablet ? 20 : 10, 0, 0),
+                        padding:
+                            EdgeInsets.fromLTRB(20, isTablet ? 20 : 10, 0, 0),
                         child: FutureBuilder(
                           future: controller.getUserData(),
                           builder: (context, snapshot) {
+                            // DependencyInjection.init();
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
                               if (snapshot.hasData) {
-                                UserModel userData =
-                                snapshot.data as UserModel;
+                                UserModel userData = snapshot.data as UserModel;
                                 if (userData.accountStatus != 'active') {
                                   userRepository.disableAccount('active');
                                 }
@@ -170,20 +180,20 @@ class HomeScreen extends StatelessWidget {
                                   children: [
                                     userData.profileImage != ''
                                         ? CircleAvatar(
-                                      radius: isTablet ? 44.0 : 22.0,
-                                      backgroundImage: NetworkImage(
-                                        userData.profileImage,
-                                      ),
-                                    )
-                                        :  CircleAvatar(
-                                      radius: isTablet ? 44.0 : 22.0,
-                                      backgroundImage: NetworkImage(
-                                          'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
-                                    ),
+                                            radius: isTablet ? 44.0 : 22.0,
+                                            backgroundImage: NetworkImage(
+                                              userData.profileImage,
+                                            ),
+                                          )
+                                        : CircleAvatar(
+                                            radius: isTablet ? 44.0 : 22.0,
+                                            backgroundImage: NetworkImage(
+                                                'https://cdn-icons-png.flaticon.com/128/8815/8815112.png'),
+                                          ),
                                     SizedBox(width: 10.0),
                                     Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           'Hello, Dr. ${userData.fullname}',
@@ -238,20 +248,22 @@ class HomeScreen extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.all(isTablet ? 40.0 : 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SquareModule(
-                    icon: 'assets/images/ic_rx.png',
-                    text: 'Make Rx',
-                    isTablet: isTablet,
-                  ),
-                  SquareModule(
-                    icon: 'assets/images/ic_rx_history.png',
-                    text: 'Rx History',
-                    isTablet: isTablet,
-                  ),
-                ],
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SquareModule(
+                      icon: 'assets/images/ic_rx.png',
+                      text: 'Make Rx',
+                      isTablet: isTablet,
+                    ),
+                    SquareModule(
+                      icon: 'assets/images/ic_rx_history.png',
+                      text: 'Rx History',
+                      isTablet: isTablet,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

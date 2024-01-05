@@ -1,4 +1,7 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:kode_rx/Controllers/network_controller.dart';
 import 'app_colors.dart';
 
 enum DeviceType { phone, tablet }
@@ -12,7 +15,7 @@ class DeviceHelper {
     return data.size.shortestSide < 600 ? DeviceType.phone : DeviceType.tablet;
   }
 
-  static AppBar deviceAppBar({String? title,  bool isTablet = true}) {
+  static AppBar deviceAppBar({String? title, bool isTablet = true}) {
     String defaultTitle = 'KodeRx';
     final deviceType = getDeviceType();
 
@@ -45,5 +48,11 @@ class DeviceHelper {
         backgroundColor: AppColors.customBackground,
       );
     }
+  }
+}
+
+class DependencyInjection {
+  static void init() {
+    Get.put<NetworkController>(NetworkController(), permanent: true);
   }
 }

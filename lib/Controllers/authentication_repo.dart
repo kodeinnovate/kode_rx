@@ -5,6 +5,7 @@ import 'package:kode_rx/data_state_store.dart';
 import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/Controllers/profile_controller.dart';
 import 'package:kode_rx/Controllers/user_repo.dart';
+import 'package:kode_rx/device_helper.dart';
 import 'package:kode_rx/home.dart';
 import 'package:kode_rx/login.dart';
 import 'package:kode_rx/register.dart';
@@ -19,6 +20,7 @@ class AuthenticationRepo extends GetxController {
 
   @override
   void onReady() async {
+    DependencyInjection.init();
     //  await Future.delayed(const Duration(seconds: 6));
     firebaseUser = Rx<User?>(_auth.currentUser);
     firebaseUser.bindStream(_auth.userChanges());
@@ -26,6 +28,7 @@ class AuthenticationRepo extends GetxController {
   }
 
   _setInitialScreen(User? user) async {
+      // DependencyInjection.init();
     if (user == null) {
       Get.offAll(() => LoginScreen());
       print('User logged out');

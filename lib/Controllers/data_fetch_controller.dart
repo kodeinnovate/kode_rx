@@ -15,6 +15,7 @@ class DataController extends GetxController {
   }
 //Gets the user specific medicine
   Future<List<UserMedicineModel>> getUserMedicines() async {
+    
     final userId = userController.userId.value;
     return await _userRepo.getUserMedicines(userId);
   }

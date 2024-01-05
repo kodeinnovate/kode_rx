@@ -68,6 +68,8 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
 // medicineDataStore();
 // final userId = userController.userId.value;
     // Fetch all medicines from the database and set them initially
+    // DependencyInjection.init();
+    DependencyInjection.init();
     controller.getUserMedicines().then((medicineData) {
       setState(() {
         GlobalMedicineList.medicines = medicineData
@@ -97,110 +99,113 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
         padding: const EdgeInsets.only(bottom: 100, right: 6),
         child: FloatingActionButton(onPressed: () {Get.to(() => AddNewMedicine()); userController.isMedicineSelected.value = true;}, backgroundColor: AppColors.customBackground, child: const Icon(Icons.add, color: Colors.white,),),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Column(
-            children: [
-              SearchField(
-                medicines: GlobalMedicineList.medicines,
-                onSearch: (filteredMedicines) {
-                  print("Filtered Medicines: $filteredMedicines");
-                  setState(() {
-                    displayedMedicines = filteredMedicines;
-                  });
-                  print("Display Medicines: $displayedMedicines");
-                },
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.6,
-                child: MedicationListView(
-                  displayedMedicines: displayedMedicines,
-                  selectedMedicines: selectedMedicines,
-                  onSelect: (selectedMedicine) {
-                    // if (options.isEmpty) {
-                    //   // Navigator.of(context).pop();
-                    //   showMedicineTimeDialog(medicine!);
-                    // }
-                    showSingleChoiceListDialog(selectedMedicine);
-                    //showMedicineTimeDialog(selectedMedicine);
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Column(
+              children: [
+                SearchField(
+                  medicines: GlobalMedicineList.medicines,
+                  onSearch: (filteredMedicines) {
+                    print("Filtered Medicines: $filteredMedicines");
+                    setState(() {
+                      displayedMedicines = filteredMedicines;
+                    });
+                    print("Display Medicines: $displayedMedicines");
                   },
                 ),
-              ),
-              // Padding(
-              //   padding: const EdgeInsets.only(right: 20),
-              //   child: Align(alignment: Alignment.bottomRight, child: FloatingActionButton(onPressed: () {Get.to(() => AddNewMedicine());}, child: Icon(Icons.add),)),
-              // ),
-              ExpansionTile(
-                title: const Text(
-                  'Selected Medicines',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.customBackground,
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: MedicationListView(
+                    displayedMedicines: displayedMedicines,
+                    selectedMedicines: selectedMedicines,
+                    onSelect: (selectedMedicine) {
+                      // if (options.isEmpty) {
+                      //   // Navigator.of(context).pop();
+                      //   showMedicineTimeDialog(medicine!);
+                      // }
+                      showSingleChoiceListDialog(selectedMedicine);
+                      //showMedicineTimeDialog(selectedMedicine);
+                    },
                   ),
                 ),
-                children: [
-                  SizedBox(
-                    height: selectedMedicines.isNotEmpty
-                        ? MediaQuery.of(context).size.height *
-                            0.15 *
-                            selectedMedicines.length
-                        : 0,
-                    child: SelectedMedicationsList(
-                      selectedMedicines: selectedMedicines,
-                      onDelete: onDeleteMedicine,
-                      onEdit: onEditMedicine,
+                // Padding(
+                //   padding: const EdgeInsets.only(right: 20),
+                //   child: Align(alignment: Alignment.bottomRight, child: FloatingActionButton(onPressed: () {Get.to(() => AddNewMedicine());}, child: Icon(Icons.add),)),
+                // ),
+                ExpansionTile(
+                  title: const Text(
+                    'Selected Medicines',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.customBackground,
                     ),
                   ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 10),
-                      child: TextField(
-                        controller: noteController,
-                        // obscureText: obsecureText,
-                        decoration: InputDecoration(
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.grey),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: AppColors.customBackground),
-                            ),
-                            fillColor: Colors.grey.shade200,
-                            filled: true,
-                            hintText: 'Add a note here',
-                            hintStyle: TextStyle(color: Colors.grey[500])),
+                  children: [
+                    SizedBox(
+                      height: selectedMedicines.isNotEmpty
+                          ? MediaQuery.of(context).size.height *
+                              0.15 *
+                              selectedMedicines.length
+                          : 0,
+                      child: SelectedMedicationsList(
+                        selectedMedicines: selectedMedicines,
+                        onDelete: onDeleteMedicine,
+                        onEdit: onEditMedicine,
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: pdfDataSubmit,
-                    child: Container(
-                      width: 150,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16.0, vertical: 18),
-                      margin: EdgeInsets.only(right: 8),
-                      decoration: BoxDecoration(
-                          color: AppColors.customBackground,
-                          borderRadius: BorderRadius.circular(5.0)),
-                      child: Center(
-                        child: Text(
-                          'Submit',
-                          style: TextStyle(fontSize: 20, color: Colors.white),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 10),
+                        child: TextField(
+                          controller: noteController,
+                          // obscureText: obsecureText,
+                          decoration: InputDecoration(
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: AppColors.customBackground),
+                              ),
+                              fillColor: Colors.grey.shade200,
+                              filled: true,
+                              hintText: 'Add a note here',
+                              hintStyle: TextStyle(color: Colors.grey[500])),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    GestureDetector(
+                      onTap: pdfDataSubmit,
+                      child: Container(
+                        width: 150,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16.0, vertical: 18),
+                        margin: EdgeInsets.only(right: 8),
+                        decoration: BoxDecoration(
+                            color: AppColors.customBackground,
+                            borderRadius: BorderRadius.circular(5.0)),
+                        child: Center(
+                          child: Text(
+                            'Submit',
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -345,6 +350,90 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
       selectedTimes.remove(time);
     }
   }
+
+// void updateSelectedTimes(
+//   String time,
+//   bool selected,
+//   List<String> selectedTimes,
+// ) {
+//   if (selected) {
+//     // if (time == 'Morning') {
+//       if (!selectedTimes.contains('Morning') && time == 'Morning') {
+//         selectedTimes.add('Morning');
+//       } 
+//      else if (!selectedTimes.contains('Afternoon') && time == 'Afternoon') {
+//         if(!selectedTimes.contains('Morning')) {
+//           selectedTimes.add('Afternoon');
+//         } else {
+//           selectedTimes.add('Afternoon');
+//         }
+//       }
+//      else if (!selectedTimes.contains('Evening') && time == 'Evening') {
+//         if(!selectedTimes.contains('Morning') && !selectedTimes.contains('Afternoon') ) {
+//           selectedTimes.add('Evening');
+//         } else if (selectedTimes.contains('Morning') && selectedTimes.contains('Afternoon')) {
+//           selectedTimes
+//         ..remove('Morning')
+//         ..remove('Afternoon')
+//         ..add('Morning')
+//         ..add('Afternoon')
+//           ..add('Evening');
+//         } else if (selectedTimes.contains('Morning')) {
+//           selectedTimes
+//           ..remove('Morning')
+//           ..add('Morning')
+//           ..add('Evening');
+
+//         } else if (selectedTimes.contains('Afternoon')) {
+//           selectedTimes
+//           ..remove('Afternoon')
+//           ..add('Afternoon')
+//           ..add('Evening');
+//         }
+//       }
+//     // } 
+//   } else {
+//     selectedTimes.remove(time);
+//   }
+// }
+
+// void updateSelectedTimes(
+//   String time,
+//   bool selected,
+//   List<String> selectedTimes,
+// ) {
+//   if (selected) {
+//     if (time == 'Morning') {
+//       // Ensure 'Morning' is at the beginning of the list
+//       selectedTimes
+//         ..remove('Morning')
+//         ..insert(0, 'Morning');
+//     } else if (time == 'Afternoon') {
+//       // Ensure 'Morning' is in the list, then ensure 'Afternoon' is after it
+//       if (!selectedTimes.contains('Morning')) {
+//         selectedTimes.add('Morning');
+//       }
+//       selectedTimes
+//         ..remove('Afternoon')
+//         ..add('Afternoon');
+//     } else if (time == 'Evening') {
+//       // Ensure 'Morning' and 'Afternoon' are in the list, then ensure 'Evening' is after them
+//       if (!selectedTimes.contains('Morning')) {
+//         selectedTimes.add('Morning');
+//       }
+//       if (!selectedTimes.contains('Afternoon')) {
+//         selectedTimes.add('Afternoon');
+//       }
+//       selectedTimes
+//         ..remove('Evening')
+//         ..add('Evening');
+//     }
+//   } else {
+//     selectedTimes.remove(time);
+//   }
+// }
+
+
 
   // Function to show single choice list dialog
 

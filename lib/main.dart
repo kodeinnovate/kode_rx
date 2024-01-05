@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:kode_rx/Controllers/user_repo.dart';
 import 'package:kode_rx/Pages/patient_info.dart';
 import 'package:kode_rx/Pages/splashscreen.dart';
 import 'package:kode_rx/app_colors.dart';
+import 'package:kode_rx/device_helper.dart';
 import 'package:kode_rx/patient_appointments.dart';
 import 'package:kode_rx/register.dart';
 import 'package:kode_rx/select_medicenes.dart';
@@ -20,12 +23,24 @@ import 'package:sms_autofill/sms_autofill.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // DependencyInjection.init();
+  // try {
+  //   final result = await InternetAddress.lookup('google.com');
+  //   if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+  //     print('connected');
+  //   }
+  // } on SocketException catch (_) {
+  //   print('not connected');
+  //   Get.snackbar('Not Connected', 'Something');
+  // }
   try {
+    //
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
     Get.put(AuthenticationRepo());
-    await FirebaseAppCheck.instance.activate(androidProvider: AndroidProvider.playIntegrity);
+    await FirebaseAppCheck.instance
+        .activate(androidProvider: AndroidProvider.playIntegrity);
   } catch (e) {
     print("Error initializing Firebase: $e");
   }
@@ -34,23 +49,26 @@ void main() async {
   Get.put(HomeScreen());
   Get.put(SplashScreen());
   Get.put(LoginScreen());
+    DependencyInjection.init();
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-
     return GetMaterialApp(
-
-      theme: ThemeData(primaryColor: AppColors.customBackground,backgroundColor: Colors.white,),
-      initialRoute: FirebaseAuth.instance.currentUser == null ? '/login' : '/home',
+      theme: ThemeData(
+        primaryColor: AppColors.customBackground,
+        backgroundColor: Colors.white,
+      ),
+      initialRoute:
+          FirebaseAuth.instance.currentUser == null ? '/login' : '/home',
 
       routes: {
         '/login': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),
         '/selectMedicenesScreen': (context) => MedicationReminderApp(),
-        '/Patient_info' : (context) => Patient_info(),
+        '/Patient_info': (context) => Patient_info(),
         '/patientAppointmentScreen': (context) => PatientAppointmentsScreen(),
         '/register': (context) => Signup(),
         // '/otpPage': (context) => OTPScreen(),

@@ -6,6 +6,7 @@ import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/database/doctor_medicine_data.dart';
 import 'package:kode_rx/database/medicine_data_fetch.dart';
 import 'package:kode_rx/database/patient_data.dart';
+import 'package:kode_rx/device_helper.dart';
 import 'package:kode_rx/select_medicenes.dart';
 
 class UserRepo extends GetxController {
@@ -158,6 +159,7 @@ final RxBool medicineLoading = false.obs; //For Loader
 
   Future<List<UserMedicineModel>> getUserMedicines(String userId) async {
     try {
+      DependencyInjection.init();
     medicineLoading.value = true;
     final snapshot =
         await _db.collection('Users').doc(userId).collection('Medicines').get();
