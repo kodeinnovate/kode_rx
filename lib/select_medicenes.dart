@@ -9,6 +9,7 @@ import 'package:kode_rx/Controllers/user_repo.dart';
 import 'package:kode_rx/Pages/add_new_medicine.dart';
 import 'package:kode_rx/Pages/pdf_genarater.dart';
 import 'package:kode_rx/Pages/pdf_preview_screen.dart';
+import 'package:kode_rx/Utils/helper_function.dart';
 import 'package:kode_rx/app_colors.dart';
 import 'package:kode_rx/data_state_store.dart';
 import 'package:kode_rx/database/doctor_medicine_data.dart';
@@ -97,7 +98,17 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
       appBar: DeviceHelper.deviceAppBar(title: 'Select Medicine'),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 100, right: 6),
-        child: FloatingActionButton(onPressed: () {Get.to(() => AddNewMedicine()); userController.isMedicineSelected.value = true;}, backgroundColor: AppColors.customBackground, child: const Icon(Icons.add, color: Colors.white,),),
+        child: FloatingActionButton(
+          onPressed: () {
+            Get.to(() => AddNewMedicine());
+            userController.isMedicineSelected.value = true;
+          },
+          backgroundColor: AppColors.customBackground,
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+        ),
       ),
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -174,8 +185,8 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                                 borderSide: BorderSide(color: Colors.grey),
                               ),
                               focusedBorder: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: AppColors.customBackground),
+                                borderSide: BorderSide(
+                                    color: AppColors.customBackground),
                               ),
                               fillColor: Colors.grey.shade200,
                               filled: true,
@@ -188,8 +199,8 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                       onTap: pdfDataSubmit,
                       child: Container(
                         width: 150,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 16.0, vertical: 18),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 18),
                         margin: EdgeInsets.only(right: 8),
                         decoration: BoxDecoration(
                             color: AppColors.customBackground,
@@ -338,102 +349,6 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
       },
     );
   }
-
-  void updateSelectedTimes(
-    String time,
-    bool selected,
-    List<String> selectedTimes,
-  ) {
-    if (selected) {
-      selectedTimes.add(time);
-    } else {
-      selectedTimes.remove(time);
-    }
-  }
-
-// void updateSelectedTimes(
-//   String time,
-//   bool selected,
-//   List<String> selectedTimes,
-// ) {
-//   if (selected) {
-//     // if (time == 'Morning') {
-//       if (!selectedTimes.contains('Morning') && time == 'Morning') {
-//         selectedTimes.add('Morning');
-//       } 
-//      else if (!selectedTimes.contains('Afternoon') && time == 'Afternoon') {
-//         if(!selectedTimes.contains('Morning')) {
-//           selectedTimes.add('Afternoon');
-//         } else {
-//           selectedTimes.add('Afternoon');
-//         }
-//       }
-//      else if (!selectedTimes.contains('Evening') && time == 'Evening') {
-//         if(!selectedTimes.contains('Morning') && !selectedTimes.contains('Afternoon') ) {
-//           selectedTimes.add('Evening');
-//         } else if (selectedTimes.contains('Morning') && selectedTimes.contains('Afternoon')) {
-//           selectedTimes
-//         ..remove('Morning')
-//         ..remove('Afternoon')
-//         ..add('Morning')
-//         ..add('Afternoon')
-//           ..add('Evening');
-//         } else if (selectedTimes.contains('Morning')) {
-//           selectedTimes
-//           ..remove('Morning')
-//           ..add('Morning')
-//           ..add('Evening');
-
-//         } else if (selectedTimes.contains('Afternoon')) {
-//           selectedTimes
-//           ..remove('Afternoon')
-//           ..add('Afternoon')
-//           ..add('Evening');
-//         }
-//       }
-//     // } 
-//   } else {
-//     selectedTimes.remove(time);
-//   }
-// }
-
-// void updateSelectedTimes(
-//   String time,
-//   bool selected,
-//   List<String> selectedTimes,
-// ) {
-//   if (selected) {
-//     if (time == 'Morning') {
-//       // Ensure 'Morning' is at the beginning of the list
-//       selectedTimes
-//         ..remove('Morning')
-//         ..insert(0, 'Morning');
-//     } else if (time == 'Afternoon') {
-//       // Ensure 'Morning' is in the list, then ensure 'Afternoon' is after it
-//       if (!selectedTimes.contains('Morning')) {
-//         selectedTimes.add('Morning');
-//       }
-//       selectedTimes
-//         ..remove('Afternoon')
-//         ..add('Afternoon');
-//     } else if (time == 'Evening') {
-//       // Ensure 'Morning' and 'Afternoon' are in the list, then ensure 'Evening' is after them
-//       if (!selectedTimes.contains('Morning')) {
-//         selectedTimes.add('Morning');
-//       }
-//       if (!selectedTimes.contains('Afternoon')) {
-//         selectedTimes.add('Afternoon');
-//       }
-//       selectedTimes
-//         ..remove('Evening')
-//         ..add('Evening');
-//     }
-//   } else {
-//     selectedTimes.remove(time);
-//   }
-// }
-
-
 
   // Function to show single choice list dialog
 
@@ -713,22 +628,25 @@ class SearchField extends StatelessWidget {
               TextField(
                 style: const TextStyle(fontSize: 18),
                 decoration: InputDecoration(
-                   suffixIcon: Icon(Icons.search, color: Colors.grey.shade500,),
-                    hintText: 'Search Medicine',
-                    filled: true,
-                    hintStyle: TextStyle(color: Colors.grey.shade500),
-                    fillColor: Color.fromARGB(255, 238, 238, 238),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide:  BorderSide(
-                          color: Colors.grey.shade500, width: 2.0),
-                      borderRadius: BorderRadius.circular(7.7),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                          color: AppColors.customBackground, width: 2.0),
-                      borderRadius: BorderRadius.circular(7.7),
-                    ),
-              ),
+                  suffixIcon: Icon(
+                    Icons.search,
+                    color: Colors.grey.shade500,
+                  ),
+                  hintText: 'Search Medicine',
+                  filled: true,
+                  hintStyle: TextStyle(color: Colors.grey.shade500),
+                  fillColor: Color.fromARGB(255, 238, 238, 238),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: Colors.grey.shade500, width: 2.0),
+                    borderRadius: BorderRadius.circular(7.7),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        color: AppColors.customBackground, width: 2.0),
+                    borderRadius: BorderRadius.circular(7.7),
+                  ),
+                ),
                 onChanged: (query) {
                   query = query.trim();
                   final filteredMedicines = GlobalMedicineList.medicines
@@ -757,17 +675,15 @@ class Medicine {
   List<String> timesToTake = [];
   bool beforeMeal = false;
 
-  Medicine(
-    this.name,
-    this.id,
-    this.details,
-    this.mgList,
-    this.status
-  );
+  Medicine(this.name, this.id, this.details, this.mgList, this.status);
 
   factory Medicine.fromMedicineModel(UserMedicineModel medicineModel) {
-    return Medicine(medicineModel.medicineName, medicineModel.id!,
-        medicineModel.medicineContent, medicineModel.medicineMgList, medicineModel.status);
+    return Medicine(
+        medicineModel.medicineName,
+        medicineModel.id!,
+        medicineModel.medicineContent,
+        medicineModel.medicineMgList,
+        medicineModel.status);
   }
 }
 
@@ -906,8 +822,8 @@ class SelectedMedicationsList extends StatelessWidget {
 
   ///Main Edit fuction, the data goes here
   void saveEdited(medicine) {
-    Medicine editedMedicine =
-        Medicine(medicine.name, medicine.id, medicine.details, medicine.mgList, medicine.status);
+    Medicine editedMedicine = Medicine(medicine.name, medicine.id,
+        medicine.details, medicine.mgList, medicine.status);
     editedMedicine.timesToTake = editedTimesToTake!;
     editedMedicine.beforeMeal = editedBeforeMeal!;
     editedMedicine.mg = editedMg;
@@ -1144,11 +1060,13 @@ class SelectedMedicationsList extends StatelessWidget {
                     value: timesToTake.contains('Morning'),
                     onChanged: (value) {
                       setState(() {
-                        if (value!) {
-                          timesToTake.add('Morning');
-                        } else {
-                          timesToTake.remove('Morning');
-                        }
+
+                        // if (value!) {
+                        updateSelectedTimes('Morning', value!, timesToTake);
+                          // timesToTake.add('Morning');
+                        // } else {
+                        //   timesToTake.remove('Morning');
+                        // }
                       });
                     },
                   ),
@@ -1159,11 +1077,12 @@ class SelectedMedicationsList extends StatelessWidget {
                     value: timesToTake.contains('Afternoon'),
                     onChanged: (value) {
                       setState(() {
-                        if (value!) {
-                          timesToTake.add('Afternoon');
-                        } else {
-                          timesToTake.remove('Afternoon');
-                        }
+                        // if (value!) {
+                        //   timesToTake.add('Afternoon');
+                        // } else {
+                        //   timesToTake.remove('Afternoon');
+                        // }
+                        updateSelectedTimes('Afternoon', value!, timesToTake);
                       });
                     },
                   ),
@@ -1174,11 +1093,12 @@ class SelectedMedicationsList extends StatelessWidget {
                     value: timesToTake.contains('Evening'),
                     onChanged: (value) {
                       setState(() {
-                        if (value!) {
-                          timesToTake.add('Evening');
-                        } else {
-                          timesToTake.remove('Evening');
-                        }
+                        // if (value!) {
+                        //   timesToTake.add('Evening');
+                        // } else {
+                        //   timesToTake.remove('Evening');
+                        // }
+                        updateSelectedTimes('Evening', value!, timesToTake);
                       });
                     },
                   ),
