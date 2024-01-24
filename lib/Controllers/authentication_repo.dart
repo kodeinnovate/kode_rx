@@ -40,10 +40,6 @@ class AuthenticationRepo extends GetxController {
         String userId = userDetails.id!;
         userController.userId.value = userId;
         userController.currentLoggedInUserName.value = userDetails.fullname;
-        print(user.uid);
-        print(user.displayName);
-        print(userDetails.id);
-        print(userDetails.fullname);
         // Navigate to the HomeScreen and pass the userId as an argument
         Get.offAll(() => HomeScreen(currentUser: userDetails,));
       } else {
@@ -60,11 +56,7 @@ class AuthenticationRepo extends GetxController {
       await _auth.verifyPhoneNumber(
           phoneNumber: number,
           verificationCompleted: (credential) async {
-            print('credential.smsCode: $credential.smsCode');
-            print('credential $credential');
-            print('verificationCompleted');
             await _auth.signInWithCredential(credential);
-            print('verificationCompleted End');
           },
           codeSent: (verificationId, resendToken) {
             this.verificationId.value = verificationId;

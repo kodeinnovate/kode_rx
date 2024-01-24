@@ -83,6 +83,9 @@ class PdfController extends GetxController {
         phoneNumber: userController.patientPhoneNo.value,
         date: formattedDate,
         pdfUrl: pdfUrl,
+        diagnosisDetails: userController.diagnosisDetails.value,
+        // pastmedicalHistoryDetails: userController.pastmedicalHistoryDetails.value,
+        treatmentDetails: userController.treatmentDetails.value,
         status: '1');
     await userRepository.addPatientDetails(
         userController.userId.value, patientData);
@@ -225,11 +228,57 @@ class PdfController extends GetxController {
               ]),
           pw.Wrap(
             children: [
-              pw.Text(
-                'History: ${userController.patientPastHistory.value}',
-                style: pw.TextStyle(
-                    fontSize: 14, fontWeight: pw.FontWeight.normal),
+              // pw.Text(
+              //   'History: ${userController.patientPastHistory.value}',
+              //   style: pw.TextStyle(
+              //       fontSize: 14, fontWeight: pw.FontWeight.normal),
+              // ),
+              pw.RichText(
+                text: pw.TextSpan(children: <pw.TextSpan>[
+                  pw.TextSpan(
+                      text: 'History: ',
+                      style: pw.TextStyle(
+                          fontSize: 14, fontWeight: pw.FontWeight.bold)),
+                  pw.TextSpan(
+                      text: userController.patientPastHistory.value,
+                      style: pw.TextStyle(
+                          fontSize: 14, fontWeight: pw.FontWeight.normal))
+                ]),
               ),
+              pw.RichText(
+                text: pw.TextSpan(children: <pw.TextSpan>[
+                  pw.TextSpan(
+                      text: 'Diagnosis: ',
+                      style: pw.TextStyle(
+                          fontSize: 14, fontWeight: pw.FontWeight.bold)),
+                  pw.TextSpan(
+                      text: userController.diagnosisDetails.value,
+                      style: pw.TextStyle(
+                          fontSize: 14, fontWeight: pw.FontWeight.normal))
+                ]),
+              ),
+              pw.RichText(
+                text: pw.TextSpan(children: <pw.TextSpan>[
+                  pw.TextSpan(
+                      text: 'Treatment: ',
+                      style: pw.TextStyle(
+                          fontSize: 14, fontWeight: pw.FontWeight.bold)),
+                  pw.TextSpan(
+                      text: userController.treatmentDetails.value,
+                      style: pw.TextStyle(
+                          fontSize: 14, fontWeight: pw.FontWeight.normal))
+                ]),
+              ),
+              // pw.Text(
+              //   'Diagnosis: ${userController.diagnosisDetails.value}',
+              //   style: pw.TextStyle(
+              //       fontSize: 14, fontWeight: pw.FontWeight.normal),
+              // ),
+              // pw.Text(
+              //   'Treatment: ${userController.treatmentDetails.value}',
+              //   style: pw.TextStyle(
+              //       fontSize: 14, fontWeight: pw.FontWeight.normal),
+              // ),
             ],
           ),
         ],

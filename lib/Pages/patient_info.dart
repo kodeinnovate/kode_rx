@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:kode_rx/Components/custom_button.dart';
 import 'package:kode_rx/Components/custom_textfield.dart';
 import 'package:kode_rx/Controllers/user_repo.dart';
+import 'package:kode_rx/Pages/additional_info.dart';
 import 'package:kode_rx/app_colors.dart';
 import 'package:kode_rx/data_state_store.dart';
 import 'package:kode_rx/database/patient_data.dart';
@@ -186,7 +187,7 @@ class _Patient_infoState extends State<Patient_info> {
     // );
     // await userRepository.addPatientDetails(userController.userId.value, patientData);
     if (userController.patientName.value.isNotEmpty) {
-      Get.to(() => MedicationReminderApp());
+      Get.to(() => AdditionalInfo());
     } else {
       Get.snackbar('Name Field Empty', 'Please add a name');
     }

@@ -35,6 +35,10 @@ class UserController extends GetxController {
   final RxString signatureId = RxString('');
   //Screen Swap
   final RxBool isMedicineSelected = RxBool(false);
+  //AdditionalInfo Screen Data
+  // final RxString pastmedicalHistoryDetails = RxString('');
+  final RxString diagnosisDetails = RxString('');
+  final RxString treatmentDetails = RxString('');
 }
 
 final RxString loginPhoneNumber = RxString('');

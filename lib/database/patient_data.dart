@@ -10,6 +10,9 @@ class PatientModel {
   final String date;
   final String? pdfUrl;
   final String? status;
+  // final String? pastmedicalHistoryDetails;
+  final String? diagnosisDetails;
+  final String? treatmentDetails;
 
   const PatientModel(
       {this.id,
@@ -18,7 +21,12 @@ class PatientModel {
       required this.pastHistory,
       required this.patientAge,
       required this.patientGender,
-      required this.date, this.pdfUrl, this.status});
+      required this.date,
+      this.pdfUrl,
+      this.status,
+      this.diagnosisDetails,
+      // this.pastmedicalHistoryDetails,
+      this.treatmentDetails});
 
   toJson() {
     return {
@@ -29,22 +37,28 @@ class PatientModel {
       'PatientGender': patientGender,
       "Date": date,
       'PdfUrl': pdfUrl,
-      'Status': status
+      'Status': status,
+      'DiagnosisDetails': diagnosisDetails,
+      // 'PastMedicalHistoryDetails': pastmedicalHistoryDetails,
+      'TreatmentDetails': treatmentDetails
     };
   }
-
 
   factory PatientModel.fromSnapshot(
       DocumentSnapshot<Map<String, dynamic>> document) {
     final data = document.data()!;
     return PatientModel(
-      id: document.id,
-      patientName: data['PatientName'],
-      phoneNumber: data['PatientPhoneNumber'],
-      pastHistory: data['PatientHistory'],
-      patientAge: data['PatientAge'],
-      patientGender: data['PatientGender'],
-      date: data['Date'], pdfUrl: data['PdfUrl'], status: data['Status']
-    );
+        id: document.id,
+        patientName: data['PatientName'],
+        phoneNumber: data['PatientPhoneNumber'],
+        pastHistory: data['PatientHistory'],
+        patientAge: data['PatientAge'],
+        patientGender: data['PatientGender'],
+        date: data['Date'],
+        pdfUrl: data['PdfUrl'],
+        status: data['Status'],
+        diagnosisDetails: data['DiagnosisDetails'],
+        // pastmedicalHistoryDetails: data['PastMedicalHistoryDetails'],
+        treatmentDetails: data['TreatmentDetails']);
   }
 }
