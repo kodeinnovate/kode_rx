@@ -159,12 +159,13 @@ class PdfController extends GetxController {
   }
 
   pw.Widget buildInvoice(pw.Context context) {
-    final headers = ['Medicine', 'Routine', 'Before or after meal'];
+    final headers = ['Medicine', 'Routine', 'Before or after meal', 'Duration'];
     final data = selectedMedicines?.map((medicine) {
       return [
         '${medicine.name} ${medicine.mg == null || medicine.mg == '' ? '' : ' - ${medicine.mg}'}',
         medicine.timesToTake.isEmpty ? 'N/A' : medicine.timesToTake.join(', '),
         medicine.beforeMeal ? 'Before Meal' : 'After Meal',
+        medicine.days == '0' || medicine.days == null ? 'Not Specified' :  (medicine.days == '1' ? '${medicine.days} ${medicine.daysType}' : '${medicine.days} ${medicine.daysType}s')
       ];
     }).toList();
 
@@ -181,6 +182,7 @@ class PdfController extends GetxController {
         0: pw.Alignment.centerLeft,
         1: pw.Alignment.center,
         2: pw.Alignment.center,
+        3: pw.Alignment.center
       },
     );
   }

@@ -35,132 +35,133 @@ class _Patient_infoState extends State<Patient_info> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: GestureDetector(
-            onTap: () {
-              // Close the keyboard when tapped anywhere on the screen
-              FocusScope.of(context).unfocus();
-            },
-            child: Scaffold(
-              appBar: DeviceHelper.deviceAppBar(title: 'Patient Information'),
-              body: GestureDetector(
-                onTap: () {
-                  // Close the keyboard when tapped anywhere on the screen
-                  FocusScope.of(context).unfocus();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 20),
-                        CustomTextfield(
-                          controller: patientName,
-                          hintText: 'Patient Name',
-                          keyboardType: TextInputType.name,
-                          obsecureText: false,
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        CustomTextfield(
-                          controller: phoneNumber,
-                          hintText: 'Enter your Phone',
-                          keyboardType: TextInputType.phone,
-                          obsecureText: false,
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        CustomTextfield(
-                          controller: patientAge,
-                          hintText: 'Enter your Age',
-                          obsecureText: false,
-                          keyboardType: TextInputType.number,
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              child: Text(
-                                'Select your gender',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                            ),
-                            Expanded(
-                              child: RadioListTile(
-                                title: const Text('Male',style:TextStyle(fontSize: 12)),
-                                value: 'male',
-                                groupValue: patientGender,
-                                onChanged: _handleRadioValueChange,
-                              ),
-                            ),
-                            Expanded(
-                              child: RadioListTile(
-                                title: const Text('Female',style:TextStyle(fontSize: 12)),
-                                value: 'female',
-                                groupValue: patientGender,
-                                onChanged: _handleRadioValueChange,
-                              ),
-                            ),
-                            Expanded(
-                              child: RadioListTile(
-                                title: const Text('Other',style:TextStyle(fontSize: 12)),
-                                value: 'other',
-                                groupValue: patientGender,
-                                onChanged: _handleRadioValueChange,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 30),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25),
-                          child: TextField(
-                            style: const TextStyle(
-                                fontSize:
-                                    18), // Set the font size for the input text
-                            controller: pastHistory,
-                            maxLines: 4,
-                            textCapitalization: TextCapitalization.sentences,
-                            decoration: InputDecoration(
-                              enabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey),
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: AppColors.customBackground),
-                              ),
-                              fillColor: Colors.grey.shade200,
-                              filled: true,
-                              hintText: 'Past History',
-                              hintStyle: TextStyle(
-                                  color: Colors.grey[500],
-                                  fontSize:
-                                      14), // Set the font size for the placeholder
-                            ),
+    return GestureDetector(
+      onTap: () {
+        // Close the keyboard when tapped anywhere on the screen
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: DeviceHelper.deviceAppBar(title: 'Patient Information'),
+        body: GestureDetector(
+          onTap: () {
+            // Close the keyboard when tapped anywhere on the screen
+            FocusScope.of(context).unfocus();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  CustomTextfield(
+                    controller: patientName,
+                    hintText: 'Patient Name',
+                    keyboardType: TextInputType.name,
+                    obsecureText: false,
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  CustomTextfield(
+                    controller: phoneNumber,
+                    hintText: 'Enter your Phone',
+                    keyboardType: TextInputType.phone,
+                    obsecureText: false,
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  CustomTextfield(
+                    controller: patientAge,
+                    hintText: 'Enter your Age',
+                    obsecureText: false,
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        child: Text(
+                          'Select your gender',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
                           ),
                         ),
-                        const SizedBox(height: 30),
-                        CustomButtom(
-                            buttonText: 'Next', onTap: patientDataStore),
-                      ],
+                        padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                      ),
+                      Expanded(
+                        child: RadioListTile(
+                          title: const Text('Male',
+                              style: TextStyle(fontSize: 12)),
+                          value: 'male',
+                          groupValue: patientGender,
+                          onChanged: _handleRadioValueChange,
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile(
+                          title: const Text('Female',
+                              style: TextStyle(fontSize: 12)),
+                          value: 'female',
+                          groupValue: patientGender,
+                          onChanged: _handleRadioValueChange,
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile(
+                          title: const Text('Other',
+                              style: TextStyle(fontSize: 12)),
+                          value: 'other',
+                          groupValue: patientGender,
+                          onChanged: _handleRadioValueChange,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: TextField(
+                      style: const TextStyle(
+                          fontSize: 18), // Set the font size for the input text
+                      controller: pastHistory,
+                      maxLines: 4,
+                      textCapitalization: TextCapitalization.sentences,
+                      decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: AppColors.customBackground),
+                        ),
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        hintText: 'Past History',
+                        hintStyle: TextStyle(
+                            color: Colors.grey[500],
+                            fontSize:
+                                14), // Set the font size for the placeholder
+                      ),
                     ),
                   ),
-                ),
+                  const SizedBox(height: 30),
+                  CustomButtom(buttonText: 'Next', onTap: patientDataStore),
+                ],
               ),
-            )));
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Future<void> patientDataStore() async {

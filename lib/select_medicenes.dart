@@ -138,6 +138,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                       //   showMedicineTimeDialog(medicine!);
                       // }
                       showSingleChoiceListDialog(selectedMedicine);
+                      // showMedicineDaysDialog(selectedMedicine);
                       //showMedicineTimeDialog(selectedMedicine);
                     },
                   ),
@@ -220,6 +221,136 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  // void showMedicineDaysDialog(Medicine medicine) {
+  //   var days = '';
+
+  // }
+  void showMedicineDaysDialog(
+      Medicine medicine, List<String> selectedTimesToTake, String mealType) {
+    var days; // Variable to store the number of days
+    var daysType = 'Day';
+
+    final daysDialogKey = GlobalKey<FormState>();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                medicine.name,
+                style: const TextStyle(
+                  fontSize: 20,
+                  color: AppColors.customBackground,
+                ),
+              ),
+              const Text(
+                'Add Number of Days',
+                style: TextStyle(fontSize: 16, color: Colors.black54),
+              ),
+            ],
+          ),
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              return Form(
+                key: daysDialogKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        Flexible(
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                labelText: 'Number of Days',
+                                filled: true,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: AppColors.customBackground),
+                                  borderRadius: BorderRadius.circular(7.7),
+                                )),
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
+                              setState(() {
+                                days = value;
+                              });
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: DropdownButton<String>(
+                            hint: Text(daysType),
+                            items: <String>['Day', 'Month', 'Year']
+                                .map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                daysType = value!;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.red,
+                shadowColor: Colors.grey,
+                elevation: 2,
+              ),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (daysDialogKey.currentState!.validate()) {
+                  medicine.timesToTake = selectedTimesToTake;
+                  medicine.beforeMeal = mealType == 'before';
+                  medicine.days = days;
+                  medicine.daysType = daysType;
+                  setState(() {
+                    selectedMedicines.add(medicine);
+                  });
+                  Navigator.of(context).pop();
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.customBackground,
+                shadowColor: Colors.grey,
+                elevation: 2,
+              ),
+              child: const Text(
+                'Add',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -460,19 +591,21 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (mealDialogKey.currentState!.validate()) {
-                  medicine.timesToTake = selectedTimesToTake;
-                  medicine.beforeMeal = mealType == 'before';
-                  setState(() {
-                    selectedMedicines.add(medicine);
-                  });
-                  Navigator.of(context).pop();
-                }
+                // if (mealDialogKey.currentState!.validate()) {
+                //   medicine.timesToTake = selectedTimesToTake;
+                //   medicine.beforeMeal = mealType == 'before';
+                //   setState(() {
+                //     selectedMedicines.add(medicine);
+                //   });
+                //   Navigator.of(context).pop();
+                // }
+                Navigator.of(context).pop();
+                showMedicineDaysDialog(medicine, selectedTimesToTake, mealType);
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.customBackground),
               child: Text(
-                'Add',
+                'Next',
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -671,6 +804,8 @@ class Medicine {
   final String details;
   final List mgList;
   final String status;
+  String? days;
+  String? daysType;
   String? mg;
   List<String> timesToTake = [];
   bool beforeMeal = false;
@@ -679,11 +814,12 @@ class Medicine {
 
   factory Medicine.fromMedicineModel(UserMedicineModel medicineModel) {
     return Medicine(
-        medicineModel.medicineName,
-        medicineModel.id!,
-        medicineModel.medicineContent,
-        medicineModel.medicineMgList,
-        medicineModel.status);
+      medicineModel.medicineName,
+      medicineModel.id!,
+      medicineModel.medicineContent,
+      medicineModel.medicineMgList,
+      medicineModel.status,
+    );
   }
 }
 
@@ -815,18 +951,28 @@ class SelectedMedicationsList extends StatelessWidget {
 
   // ...
   String? editedMg;
+  String? editedDays;
+  String? editedDaysType;
   bool? editedBeforeMeal;
+  String? editedDuration;
   List<String>? editedTimesToTake;
   Medicine? _editingMedicine;
   List<String>? options;
 
   ///Main Edit fuction, the data goes here
   void saveEdited(medicine) {
-    Medicine editedMedicine = Medicine(medicine.name, medicine.id,
-        medicine.details, medicine.mgList, medicine.status);
+    Medicine editedMedicine = Medicine(
+      medicine.name,
+      medicine.id,
+      medicine.details,
+      medicine.mgList,
+      medicine.status,
+    );
     editedMedicine.timesToTake = editedTimesToTake!;
     editedMedicine.beforeMeal = editedBeforeMeal!;
     editedMedicine.mg = editedMg;
+    editedMedicine.days = editedDays;
+    editedMedicine.daysType = editedDaysType;
 
     onEdit(editedMedicine);
   }
@@ -839,11 +985,132 @@ class SelectedMedicationsList extends StatelessWidget {
     editedTimesToTake = List.from(medicine.timesToTake);
     editedBeforeMeal = medicine.beforeMeal;
     editedMg = medicine.mg;
+    editedDays = medicine.days;
+    editedDaysType = medicine.daysType;
     if (options!.isNotEmpty) {
       _showMgListDialog(context, editedMg, options!, editedTimesToTake!);
     } else {
       _showTimesToTakeDialog(context, editedTimesToTake!);
     }
+  }
+
+  void _showMedicineDaysDialog(context) {
+    var days = editedDays; // Variable to store the number of days
+    var daysType = editedDaysType;
+
+    final daysDialogKey = GlobalKey<FormState>();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                _editingMedicine!.name,
+                style: const TextStyle(
+                  fontSize: 20,
+                  color: AppColors.customBackground,
+                ),
+              ),
+              const Text(
+                'Update Number of Days',
+                style: TextStyle(fontSize: 16, color: Colors.black54),
+              ),
+            ],
+          ),
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              return Form(
+                key: daysDialogKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        Flexible(
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                                labelText: 'Number of Days',
+                                filled: true,
+                                // fillColor: Color.fromARGB(255, 238, 238, 238),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: AppColors.customBackground),
+                                  borderRadius: BorderRadius.circular(7.7),
+                                )),
+                            initialValue: days,
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
+                              setState(() {
+                                editedDays = value;
+                              });
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: DropdownButton<String>(
+                            hint: Text(editedDaysType ?? 'Day'),
+                            items: <String>['Day', 'Month', 'Year']
+                                .map((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                editedDaysType = value!;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.red,
+                shadowColor: Colors.grey,
+                elevation: 2,
+              ),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                saveEdited(_editingMedicine);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.customBackground,
+                shadowColor: Colors.grey,
+                elevation: 2,
+              ),
+              child: const Text(
+                'Save',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
 // Before MealAfterMeal Edit dialogue
@@ -852,6 +1119,9 @@ class SelectedMedicationsList extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -928,12 +1198,13 @@ class SelectedMedicationsList extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                saveEdited(_editingMedicine);
+                _showMedicineDaysDialog(context);
+                // saveEdited(_editingMedicine);
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.customBackground),
               child: const Text(
-                'Save',
+                'Next',
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -950,6 +1221,9 @@ class SelectedMedicationsList extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -1031,6 +1305,9 @@ class SelectedMedicationsList extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -1060,10 +1337,9 @@ class SelectedMedicationsList extends StatelessWidget {
                     value: timesToTake.contains('Morning'),
                     onChanged: (value) {
                       setState(() {
-
                         // if (value!) {
                         updateSelectedTimes('Morning', value!, timesToTake);
-                          // timesToTake.add('Morning');
+                        // timesToTake.add('Morning');
                         // } else {
                         //   timesToTake.remove('Morning');
                         // }
@@ -1179,7 +1455,7 @@ class SelectedMedicationsList extends StatelessWidget {
                         fontSize: 20, color: AppColors.customBackground),
                   ),
                   subtitle: Text(
-                    'Time to take: ${medicine.timesToTake.isNotEmpty ? medicine.timesToTake.join(', ') : 'No specific time'} | Meal: ${medicine.beforeMeal ? 'Before Meal' : 'After Meal'}',
+                    'Time to take: ${medicine.timesToTake.isNotEmpty ? medicine.timesToTake.join(', ') : 'No specific time'} | Meal: ${medicine.beforeMeal ? 'Before Meal' : 'After Meal'} | Duration: ${medicine.days == '0' || medicine.days == null ? 'Not Specified' :  (medicine.days == '1' ? '${medicine.days} ${medicine.daysType}' : '${medicine.days} ${medicine.daysType}s')}',
                     style: const TextStyle(fontSize: 16),
                   ),
                   trailing: Row(

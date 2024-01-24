@@ -58,6 +58,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.customBackground),
         primaryColor: AppColors.customBackground,
         backgroundColor: Colors.white,
       ),
