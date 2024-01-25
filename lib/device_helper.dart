@@ -29,7 +29,7 @@ class DeviceHelper {
       );
     } else if (deviceType == DeviceType.phone) {
       return AppBar(
-        leading: null,
+        // leading: GestureDetector(onTap: () => Get.off(context), child: Icon(Icons.arrow_back, color: Colors.white,)),
         centerTitle: true,
         toolbarHeight: 65,
         title: Text(

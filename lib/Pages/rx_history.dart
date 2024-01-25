@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:kode_rx/Components/search_field.dart';
 import 'package:kode_rx/Controllers/data_fetch_controller.dart';
 import 'package:kode_rx/Pages/rxhistory_pdf_preview.dart';
 import 'package:kode_rx/app_colors.dart';
@@ -115,34 +116,7 @@ class _RxHistoryState extends State<RxHistory> {
                         const SizedBox(
                           height: 5.0,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: TextField(
-                            style: const TextStyle(fontSize: 20),
-                            decoration: InputDecoration(
-                              suffixIcon: Icon(
-                                Icons.search,
-                                color: Colors.grey.shade500,
-                              ),
-                              hintText: 'Search',
-                              filled: true,
-                              hintStyle: TextStyle(color: Colors.grey.shade500),
-                              fillColor: Color.fromARGB(255, 238, 238, 238),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.grey.shade500, width: 2.0),
-                                borderRadius: BorderRadius.circular(7.7),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: const BorderSide(
-                                    color: AppColors.customBackground,
-                                    width: 2.0),
-                                borderRadius: BorderRadius.circular(7.7),
-                              ),
-                            ),
-                            onChanged: filterSearchResults,
-                          ),
-                        ),
+                        CustomSearchField(filterSearchResults: filterSearchResults,),
                         const SizedBox(height: 20),
                         patientList.isEmpty
                             ? const Center(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kode_rx/Components/custom_button.dart';
 import 'package:kode_rx/Components/custom_textfield.dart';
+import 'package:kode_rx/Pages/additional_assessments.dart';
 import 'package:kode_rx/data_state_store.dart';
 import 'package:kode_rx/device_helper.dart';
 import 'package:kode_rx/select_medicenes.dart';
@@ -71,6 +72,6 @@ class AdditionalInfo extends StatelessWidget {
         diagnosisDetailsController.text.toString().trim();
     userController.treatmentDetails.value =
         treatmentDetailsController.text.toString().trim();
-    Get.to(() => MedicationReminderApp());
+    Get.to(() => AdditionalAssessments());
   }
 }
