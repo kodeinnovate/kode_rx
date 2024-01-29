@@ -36,7 +36,11 @@ class _AdditionalAssessmentsState extends State<AdditionalAssessments> {
       },
       {
         'tileTitle': 'Investigation',
-        'icon': Icon(Icons.inbox, size: iconsize, color: iconColor,),
+        'icon': Icon(
+          Icons.inbox,
+          size: iconsize,
+          color: iconColor,
+        ),
       },
       {
         'tileTitle': 'Diagnosis',
@@ -63,7 +67,10 @@ class _AdditionalAssessmentsState extends State<AdditionalAssessments> {
               itemCount: tileData.length,
               itemBuilder: ((context, index) => CustomTile(
                     tileTitle: tileData[index]['tileTitle'],
-                    icon: tileData[index]['icon'], onTap: () => Get.to(() => CustomSearch(title: tileData[index]['tileTitle'],)),
+                    icon: tileData[index]['icon'],
+                    onTap: () => Get.to(() => AssessmentSelection(
+                          title: tileData[index]['tileTitle'],
+                        )),
                   )),
             ),
           ),

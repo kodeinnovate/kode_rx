@@ -5,8 +5,9 @@ import 'package:kode_rx/Pages/custom_search.dart';
 class CustomTile extends StatelessWidget {
   final String tileTitle;
   final Widget? icon;
+  final Widget? trailingIcon;
   final Function()? onTap;
-  const CustomTile({super.key, required this.tileTitle, this.icon, this.onTap});
+  const CustomTile({super.key, required this.tileTitle, this.icon, this.onTap, this.trailingIcon});
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +29,7 @@ class CustomTile extends StatelessWidget {
                 tileTitle,
                 style: const TextStyle(fontSize: 24),
               ),
+              trailing: trailingIcon,
             ),
           ),
         ),
