@@ -108,6 +108,8 @@ class Profile extends StatelessWidget {
                             TextEditingController(text: userData.phoneNo);
                         final speciality =
                             TextEditingController(text: userData.specialist);
+                             final doctorRegisterationNum = TextEditingController(
+                            text: userData.doctorRegisterationNo);
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -185,9 +187,20 @@ class Profile extends StatelessWidget {
                             ),
                             CustomTextfield(
                               controller: phone,
+                              readOnly: true,
                               hintText: 'Enter your phone number',
                               obsecureText: false,
                               keyboardType: TextInputType.phone,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            CustomTextfield(
+                              readOnly: true,
+                              hintText: 'Doctor Registeration Number',
+                              obsecureText: false,
+                              keyboardType: TextInputType.text,
+                              controller: doctorRegisterationNum,
                             ),
                             const SizedBox(
                               height: 10,
@@ -301,7 +314,7 @@ class Profile extends StatelessWidget {
                                               .userSignitureUpdateUrl.value,
                                       specialist: speciality.text.trim(),
                                       status: userData.status,
-                                      accountStatus: 'active');
+                                      accountStatus: 'active', chiefComplaints: userData.chiefComplaints, diagnosis: userData.diagnosis, findings: userData.findings, investigation: userData.investigation, doctorRegisterationNo: userData.doctorRegisterationNo);
                                   await controller.updateRecord(user);
                                   //  HomeScreen.instance.updateDataFromProfileScreen();
                                   // userController.userProfileImageUrl.value = '';

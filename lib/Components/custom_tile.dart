@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:kode_rx/Pages/custom_search.dart';
 
 class CustomTile extends StatelessWidget {
   final String tileTitle;
   final Widget? icon;
   final Widget? trailingIcon;
+  final double? verticalPadding;
   final Function()? onTap;
-  const CustomTile({super.key, required this.tileTitle, this.icon, this.onTap, this.trailingIcon});
+  const CustomTile({super.key, required this.tileTitle, this.icon, this.onTap, this.trailingIcon, this.verticalPadding, });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class CustomTile extends StatelessWidget {
           // shadowColor: Colors.grey,
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(horizontal: 6.0, vertical: 20.0),
+                EdgeInsets.symmetric(horizontal: 6.0, vertical: verticalPadding ?? 20.0),
             child: ListTile(
               leading: icon,
               title: Text(

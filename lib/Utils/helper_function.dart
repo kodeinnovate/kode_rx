@@ -58,6 +58,35 @@ void updateSelectedTimes(
   }
 }
 
+ List<String> diagnosis = [
+    'Abdominal pain',
+    'Acne-other',
+    'cavity',
+    'fissure',
+    'ARDS',
+  ];
+
+  List<String> findings = [
+    'Allergy',
+    'Asthama',
+    'Cancer',
+    'Anamoly Scan',
+    'Abortion'
+  ];
+
+  List<String> chiefComplaints = [
+    'DOE II',
+    'Chest pain',
+    'DCM',
+    'DM2',
+    'Stable cardiac status',
+    'HTN',
+    'CAD',
+    'Asymptomatic'
+  ];
+
+  List<String> investigation = ['ACL - lgG', 'AFP', 'Anti HCV', 'ASO'];
+
   // void updateSelectedTimes(
   //   String time,
   //   bool selected,

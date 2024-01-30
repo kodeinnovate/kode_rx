@@ -88,6 +88,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
         //     return true;
         //   }
         // }).toList();
+        print(userController.diagnosis.toList());
       });
     });
   }

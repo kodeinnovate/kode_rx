@@ -228,61 +228,56 @@ class PdfController extends GetxController {
                   ),
                 ]),
               ]),
-          pw.Wrap(
-            children: [
-              // pw.Text(
-              //   'History: ${userController.patientPastHistory.value}',
-              //   style: pw.TextStyle(
-              //       fontSize: 14, fontWeight: pw.FontWeight.normal),
-              // ),
-              pw.RichText(
-                text: pw.TextSpan(children: <pw.TextSpan>[
-                  pw.TextSpan(
-                      text: 'History: ',
-                      style: pw.TextStyle(
-                          fontSize: 14, fontWeight: pw.FontWeight.bold)),
-                  pw.TextSpan(
-                      text: userController.patientPastHistory.value,
-                      style: pw.TextStyle(
-                          fontSize: 14, fontWeight: pw.FontWeight.normal))
-                ]),
-              ),
-              pw.RichText(
-                text: pw.TextSpan(children: <pw.TextSpan>[
-                  pw.TextSpan(
-                      text: 'Diagnosis: ',
-                      style: pw.TextStyle(
-                          fontSize: 14, fontWeight: pw.FontWeight.bold)),
-                  pw.TextSpan(
-                      text: userController.diagnosisDetails.value,
-                      style: pw.TextStyle(
-                          fontSize: 14, fontWeight: pw.FontWeight.normal))
-                ]),
-              ),
-              pw.RichText(
-                text: pw.TextSpan(children: <pw.TextSpan>[
-                  pw.TextSpan(
-                      text: 'Treatment: ',
-                      style: pw.TextStyle(
-                          fontSize: 14, fontWeight: pw.FontWeight.bold)),
-                  pw.TextSpan(
-                      text: userController.treatmentDetails.value,
-                      style: pw.TextStyle(
-                          fontSize: 14, fontWeight: pw.FontWeight.normal))
-                ]),
-              ),
-              // pw.Text(
-              //   'Diagnosis: ${userController.diagnosisDetails.value}',
-              //   style: pw.TextStyle(
-              //       fontSize: 14, fontWeight: pw.FontWeight.normal),
-              // ),
-              // pw.Text(
-              //   'Treatment: ${userController.treatmentDetails.value}',
-              //   style: pw.TextStyle(
-              //       fontSize: 14, fontWeight: pw.FontWeight.normal),
-              // ),
-            ],
-          ),
+              pw.Wrap(children: [
+                if(userController.chiefComplaints.isNotEmpty)
+                pw.Text('Chief Complaints: ${userController.chiefComplaints.toList().join(', ')}'),
+                if(userController.findings.isNotEmpty)
+                pw.Text('Findings: ${userController.findings.toList().join(', ')}'),
+                if(userController.diagnosis.isNotEmpty)
+                pw.Text('Diagnosis: ${userController.diagnosis.toList().join(', ')}'),
+                if(userController.investigation.isNotEmpty)
+                pw.Text('Investigation: ${userController.investigation.toList().join(', ')}')
+              ])
+          // pw.Wrap(
+          //   children: [
+          //     pw.RichText(
+          //       text: pw.TextSpan(children: <pw.TextSpan>[
+          //         pw.TextSpan(
+          //             text: 'History: ',
+          //             style: pw.TextStyle(
+          //                 fontSize: 14, fontWeight: pw.FontWeight.bold)),
+          //         pw.TextSpan(
+          //             text: userController.patientPastHistory.value,
+          //             style: pw.TextStyle(
+          //                 fontSize: 14, fontWeight: pw.FontWeight.normal))
+          //       ]),
+          //     ),
+          //     pw.RichText(
+          //       text: pw.TextSpan(children: <pw.TextSpan>[
+          //         pw.TextSpan(
+          //             text: 'Diagnosis: ',
+          //             style: pw.TextStyle(
+          //                 fontSize: 14, fontWeight: pw.FontWeight.bold)),
+          //         pw.TextSpan(
+          //             text: userController.diagnosisDetails.value,
+          //             style: pw.TextStyle(
+          //                 fontSize: 14, fontWeight: pw.FontWeight.normal))
+          //       ]),
+          //     ),
+          //     pw.RichText(
+          //       text: pw.TextSpan(children: <pw.TextSpan>[
+          //         pw.TextSpan(
+          //             text: 'Treatment: ',
+          //             style: pw.TextStyle(
+          //                 fontSize: 14, fontWeight: pw.FontWeight.bold)),
+          //         pw.TextSpan(
+          //             text: userController.treatmentDetails.value,
+          //             style: pw.TextStyle(
+          //                 fontSize: 14, fontWeight: pw.FontWeight.normal))
+          //       ]),
+          //     ),
+          //   ],
+          // ),
         ],
       );
 

@@ -10,6 +10,7 @@ import 'package:kode_rx/Components/custom_textfield.dart';
 import 'package:kode_rx/Controllers/user_repo.dart';
 import 'package:kode_rx/Controllers/utils.dart';
 import 'package:kode_rx/Pages/privacy_policy_screen.dart';
+import 'package:kode_rx/Utils/helper_function.dart';
 import 'package:kode_rx/app_colors.dart';
 import 'package:kode_rx/database/database_fetch.dart';
 import 'package:kode_rx/home.dart';
@@ -355,7 +356,9 @@ class Signup extends StatelessWidget {
         signature: '',
         doctorRegisterationNo: userController.doctorRegisterationNo.value,
         status: '1',
-        accountStatus: 'active');
+        accountStatus: 'active', 
+        findings: findings, investigation: investigation, diagnosis: diagnosis, chiefComplaints: chiefComplaints
+        );
     var isVerified = await AuthenticationRepo.instance.verifyOTP(otp);
     if (isVerified) {
       if (authOperation == AuthOperation.signUp) {

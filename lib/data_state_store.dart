@@ -39,6 +39,18 @@ class UserController extends GetxController {
   // final RxString pastmedicalHistoryDetails = RxString('');
   final RxString diagnosisDetails = RxString('');
   final RxString treatmentDetails = RxString('');
+
+  // Additional Assessment Temperoray data, Arrays for findings, investigation and diagnosis temp data //
+  final RxList<String> findings = <String>[].obs;
+  final RxList<String> investigation = <String>[].obs;
+  final RxList<String> diagnosis = <String>[].obs;
+  final RxList<String> chiefComplaints = <String>[].obs;
+
+  // Additional Assessment data from database
+  final RxList<String> dbFindingsList = <String>[].obs;
+  final RxList<String> dbInvestigationList = <String>[].obs;
+  final RxList<String> dbDiagnosisList = <String>[].obs;
+  final RxList<String> dbChiefComplaintsList = <String>[].obs;
 }
 
 final RxString loginPhoneNumber = RxString('');

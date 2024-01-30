@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kode_rx/Components/custom_button.dart';
 import 'package:kode_rx/Components/custom_tile.dart';
-import 'package:kode_rx/Pages/custom_search.dart';
+import 'package:kode_rx/Pages/assessment_search.dart';
 import 'package:kode_rx/app_colors.dart';
 import 'package:kode_rx/device_helper.dart';
 import 'package:kode_rx/select_medicenes.dart';

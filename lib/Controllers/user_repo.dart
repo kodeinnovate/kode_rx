@@ -49,39 +49,34 @@ class UserRepo extends GetxController {
     // Create a reference to the user's document
     try {
       addMedicineLoader.value = true;
-         DocumentReference userRef = _db.collection("Users").doc(userId);
-    await userRef
-        .collection("Medicines")
-        .add(medicine.toJson())
-        .whenComplete(() => Get.snackbar(
-              'Medicine Successfully Added',
+      DocumentReference userRef = _db.collection("Users").doc(userId);
+      await userRef
+          .collection("Medicines")
+          .add(medicine.toJson())
+          .whenComplete(() => Get.snackbar('Medicine Successfully Added',
               'Medicine details have been added for the user.',
               snackPosition: SnackPosition.BOTTOM,
               backgroundColor: Colors.white,
               colorText: Colors.green,
-              icon: const Icon(Icons.check)
-            ))
-        .catchError((error, stackTrace) {
-      Get.snackbar(
-        'Error',
-        'Something went wrong. Try again',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.white,
-        colorText: Colors.red,
-      );
-    });
+              icon: const Icon(Icons.check)))
+          .catchError((error, stackTrace) {
+        Get.snackbar(
+          'Error',
+          'Something went wrong. Try again',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.white,
+          colorText: Colors.red,
+        );
+      });
     } catch (e) {
       print(e);
       Get.snackbar('Error', "Something went wrong");
     } finally {
       addMedicineLoader.value = false;
     }
- 
 
     // Add medicine details to a subcollection named 'Medicines'
   }
-
-
 
 // User Registeration
   createUser(UserModel user) async {
@@ -155,17 +150,20 @@ class UserRepo extends GetxController {
 
 //Doctor Specific medicine List
 
-final RxBool medicineLoading = false.obs; //For Loader
+  final RxBool medicineLoading = false.obs; //For Loader
 
   Future<List<UserMedicineModel>> getUserMedicines(String userId) async {
     try {
       DependencyInjection.init();
-    medicineLoading.value = true;
-    final snapshot =
-        await _db.collection('Users').doc(userId).collection('Medicines').get();
-    final medicineData =
-        snapshot.docs.map((e) => UserMedicineModel.fromSnapshot(e)).toList();
-    return medicineData;
+      medicineLoading.value = true;
+      final snapshot = await _db
+          .collection('Users')
+          .doc(userId)
+          .collection('Medicines')
+          .get();
+      final medicineData =
+          snapshot.docs.map((e) => UserMedicineModel.fromSnapshot(e)).toList();
+      return medicineData;
     } catch (e) {
       print('Something went wrong $e');
       Get.snackbar('Something Went Wrong', 'Error: $e');
@@ -175,21 +173,26 @@ final RxBool medicineLoading = false.obs; //For Loader
     }
   }
 
-Future<void> refreshMedicines({String searchQuery = ''}) async {
+  Future<void> refreshMedicines({String searchQuery = ''}) async {
     try {
       medicineLoading.value = true;
       final userId = userController.userId.value;
-      final snapshot =
-          await _db.collection('Users').doc(userId).collection('Medicines').get();
+      final snapshot = await _db
+          .collection('Users')
+          .doc(userId)
+          .collection('Medicines')
+          .get();
       final medicineData =
           snapshot.docs.map((e) => UserMedicineModel.fromSnapshot(e)).toList();
 
       // Use assignAll to update the RxList
       GlobalMedicineList.medicines.assignAll(
-        medicineData.map((medicineModel) => Medicine.fromMedicineModel(medicineModel)).toList(),
+        medicineData
+            .map((medicineModel) => Medicine.fromMedicineModel(medicineModel))
+            .toList(),
       );
-     GlobalMedicineList.medicines.sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
-
+      GlobalMedicineList.medicines
+          .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
 
       update(); // Manually trigger a rebuild
       // displayedMedicines = GlobalMedicineList.medicines
@@ -203,18 +206,15 @@ Future<void> refreshMedicines({String searchQuery = ''}) async {
       //       }
       //     })
       //     .toList();
-          // .where((medicine) =>
-          //     medicine.name.toLowerCase().contains(searchQuery.toLowerCase()))
-          // .toList();
-
+      // .where((medicine) =>
+      //     medicine.name.toLowerCase().contains(searchQuery.toLowerCase()))
+      // .toList();
     } catch (e) {
       Get.snackbar('Something Went Wrong', 'Error: $e');
     } finally {
       medicineLoading.value = false;
     }
   }
-
-
 
   //Doctor Specific patient List
   Future<List<PatientModel>> getUserPatients(String userId) async {
@@ -251,55 +251,57 @@ Future<void> refreshMedicines({String searchQuery = ''}) async {
     }
   }
 
-final RxBool isLoading = false.obs;
+  final RxBool isLoading = false.obs;
 // For updating the data of the current user
   Future<void> updateUserRecords(UserModel user) async {
     try {
       isLoading.value = true;
       final userId = userController.userId.value;
       await _db.collection('Users').doc(userId).update(user.toJson());
-      Get.snackbar('Success', 'Profile updated Successfully', backgroundColor: Colors.white, colorText: Colors.black );
+      Get.snackbar('Success', 'Profile updated Successfully',
+          backgroundColor: Colors.white, colorText: Colors.black);
       print('User records updated successfully!');
     } catch (e) {
       print('Error updating user records: $e');
       Get.snackbar('Something went wrong', 'Please try again later');
     } finally {
-      isLoading.value = false; // Set loading to false when the update completes (success or failure)
+      isLoading.value =
+          false; // Set loading to false when the update completes (success or failure)
     }
   }
 
 // Account delection or Disabling
-Future<void> disableAccount(String status) async {
-   final userId = userController.userId.value;
-  try {
-  await _db.collection('Users').doc(userId).update({
+  Future<void> disableAccount(String status) async {
+    final userId = userController.userId.value;
+    try {
+      await _db.collection('Users').doc(userId).update({
         'AccountStatus': status, // Update to disabled
       });
-      // if(status == 'deactivate') {
-      //   Get.snackbar('Account has been Suspended', 'Your account has been deactivated, you can reenable it by logging in');
-      // }     
-      // if (status == 'delete') {
-      //   Get.snackbar('Account has been been set to DELETE', 'Your account has been deactivated, you it your will be permanently deleted in 10 days');
-      // } 
-      // if (status == 'active') {
-      //   Get.snackbar('Account Reactivated', 'Your Account has been Reinstated');
-      // }
-  } catch (e) {
-          print('Error updating account status: $e');
-          Get.snackbar('Error updating account status:', '$e');
-
-  } finally {
-      if(status == 'deactivate') {
-        Get.snackbar('Account deactivated', 'Your Account Has been deactivated');
+    } catch (e) {
+      Get.snackbar('Error updating account status:', '$e');
+    } finally {
+      if (status == 'deactivate') {
+        Get.snackbar(
+            'Account deactivated', 'Your Account Has been deactivated');
       }
-      if(status == 'delete') {
-        Get.snackbar('Your Account Has been set to delete in 10 days', 'You can login to reactivate');
+      if (status == 'delete') {
+        Get.snackbar('Your Account Has been set to delete in 10 days',
+            'You can login to reactivate');
       }
       if (status == 'active') {
         Get.snackbar('Account Reactivated', 'Your Account has been Reinstated');
       }
-
+    }
   }
-}
-}
 
+  // Future<void> updateList(List<String> list, String listName) async {
+  //   final userId = userController.userId.value;
+  //   try {
+  //     await _db.collection('User').doc(userId).update({
+  //       listName: list,
+  //     });
+  //   } catch (e) {
+  //     Get.snackbar('', 'e');
+  //   }
+  // }
+}
