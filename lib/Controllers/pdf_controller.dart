@@ -53,6 +53,11 @@ class PdfController extends GetxController {
     } catch (e) {
       print(e);
       Get.snackbar('Something went wrong', 'Error loading the PDF');
+    } finally {
+      userController.chiefComplaints.value = <String>[];
+      userController.findings.value = <String>[];
+      userController.diagnosis.value = <String>[];
+      userController.investigation.value = <String>[];
     }
   }
 
@@ -228,16 +233,27 @@ class PdfController extends GetxController {
                   ),
                 ]),
               ]),
-              pw.Wrap(children: [
+              pw.Wrap(
+                spacing: 1.0,
+                children: [
                 if(userController.chiefComplaints.isNotEmpty)
                 pw.Text('Chief Complaints: ${userController.chiefComplaints.toList().join(', ')}'),
+              ]),
+              pw.Wrap(spacing: 1.0, children: [
                 if(userController.findings.isNotEmpty)
                 pw.Text('Findings: ${userController.findings.toList().join(', ')}'),
+
+              ]),
+              pw.Wrap(children: [
                 if(userController.diagnosis.isNotEmpty)
                 pw.Text('Diagnosis: ${userController.diagnosis.toList().join(', ')}'),
+
+              ]),
+              pw.Wrap(children: [
                 if(userController.investigation.isNotEmpty)
                 pw.Text('Investigation: ${userController.investigation.toList().join(', ')}')
-              ])
+
+              ]),
           // pw.Wrap(
           //   children: [
           //     pw.RichText(

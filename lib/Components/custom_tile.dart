@@ -14,7 +14,7 @@ class CustomTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+        margin: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
         child: Card(
           surfaceTintColor: Colors.white38,
           // color: Colors.white,

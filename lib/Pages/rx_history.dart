@@ -109,71 +109,71 @@ class _RxHistoryState extends State<RxHistory> {
                   onTap: () => {
                     FocusScope.of(context).unfocus(),
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 5.0,
-                        ),
-                        CustomSearchField(filterSearchResults: filterSearchResults,),
-                        const SizedBox(height: 20),
-                        patientList.isEmpty
-                            ? const Center(
-                                child: Text(
-                                  'No past History Found',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                              )
-                            : Expanded(
-                                child: ListView.separated(
-                                  itemBuilder: (context, index) {
-                                    PatientModel patient = patientList[index];
-
-                                    return GestureDetector(
-                                      onTap: () => patient.pdfUrl != null
-                                          ? _launchUrl(patient.pdfUrl!)
-                                          : Get.snackbar('No Pdf Available',
-                                              'No pdf available on old patient data'),
-                                      child: Center(
-                                        child: Card(
-                                          surfaceTintColor: Colors.white60,
-                                          // color: Colors.white,
-                                          elevation: 10,
-                                          // shadowColor: Colors.grey,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: ListTile(
-                                              title: Text(
-                                                patient.patientName,
-                                                style: const TextStyle(
-                                                    fontSize: 22,
-                                                    color: AppColors
-                                                        .customBackground),
-                                              ),
-                                              subtitle: Text(
-                                                'Date: ${patient.date}',
-                                                style: TextStyle(fontSize: 18),
-                                              ),
-                                              trailing: const Image(
-                                                  image: AssetImage(
-                                                      'assets/images/ic_rx_prescription_icon.png')),
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 5.0,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: CustomSearchField(filterSearchResults: filterSearchResults,),
+                      ),
+                      const SizedBox(height: 20),
+                      patientList.isEmpty
+                          ? const Center(
+                              child: Text(
+                                'No past History Found',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            )
+                          : Expanded(
+                              child: ListView.separated(
+                                itemBuilder: (context, index) {
+                                  PatientModel patient = patientList[index];
+                  
+                                  return GestureDetector(
+                                    onTap: () => patient.pdfUrl != null
+                                        ? _launchUrl(patient.pdfUrl!)
+                                        : Get.snackbar('No Pdf Available',
+                                            'No pdf available on old patient data'),
+                                    child: Center(
+                                      child: Card(
+                                        surfaceTintColor: Colors.white60,
+                                        // color: Colors.white,
+                                        elevation: 10,
+                                        // shadowColor: Colors.grey,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: ListTile(
+                                            title: Text(
+                                              patient.patientName,
+                                              style: const TextStyle(
+                                                  fontSize: 22,
+                                                  color: AppColors
+                                                      .customBackground),
                                             ),
+                                            subtitle: Text(
+                                              'Date: ${patient.date}',
+                                              style: TextStyle(fontSize: 18),
+                                            ),
+                                            trailing: const Image(
+                                                image: AssetImage(
+                                                    'assets/images/ic_rx_prescription_icon.png')),
                                           ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                  itemCount: patientList.length,
-                                  separatorBuilder: (context, index) {
-                                    return const SizedBox(
-                                      height: 5.0,
-                                    );
-                                  },
-                                ),
+                                    ),
+                                  );
+                                },
+                                itemCount: patientList.length,
+                                separatorBuilder: (context, index) {
+                                  return const SizedBox(
+                                    height: 5.0,
+                                  );
+                                },
                               ),
-                      ],
-                    ),
+                            ),
+                    ],
                   ),
                 ),
     );

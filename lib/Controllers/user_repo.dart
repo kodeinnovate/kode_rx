@@ -294,14 +294,20 @@ class UserRepo extends GetxController {
     }
   }
 
-  // Future<void> updateList(List<String> list, String listName) async {
-  //   final userId = userController.userId.value;
-  //   try {
-  //     await _db.collection('User').doc(userId).update({
-  //       listName: list,
-  //     });
-  //   } catch (e) {
-  //     Get.snackbar('', 'e');
-  //   }
-  // }
+  Future<void> updateList(List<String> list, String listName) async {
+    final userId = userController.userId.value;
+    print('updateList');
+    print(list);
+    print(listName);
+    try {
+      await _db.collection('Users').doc(userId).update({
+        listName: list,
+      });
+    } catch (e) {
+      print(e);
+      Get.snackbar('Error', 'Something went wrong');
+    } finally {
+      print('done');
+    }
+  }
 }

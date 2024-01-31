@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:kode_rx/Components/alert_dialogue.dart';
+import 'package:kode_rx/Components/calender_dialogue.dart';
 import 'package:kode_rx/Controllers/data_fetch_controller.dart';
 import 'package:kode_rx/Controllers/pdf_controller.dart';
 import 'package:kode_rx/Controllers/user_repo.dart';
@@ -198,7 +199,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: pdfDataSubmit,
+                      onTap: () => Get.to(() => CalenderDialogue(func: pdfDataSubmit,)) ,
                       child: Container(
                         width: 150,
                         padding: EdgeInsets.symmetric(

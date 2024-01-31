@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import 'package:kode_rx/Components/custom_button.dart';
 import 'package:kode_rx/Components/custom_tile.dart';
 import 'package:kode_rx/Components/search_field.dart';
+import 'package:kode_rx/Controllers/user_repo.dart';
 import 'package:kode_rx/Pages/additional_assessments.dart';
 import 'package:kode_rx/app_colors.dart';
 import 'package:kode_rx/data_state_store.dart';
 import 'package:kode_rx/device_helper.dart';
+import 'package:kode_rx/select_medicenes.dart';
 
 // ignore: must_be_immutable
 class AssessmentSelection extends StatefulWidget {
@@ -14,6 +16,7 @@ class AssessmentSelection extends StatefulWidget {
   final Function()? onTap;
   AssessmentSelection({super.key, this.title, this.onTap});
   static AssessmentSelection get instance => Get.find();
+  final userRepository = Get.put(UserRepo());
   UserController userController = Get.put(UserController());
   final searchText = TextEditingController();
 
@@ -22,55 +25,64 @@ class AssessmentSelection extends StatefulWidget {
 }
 
 class _CustomSearchState extends State<AssessmentSelection> {
+  late bool findingBool = widget.title == 'Findings';
   late List<String> diagnosis = widget.userController.dbDiagnosisList.toList();
 
   late List<String> findings = widget.userController.dbFindingsList.toList();
 
-  late List<String> chiefComplaints = widget.userController.dbChiefComplaintsList.toList();
+  late List<String> chiefComplaints =
+      widget.userController.dbChiefComplaintsList.toList();
 
-  late List<String> investigation = widget.userController.dbInvestigationList.toList();
+  late List<String> investigation =
+      widget.userController.dbInvestigationList.toList();
 
   List<String> selectedTileData = [];
-
   late List<String> currentList;
   late List<String> filteredList;
+  List<String> hollowList = [];
   // The list to be displayed
   @override
   void initState() {
     super.initState();
-    if (widget.title == 'Findings') {
-      List<String> tempFindings =
-          widget.userController.findings.toList().isNotEmpty
-              ? widget.userController.findings.toList()
-              : <String>[];
-      currentList = findings;
-      selectedTileData = tempFindings;
+    // 1) Switch Statement to check if which options is selected, option that included are 'Findings', 'Diagnosis', 'Investigation' and Chief Complaints'.
+    // 2) current list is updated according to the selected options(Findings', 'Diagnosis', 'Investigation' and Chief Complaints).
+    // 3) selected items in the list is saved globaly using state management.
+    switch (widget.title) {
+      case 'Findings':
+        List<String> tempFindings =
+            widget.userController.findings.toList().isNotEmpty
+                ? widget.userController.findings.toList()
+                : <String>[];
+        currentList = findings;
+        selectedTileData = tempFindings;
+        break;
+      case 'Investigation':
+        List<String> tempInvestigation =
+            widget.userController.investigation.toList().isNotEmpty
+                ? widget.userController.investigation.toList()
+                : <String>[];
+        currentList = investigation;
+        selectedTileData = tempInvestigation;
+        break;
+      case 'Diagnosis':
+        List<String> tempDiagnosis =
+            widget.userController.diagnosis.toList().isNotEmpty
+                ? widget.userController.diagnosis.toList()
+                : <String>[];
+        currentList = diagnosis;
+        selectedTileData = tempDiagnosis;
+        break;
+      case 'Chief Complaints':
+        List<String> tempCheifComplaints =
+            widget.userController.diagnosis.toList().isNotEmpty
+                ? widget.userController.diagnosis.toList()
+                : <String>[];
+        currentList = chiefComplaints;
+        selectedTileData = tempCheifComplaints;
+        break;
+      default:
+        currentList = hollowList;
     }
-    if (widget.title == 'Investigation') {
-      List<String> tempInvestigation =
-          widget.userController.investigation.toList().isNotEmpty
-              ? widget.userController.investigation.toList()
-              : <String>[];
-      currentList = investigation;
-      selectedTileData = tempInvestigation;
-    }
-    if (widget.title == 'Diagnosis') {
-      List<String> tempDiagnosis =
-          widget.userController.diagnosis.toList().isNotEmpty
-              ? widget.userController.diagnosis.toList()
-              : <String>[];
-      currentList = diagnosis;
-      selectedTileData = tempDiagnosis;
-    }
-    if (widget.title == 'Chief Complaints') {
-      List<String> tempCheifComplaints =
-          widget.userController.diagnosis.toList().isNotEmpty
-              ? widget.userController.diagnosis.toList()
-              : <String>[];
-      currentList = chiefComplaints;
-      selectedTileData = tempCheifComplaints;
-    }
-
     filteredList = List.from(currentList);
   }
 
@@ -78,30 +90,26 @@ class _CustomSearchState extends State<AssessmentSelection> {
     setState(() {
       // Filter the list based on the query
       filteredList = currentList
-          .where((item) => item.toLowerCase().contains(query.toLowerCase()))
+          .where(
+              (item) => item.toLowerCase().contains(query.toLowerCase().trim()))
           .toList();
     });
   }
-
-//   void filterSearchResults(String query) {
-//   setState(() {
-//     if (query.isEmpty) {
-//        print("Query is empty. Resetting filteredList.");
-//       // If the query is empty, show the entire list
-//       filteredList = currentList.toList();
-//     } else {
-//       // Filter the list based on the query
-//       filteredList = currentList
-//           .where((item) => item.toLowerCase().contains(query.toLowerCase()))
-//           .toList();
-//     }
-//   });
-// }
 
   @override
   Widget build(BuildContext context) {
     bool isAlreadySelected;
     return Scaffold(
+      // floatingActionButton:  Container(
+      //   margin: const EdgeInsets.only(left: 30),
+      //   height: 70,
+      //   width: MediaQuery.of(context).size.width,
+      //   child: CustomButtom(
+      //     margin: 0,
+      //       buttonText: selectedTileData.isEmpty ? 'skip' : 'Add',
+      //       onTap: onTap,
+      //     ),
+      // ),
       appBar: DeviceHelper.deviceAppBar(title: widget.title),
       body: Column(children: [
         Padding(
@@ -117,7 +125,7 @@ class _CustomSearchState extends State<AssessmentSelection> {
               if (filteredList.isEmpty)
                 CustomButtom(
                   buttonText: 'Add',
-                  onTap: () => {
+                  onTap: () async => {
                     setState(() {
                       final trimmedText = widget.searchText.text
                           .toString()
@@ -125,28 +133,61 @@ class _CustomSearchState extends State<AssessmentSelection> {
                           .capitalizeFirst!;
                       currentList.insert(0, trimmedText);
                       widget.searchText.clear();
+
                       filteredList = List.from(currentList);
                       selectedTileData.add(trimmedText);
                     }),
+                    switch (widget.title) {
+                      'Findings' => {
+                          await userRepository.updateList(
+                              currentList, 'Findings'),
+                          currentList = findings
+                        },
+                      'Investigation' => {
+                          await userRepository.updateList(
+                              currentList, 'Investigation'),
+                          currentList = investigation,
+                        },
+                      'Diagnosis' => {
+                          await userRepository.updateList(
+                              currentList, 'Diagnosis'),
+                          currentList = diagnosis,
+                        },
+                      'Chief Complaints' => {
+                          await userRepository.updateList(
+                              currentList, 'ChiefComplaints'),
+                          currentList = chiefComplaints,
+                        },
+                      // TODO: Handle this case.
+                      String() => currentList = hollowList,
+                      // TODO: Handle this case.
+                      null => currentList = hollowList,
+                    },
                   },
                   margin: 4.0,
                 )
             ],
           ),
         ),
-        // ListView(
-        //   children: <Widget>[
-
-        //   ],
-        // )
-        // ListView(
-        //   children: <Widget>[
-
-        //   ],
-        // ),
         Expanded(
           child: SingleChildScrollView(
             child: Column(children: [
+              if(selectedTileData.isNotEmpty) 
+              Container(
+                margin: EdgeInsets.only(top: 5.0),
+                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: AppColors.customBackground,
+                    border: Border.symmetric(
+                  horizontal: BorderSide(
+                    color: Colors.grey.shade400,
+                    width: 1.0, // Adjust the width as needed
+                  ),
+                )),
+                child: const Text('Selected', style: TextStyle(color: Colors.white),),
+              ),
+               
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -164,6 +205,20 @@ class _CustomSearchState extends State<AssessmentSelection> {
                     verticalPadding: 6.0,
                   );
                 },
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 5.0),
+                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: AppColors.customBackground,
+                    border: Border.symmetric(
+                  horizontal: BorderSide(
+                    color: Colors.grey.shade400,
+                    width: 1.0, // Adjust the width as needed
+                  ),
+                )),
+                child: const Text('All', style: TextStyle(color: Colors.white),),
               ),
               ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
@@ -225,20 +280,6 @@ class _CustomSearchState extends State<AssessmentSelection> {
             ]),
           ),
         ),
-
-        // Container(
-        //   padding: EdgeInsets.symmetric(vertical: 10.0),
-        //   width: MediaQuery.of(context).size.width,
-        //   decoration: BoxDecoration(
-        //       border: Border.symmetric(
-        //     horizontal: BorderSide(
-        //       color: Colors.grey.shade400,
-        //       width: 1.0, // Adjust the width as needed
-        //     ),
-        //   )),
-        //   child: Text('All'),
-        // ),
-
         CustomButtom(
           buttonText: selectedTileData.isEmpty ? 'skip' : 'Add',
           onTap: onTap,
@@ -247,6 +288,7 @@ class _CustomSearchState extends State<AssessmentSelection> {
           height: 20,
         )
       ]),
+      
     );
   }
 
@@ -259,8 +301,9 @@ class _CustomSearchState extends State<AssessmentSelection> {
       widget.userController.diagnosis.value = selectedTileData;
     } else if (widget.title == 'Chief Complaints') {
       widget.userController.chiefComplaints.value = selectedTileData;
+    } else {
+      return;
     }
-
     Get.to(() => const AdditionalAssessments());
   }
 }
