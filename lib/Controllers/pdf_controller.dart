@@ -40,6 +40,7 @@ class PdfController extends GetxController {
   }
 
   Future<void> createAndDisplayPdf() async {
+    print(userController.followUpDate.value);
     try {
       final doc = pw.Document();
       pdfCreate(doc); // PDF Layout creation Function
@@ -58,6 +59,7 @@ class PdfController extends GetxController {
       userController.findings.value = <String>[];
       userController.diagnosis.value = <String>[];
       userController.investigation.value = <String>[];
+      userController.followUpDate.value = '';
     }
   }
 
@@ -111,6 +113,8 @@ class PdfController extends GetxController {
           pw.SizedBox(height: 10.0),
           pw.Divider(),
 
+          pw.SizedBox(height: 10.0),
+          if (userController.followUpDate.value != '') followUpDate(context),
           pw.SizedBox(height: 10.0),
           pw.Text(
             'Additional Note',
@@ -170,7 +174,11 @@ class PdfController extends GetxController {
         '${medicine.name} ${medicine.mg == null || medicine.mg == '' ? '' : ' - ${medicine.mg}'}',
         medicine.timesToTake.isEmpty ? 'N/A' : medicine.timesToTake.join(', '),
         medicine.beforeMeal ? 'Before Meal' : 'After Meal',
-        medicine.days == '0' || medicine.days == null ? 'Not Specified' :  (medicine.days == '1' ? '${medicine.days} ${medicine.daysType}' : '${medicine.days} ${medicine.daysType}s')
+        medicine.days == '0' || medicine.days == null
+            ? 'Not Specified'
+            : (medicine.days == '1'
+                ? '${medicine.days} ${medicine.daysType}'
+                : '${medicine.days} ${medicine.daysType}s')
       ];
     }).toList();
 
@@ -191,6 +199,11 @@ class PdfController extends GetxController {
       },
     );
   }
+
+  pw.Widget followUpDate(pw.Context context) => pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start, children: [
+        pw.Text('Follow-up date: ', style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 14)),
+        pw.Text(userController.followUpDate.value, style: pw.TextStyle(fontWeight: pw.FontWeight.normal, fontSize: 14)),
+      ]);
 
   pw.Widget buildTitle(pw.Context context) => pw.Column(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -233,27 +246,36 @@ class PdfController extends GetxController {
                   ),
                 ]),
               ]),
-              pw.Wrap(
-                spacing: 1.0,
-                children: [
-                if(userController.chiefComplaints.isNotEmpty)
-                pw.Text('Chief Complaints: ${userController.chiefComplaints.toList().join(', ')}'),
-              ]),
-              pw.Wrap(spacing: 1.0, children: [
-                if(userController.findings.isNotEmpty)
-                pw.Text('Findings: ${userController.findings.toList().join(', ')}'),
 
-              ]),
-              pw.Wrap(children: [
-                if(userController.diagnosis.isNotEmpty)
-                pw.Text('Diagnosis: ${userController.diagnosis.toList().join(', ')}'),
+         
+          pw.Wrap(spacing: 1.0, children: [
+            if (userController.chiefComplaints.isNotEmpty)
+            // pw.RichText(text: pw.TextSpan(children: <pw.TextSpan>[
+            //   pw.TextSpan(
+            //     text: 'Chief Complaints: ',
+            //     style: pw.TextStyle(fontWeight: pw.FontWeight.bold)
+            //   ),
+            //   pw.TextSpan(text: userController.chiefComplaints.toList().join(', ')),
+            // ])),
 
-              ]),
-              pw.Wrap(children: [
-                if(userController.investigation.isNotEmpty)
-                pw.Text('Investigation: ${userController.investigation.toList().join(', ')}')
-
-              ]),
+              pw.Text(
+                  'Chief Complaints: ${userController.chiefComplaints.toList().join(', ')}'),
+          ]),
+          pw.Wrap(spacing: 1.0, children: [
+            if (userController.findings.isNotEmpty)
+              pw.Text(
+                  'Findings: ${userController.findings.toList().join(', ')}'),
+          ]),
+          pw.Wrap(children: [
+            if (userController.diagnosis.isNotEmpty)
+              pw.Text(
+                  'Diagnosis: ${userController.diagnosis.toList().join(', ')}'),
+          ]),
+          pw.Wrap(children: [
+            if (userController.investigation.isNotEmpty)
+              pw.Text(
+                  'Investigation: ${userController.investigation.toList().join(', ')}')
+          ]),
           // pw.Wrap(
           //   children: [
           //     pw.RichText(

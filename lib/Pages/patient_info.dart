@@ -48,12 +48,11 @@ class _Patient_infoState extends State<Patient_info> {
             // Close the keyboard when tapped anywhere on the screen
             FocusScope.of(context).unfocus();
           },
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
@@ -92,7 +91,7 @@ class _Patient_infoState extends State<Patient_info> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 25.0),
                             child: Text(
-                              'Select your gender',
+                              'Select Gender:',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -100,41 +99,52 @@ class _Patient_infoState extends State<Patient_info> {
                               ),
                               textAlign: TextAlign.start,
                             ),
-                          ),
-                        
+                          ),  
                         ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                            Flexible(
+                          flex: 1,
                           child: RadioListTile(
                             title: const Text('Male',
-                                style: TextStyle(fontSize: 12)),
+                                style: TextStyle(fontSize: 14)),
                             value: 'male',
                             groupValue: patientGender,
                             onChanged: _handleRadioValueChange,
                           ),
                         ),
-                        Expanded(
+                        Flexible(
+                          flex: 1,
                           child: RadioListTile(
                             title: const Text('Female',
-                                style: TextStyle(fontSize: 12)),
+                                style: TextStyle(fontSize: 14)),
                             value: 'female',
                             groupValue: patientGender,
                             onChanged: _handleRadioValueChange,
                           ),
                         ),
-                        Expanded(
+                        Flexible(
+                          flex: 1,
                           child: RadioListTile(
                             title: const Text('Other',
-                                style: TextStyle(fontSize: 12)),
+                                style: TextStyle(fontSize: 14)),
                             value: 'other',
                             groupValue: patientGender,
                             onChanged: _handleRadioValueChange,
                           ),
                         ),
+                          ],),
+                        )
+                        
                       ],
                     ),
-                    // const SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     // Padding(
                     //   padding: const EdgeInsets.symmetric(horizontal: 25),
                     //   child: TextField(
@@ -161,12 +171,16 @@ class _Patient_infoState extends State<Patient_info> {
                     //     ),
                     //   ),
                     // ),
-                    const SizedBox(height: 30),
+                    // const SizedBox(height: 30),
                   ],
                 ),
-                    Align(alignment: Alignment.bottomCenter, child: CustomButtom(buttonText: 'Next', onTap: patientDataStore)),
-              ],
-            ),
+              ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: Align(alignment: Alignment.bottomCenter, child: CustomButtom(buttonText: 'Next', onTap: patientDataStore)),
+                  ),
+                 
+            ],
           ),
         ),
       ),

@@ -51,6 +51,9 @@ class UserController extends GetxController {
   final RxList<String> dbInvestigationList = <String>[].obs;
   final RxList<String> dbDiagnosisList = <String>[].obs;
   final RxList<String> dbChiefComplaintsList = <String>[].obs;
+
+  //Follow-up date
+  final RxString followUpDate = RxString('');
 }
 
 final RxString loginPhoneNumber = RxString('');

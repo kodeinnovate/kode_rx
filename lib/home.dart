@@ -175,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 userController.dbDiagnosisList.value = userData.diagnosis!;
                                 userController.dbChiefComplaintsList.value = userData.chiefComplaints!;
                                 userController.dbInvestigationList.value = userData.investigation!;
-                                print(userData.chiefComplaints!);
+                               
                                 if (userData.signature != '') {
                                   userController.signatureStore.value =
                                       userData.signature;

@@ -99,195 +99,174 @@ class _CustomSearchState extends State<AssessmentSelection> {
   @override
   Widget build(BuildContext context) {
     bool isAlreadySelected;
+    String titleName;
     return Scaffold(
-      // floatingActionButton:  Container(
-      //   margin: const EdgeInsets.only(left: 30),
-      //   height: 70,
-      //   width: MediaQuery.of(context).size.width,
-      //   child: CustomButtom(
-      //     margin: 0,
-      //       buttonText: selectedTileData.isEmpty ? 'skip' : 'Add',
-      //       onTap: onTap,
-      //     ),
-      // ),
       appBar: DeviceHelper.deviceAppBar(title: widget.title),
-      body: Column(children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 6.0, left: 6.0, right: 6.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
-                  child: CustomSearchField(
-                filterSearchResults: filterSearchResults,
-                controller: widget.searchText,
-              )),
-              if (filteredList.isEmpty)
-                CustomButtom(
-                  buttonText: 'Add',
-                  onTap: () async => {
-                    setState(() {
-                      final trimmedText = widget.searchText.text
-                          .toString()
-                          .trim()
-                          .capitalizeFirst!;
-                      currentList.insert(0, trimmedText);
-                      widget.searchText.clear();
-
-                      filteredList = List.from(currentList);
-                      selectedTileData.add(trimmedText);
-                    }),
-                    switch (widget.title) {
-                      'Findings' => {
-                          await userRepository.updateList(
-                              currentList, 'Findings'),
-                          currentList = findings
-                        },
-                      'Investigation' => {
-                          await userRepository.updateList(
-                              currentList, 'Investigation'),
-                          currentList = investigation,
-                        },
-                      'Diagnosis' => {
-                          await userRepository.updateList(
-                              currentList, 'Diagnosis'),
-                          currentList = diagnosis,
-                        },
-                      'Chief Complaints' => {
-                          await userRepository.updateList(
-                              currentList, 'ChiefComplaints'),
-                          currentList = chiefComplaints,
-                        },
-                      // TODO: Handle this case.
-                      String() => currentList = hollowList,
-                      // TODO: Handle this case.
-                      null => currentList = hollowList,
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 6.0, left: 6.0, right: 6.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                    child: CustomSearchField(
+                  filterSearchResults: filterSearchResults,
+                  controller: widget.searchText,
+                )),
+                if (filteredList.isEmpty)
+                  CustomButtom(
+                    buttonText: 'Add',
+                    onTap: () async => {
+                      setState(() {
+                        final trimmedText = widget.searchText.text
+                            .toString()
+                            .trim()
+                            ;
+                        currentList.insert(0, trimmedText.substring(0, 1).toUpperCase() + trimmedText.substring(1));
+                        widget.searchText.clear();
+                        filteredList = List.from(currentList);
+                        selectedTileData.add(trimmedText.substring(0, 1).toUpperCase() + trimmedText.substring(1));
+                      }),
+                      switch (widget.title) {
+                        'Findings' => {
+                            await userRepository.updateList(
+                                currentList, 'Findings'),
+                            currentList = findings
+                          },
+                        'Investigation' => {
+                            await userRepository.updateList(
+                                currentList, 'Investigation'),
+                            currentList = investigation,
+                          },
+                        'Diagnosis' => {
+                            await userRepository.updateList(
+                                currentList, 'Diagnosis'),
+                            currentList = diagnosis,
+                          },
+                        'Chief Complaints' => {
+                            await userRepository.updateList(
+                                currentList, 'ChiefComplaints'),
+                            currentList = chiefComplaints,
+                          },
+                        // TODO: Handle this case.
+                        String() => currentList = hollowList,
+                        // TODO: Handle this case.
+                        null => currentList = hollowList,
+                      },
                     },
-                  },
-                  margin: 4.0,
-                )
-            ],
+                    margin: 4.0,
+                  )
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(children: [
-              if(selectedTileData.isNotEmpty) 
-              Container(
-                margin: EdgeInsets.only(top: 5.0),
-                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: AppColors.customBackground,
-                    border: Border.symmetric(
-                  horizontal: BorderSide(
-                    color: Colors.grey.shade400,
-                    width: 1.0, // Adjust the width as needed
-                  ),
-                )),
-                child: const Text('Selected', style: TextStyle(color: Colors.white),),
-              ),
-               
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: selectedTileData.length,
-                itemBuilder: (context, index) {
-                  return CustomTile(
-                    tileTitle: selectedTileData[index],
-                    trailingIcon: GestureDetector(
-                        onTap: () => setState(() =>
-                            selectedTileData.remove(selectedTileData[index])),
-                        child: const Icon(
-                          Icons.delete,
-                          color: Colors.red,
-                        )),
-                    verticalPadding: 6.0,
-                  );
-                },
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 5.0),
-                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: AppColors.customBackground,
-                    border: Border.symmetric(
-                  horizontal: BorderSide(
-                    color: Colors.grey.shade400,
-                    width: 1.0, // Adjust the width as needed
-                  ),
-                )),
-                child: const Text('All', style: TextStyle(color: Colors.white),),
-              ),
-              ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: filteredList.length,
-                itemBuilder: (context, index) => GestureDetector(
-                  onTap: () => {
-                    isAlreadySelected = selectedTileData.any((selectedTitle) =>
-                        selectedTitle == filteredList[index]),
-                    if (isAlreadySelected)
-                      {duplicateDialogue(context)}
-                    else
-                      {
-                        setState(() {
-                          selectedTileData.add(filteredList[index]);
-                        }),
-                        print(selectedTileData)
-                      }
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(children: [
+                if(selectedTileData.isNotEmpty) 
+                Container(
+                  margin: EdgeInsets.only(top: 5.0),
+                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: AppColors.customBackground,
+                      border: Border.symmetric(
+                    horizontal: BorderSide(
+                      color: Colors.grey.shade400,
+                      width: 1.0, // Adjust the width as needed
+                    ),
+                  )),
+                  child: const Text('Selected', style: TextStyle(color: Colors.white),),
+                ),
+                 
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: selectedTileData.length,
+                  itemBuilder: (context, index) {
+                    return CustomTile(
+                      tileTitle: selectedTileData[index],
+                      trailingIcon: GestureDetector(
+                          onTap: () => setState(() =>
+                              selectedTileData.remove(selectedTileData[index])),
+                          child: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          )),
+                      verticalPadding: 6.0,
+                    );
                   },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    decoration: BoxDecoration(
-                        // color: Colors.white,
-                        border: Border(
-                      bottom: BorderSide(
-                        color: Colors.grey.shade400,
-                        width: 1.0, // Adjust the width as needed
-                      ),
-                    )),
-                    height: 70,
-                    // color: Colors.grey.shade200,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        filteredList[index],
-                        style: const TextStyle(fontSize: 20.0),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 5.0),
+                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: AppColors.customBackground,
+                      border: Border.symmetric(
+                    horizontal: BorderSide(
+                      color: Colors.grey.shade400,
+                      width: 1.0, // Adjust the width as needed
+                    ),
+                  )),
+                  child: const Text('All', style: TextStyle(color: Colors.white),),
+                ),
+                ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: filteredList.length,
+                  itemBuilder: (context, index) => GestureDetector(
+                    onTap: () => {
+                      isAlreadySelected = selectedTileData.any((selectedTitle) =>
+                          selectedTitle == filteredList[index]),
+                           titleName = selectedTileData.map((selectedTitle) => 
+                        (selectedTitle == filteredList[index]) ? selectedTitle : '').toString(),
+
+                      if (isAlreadySelected)
+                        {duplicateDialogue(context, titleName), }
+                      else
+                        {
+                          setState(() {
+                            selectedTileData.add(filteredList[index]);
+                          }),
+                      
+                        }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      decoration: BoxDecoration(
+                          // color: Colors.white,
+                          border: Border(
+                        bottom: BorderSide(
+                          color: Colors.grey.shade400,
+                          width: 1.0, // Adjust the width as needed
+                        ),
+                      )),
+                      height: 70,
+                      // color: Colors.grey.shade200,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          filteredList[index],
+                          style: const TextStyle(fontSize: 20.0),
+                        ),
                       ),
                     ),
                   ),
                 ),
-                // itemBuilder: ((context, index) => CustomTile(
-                //       tileTitle: filteredList[index],
-                //       onTap: () => {
-                //         isAlreadySelected = selectedTileData.any(
-                //             (selectedTitle) =>
-                //                 selectedTitle == filteredList[index]),
-                //         if (isAlreadySelected)
-                //           {duplicateDialogue(context)}
-                //         else
-                //           {
-                //             setState(() {
-                //               selectedTileData.add(filteredList[index]);
-                //             }),
-                //             print(selectedTileData)
-                //           }
-                //       },
-                //     )),
-              ),
-            ]),
+              ]),
+            ),
           ),
-        ),
-        CustomButtom(
-          buttonText: selectedTileData.isEmpty ? 'skip' : 'Add',
-          onTap: onTap,
-        ),
-        const SizedBox(
-          height: 20,
-        )
-      ]),
+          CustomButtom(
+            buttonText: selectedTileData.isEmpty ? 'skip' : 'Add',
+            onTap: onTap,
+          ),
+          const SizedBox(
+            height: 20,
+          )
+        ]),
+      ),
       
     );
   }
@@ -308,7 +287,8 @@ class _CustomSearchState extends State<AssessmentSelection> {
   }
 }
 
-void duplicateDialogue(BuildContext context) {
+void duplicateDialogue(BuildContext context, String title) {
+  // print(title);
   showDialog(
     context: context,
     builder: (context) {

@@ -199,7 +199,7 @@ class _MedicationListScreenState extends State<MedicationListScreen> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => Get.to(() => CalenderDialogue(func: pdfDataSubmit,)) ,
+                      onTap: () => selectedMedicines.isEmpty ? Get.snackbar('No medicine Added', "please add medicines") : Get.to(() => CalenderDialogue(func: pdfDataSubmit,)) ,
                       child: Container(
                         width: 150,
                         padding: EdgeInsets.symmetric(
