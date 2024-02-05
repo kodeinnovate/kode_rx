@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:kode_rx/Pages/pdf_preview_screen.dart';
+import 'package:kode_rx/Utils/sms_sender_function.dart';
 import 'package:kode_rx/data_state_store.dart';
 import 'package:kode_rx/database/patient_data.dart';
 import 'package:kode_rx/select_medicenes.dart';
@@ -15,6 +16,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 class PdfController extends GetxController {
   static PdfController get instance => Get.find();
   UserController userController = Get.put(UserController());
+  SendSms sendSms = Get.put(SendSms());
 
   List<Medicine>? selectedMedicines;
   String? notes;
@@ -40,7 +42,6 @@ class PdfController extends GetxController {
   }
 
   Future<void> createAndDisplayPdf() async {
-    print(userController.followUpDate.value);
     try {
       final doc = pw.Document();
       pdfCreate(doc); // PDF Layout creation Function
@@ -49,10 +50,12 @@ class PdfController extends GetxController {
       final pdfBytes = await doc.save();
       final pdfReference = await _uploadPdfToStorage(pdfBytes);
 
-      // Save PDF URL to Firebase Database or any other storage
+      // Save PDF URL to Firebase Database
       await _savePdfUrlToDatabase(pdfReference);
+      if (userController.patientPhoneNo.value.isNotEmpty && userController.patientPhoneNo.value.length == 10) {
+        sendSms.sendSms(userController.patientPhoneNo.value, userController.patientName.value, userController.followUpDate.value);
+      } 
     } catch (e) {
-      print(e);
       Get.snackbar('Something went wrong', 'Error loading the PDF');
     } finally {
       userController.chiefComplaints.value = <String>[];
@@ -200,9 +203,13 @@ class PdfController extends GetxController {
     );
   }
 
-  pw.Widget followUpDate(pw.Context context) => pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start, children: [
-        pw.Text('Follow-up date: ', style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 14)),
-        pw.Text(userController.followUpDate.value, style: pw.TextStyle(fontWeight: pw.FontWeight.normal, fontSize: 14)),
+  pw.Widget followUpDate(pw.Context context) =>
+      pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start, children: [
+        pw.Text('Follow-up date: ',
+            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 14)),
+        pw.Text(userController.followUpDate.value,
+            style:
+                pw.TextStyle(fontWeight: pw.FontWeight.normal, fontSize: 14)),
       ]);
 
   pw.Widget buildTitle(pw.Context context) => pw.Column(
@@ -247,16 +254,15 @@ class PdfController extends GetxController {
                 ]),
               ]),
 
-         
           pw.Wrap(spacing: 1.0, children: [
             if (userController.chiefComplaints.isNotEmpty)
-            // pw.RichText(text: pw.TextSpan(children: <pw.TextSpan>[
-            //   pw.TextSpan(
-            //     text: 'Chief Complaints: ',
-            //     style: pw.TextStyle(fontWeight: pw.FontWeight.bold)
-            //   ),
-            //   pw.TextSpan(text: userController.chiefComplaints.toList().join(', ')),
-            // ])),
+              // pw.RichText(text: pw.TextSpan(children: <pw.TextSpan>[
+              //   pw.TextSpan(
+              //     text: 'Chief Complaints: ',
+              //     style: pw.TextStyle(fontWeight: pw.FontWeight.bold)
+              //   ),
+              //   pw.TextSpan(text: userController.chiefComplaints.toList().join(', ')),
+              // ])),
 
               pw.Text(
                   'Chief Complaints: ${userController.chiefComplaints.toList().join(', ')}'),

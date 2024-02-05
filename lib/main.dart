@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +38,7 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
     Get.put(AuthenticationRepo());
     await FirebaseAppCheck.instance
         .activate(androidProvider: AndroidProvider.playIntegrity);
@@ -49,7 +50,7 @@ void main() async {
   Get.put(HomeScreen());
   Get.put(SplashScreen());
   Get.put(LoginScreen());
-    DependencyInjection.init();
+  DependencyInjection.init();
 }
 
 class MyApp extends StatelessWidget {
@@ -57,8 +58,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance)
+      ],
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.customBackground),
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: AppColors.customBackground),
         primaryColor: AppColors.customBackground,
         backgroundColor: Colors.white,
       ),

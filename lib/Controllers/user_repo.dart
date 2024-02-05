@@ -210,7 +210,7 @@ class UserRepo extends GetxController {
       //     medicine.name.toLowerCase().contains(searchQuery.toLowerCase()))
       // .toList();
     } catch (e) {
-      Get.snackbar('Something Went Wrong', 'Error: $e');
+      Get.snackbar('Something Went Wrong', 'Error');
     } finally {
       medicineLoading.value = false;
     }
